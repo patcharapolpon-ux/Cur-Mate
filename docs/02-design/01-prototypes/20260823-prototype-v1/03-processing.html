@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>กำลังตรวจสอบ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-32);
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    flex-shrink: 0;
+  }
+  .step.done .step-dot {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: #FFFFFF;
+  }
+  .step.current .step-dot {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  .step.current .step-label { color: var(--color-primary); }
+  .step.done .step-label { color: var(--color-success); }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border-strong);
+    margin: 0 var(--space-8);
+  }
+  .step-line.done { background: var(--color-success); }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-32);
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    margin-bottom: var(--space-32);
+  }
+  .task-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-16);
+    transition: border-color 150ms ease-out;
+  }
+  .task-info { flex: 1; }
+  .task-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 0 4px;
+  }
+  .task-desc {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not([aria-disabled="true"]) { background: var(--color-primary-hover); }
+  .btn-primary[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+
+  .actions {
+    margin-top: var(--space-32);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+  }
+  .actions-right {
+    display: flex;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <nav class="stepper" aria-label="ขั้นตอนการตรวจสอบเอกสาร">
+    <div class="step done">
+      <div class="step-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="step-label">อัปโหลด</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step done">
+      <div class="step-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="step-label">เลือกชุดเกณฑ์</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step current">
+      <div class="step-dot">3</div>
+      <div class="step-label">ตรวจสอบ</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-label">รายงานผล</div>
+    </div>
+  </nav>
+
+  <h1>กำลังตรวจสอบเอกสาร</h1>
+  <p class="lead">ระบบกำลังเปรียบเทียบเอกสารของท่านกับชุดเกณฑ์ที่เลือกไว้ ตามลำดับขั้นตอนด้านล่าง</p>
+
+  <div class="task-list">
+    <div class="task-card" id="task1">
+      <div class="task-info">
+        <p class="task-title">ตรวจสอบความสอดคล้องภายในเล่มเดียวกัน</p>
+        <p class="task-desc">ตรวจรหัสวิชา ชื่อวิชา หน่วยกิต และคำอธิบายรายวิชาที่ปรากฏซ้ำในหลายจุดของเล่ม รวมถึงการอ้างอิงเกณฑ์มาตรฐาน</p>
+      </div>
+      <span class="status-chip warning" id="task1Status">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        รอดำเนินการ
+      </span>
+    </div>
+    <div class="task-card" id="task2">
+      <div class="task-info">
+        <p class="task-title">ตรวจสอบความสอดคล้อง/ซ้ำซ้อนข้ามเล่มหลักสูตร</p>
+        <p class="task-desc">เปรียบเทียบรายวิชาระหว่างเล่มหลักสูตรอื่นในระบบ เพื่อตรวจจับรหัสวิชาซ้ำซ้อนและวิชาแกนที่อาจไม่ตรงกัน</p>
+      </div>
+      <span class="status-chip warning" id="task2Status">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        รอดำเนินการ
+      </span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a class="btn btn-secondary" href="02-select-criteria.html">ย้อนกลับ</a>
+    <div class="actions-right">
+      <button type="button" class="btn btn-secondary" id="simulateBtn">จำลองตรวจสอบ</button>
+      <a id="reportBtn" class="btn btn-primary" href="04-report.html" aria-disabled="true" tabindex="-1">ดูรายงานผล</a>
+    </div>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 03 "ตรวจสอบความสอดคล้องภายในเล่มเดียวกัน" และฟีเจอร์ 04 "ตรวจสอบความสอดคล้อง/ซ้ำซ้อนข้ามเล่มหลักสูตร (cross-document)" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 2 และ FR ข้อ 4 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "ตรวจสอบความสอดคล้องภายในเล่มเดียวกัน" / "ตรวจสอบความสอดคล้อง/ซ้ำซ้อนข้ามเล่มหลักสูตร"
+</footer>
+
+<script>
+  var simulateBtn = document.getElementById('simulateBtn');
+  var reportBtn = document.getElementById('reportBtn');
+  var task1Status = document.getElementById('task1Status');
+  var task2Status = document.getElementById('task2Status');
+  var step = 0;
+
+  var successIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  function setDone(el, label) {
+    el.classList.remove('warning');
+    el.classList.add('success');
+    el.innerHTML = successIcon + label;
+  }
+
+  function checkComplete() {
+    if (step >= 2) {
+      reportBtn.removeAttribute('aria-disabled');
+      reportBtn.removeAttribute('tabindex');
+      simulateBtn.setAttribute('disabled', 'true');
+    }
+  }
+
+  simulateBtn.addEventListener('click', function () {
+    if (step === 0) {
+      setDone(task1Status, 'ตรวจสอบแล้ว');
+      step = 1;
+    } else if (step === 1) {
+      setDone(task2Status, 'ตรวจสอบแล้ว');
+      step = 2;
+    }
+    checkComplete();
+  });
+
+  reportBtn.addEventListener('click', function (e) {
+    if (reportBtn.getAttribute('aria-disabled') === 'true') {
+      e.preventDefault();
+    }
+  });
+</script>
+</body>
+</html>
