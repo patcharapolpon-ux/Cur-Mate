@@ -8,6 +8,10 @@
 
 ใช้สำหรับสื่อสารและตกลงหน้าตาของระบบก่อนลงมือพัฒนาจริง โดยอ้างอิงความต้องการจาก [[../../01-requirements/01-spec/index|01-spec]] และส่งต่อรายละเอียดเชิงระบบให้ [[../02-technical/index|02-technical]]
 
+## Design System
+
+- [[DESIGN|DESIGN.md]] — brand identity, design tokens (สี/ฟอนต์/spacing), UI components และ UX guidelines ที่ mockup/user journey ทั้งหมดในโฟลเดอร์นี้ต้องอ้างอิง
+
 ## User Journey
 
 - [[20260823-01-user-journey-course-coordinator-upload|ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2]]
