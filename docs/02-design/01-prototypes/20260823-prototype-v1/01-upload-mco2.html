@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>อัปโหลดไฟล์ มคอ.2 — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Colors */
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    /* Typography */
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    /* Spacing */
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    /* Radius */
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    /* Elevation */
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-large: 0 8px 24px rgba(0,0,0,0.10);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  /* Stepper */
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-32);
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    flex-shrink: 0;
+  }
+  .step.done .step-dot {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: #FFFFFF;
+  }
+  .step.current .step-dot {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  .step.current .step-label { color: var(--color-primary); }
+  .step.done .step-label { color: var(--color-success); }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border-strong);
+    margin: 0 var(--space-8);
+  }
+  .step-line.done { background: var(--color-success); }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-32);
+  }
+
+  /* Dropzone */
+  .dropzone {
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius-large);
+    background: var(--color-bg);
+    padding: var(--space-48) var(--space-24);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 180ms ease-out, background 180ms ease-out;
+  }
+  .dropzone:hover, .dropzone:focus-visible {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  .dropzone svg { margin-bottom: var(--space-16); }
+  .dropzone-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: var(--space-8);
+  }
+  .dropzone-sub {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Document Card */
+  .doc-card {
+    display: none;
+    position: relative;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-subtle);
+  }
+  .doc-card.show { display: block; }
+  .doc-card-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+  .doc-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-medium);
+    background: var(--color-info-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .doc-name {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 0 4px;
+    word-break: break-all;
+  }
+  .doc-meta {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+  }
+  .status-chip {
+    position: absolute;
+    top: var(--space-16);
+    right: var(--space-16);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .status-chip.error { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  /* Banner */
+  .banner {
+    display: none;
+    margin-top: var(--space-16);
+    padding: var(--space-16);
+    border-radius: 0;
+    background: var(--color-error-bg);
+    color: var(--color-error-text);
+    gap: var(--space-12);
+    align-items: flex-start;
+  }
+  .banner.show { display: flex; }
+  .banner-title { font-weight: 600; margin: 0 0 4px; }
+  .banner-body { font-size: 14px; margin: 0; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:active:not(:disabled) { background: var(--color-primary-active); }
+  .btn-primary:disabled,
+  .btn-primary[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-text-secondary);
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+  .btn-ghost:hover { background: #F1F5F9; }
+
+  .actions {
+    margin-top: var(--space-32);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  .test-link {
+    display: inline-block;
+    margin-top: var(--space-16);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    padding: 0;
+  }
+  .test-link:hover { color: var(--color-error); }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <nav class="stepper" aria-label="ขั้นตอนการตรวจสอบเอกสาร">
+    <div class="step current">
+      <div class="step-dot">1</div>
+      <div class="step-label">อัปโหลด</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot">2</div>
+      <div class="step-label">เลือกชุดเกณฑ์</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-label">ตรวจสอบ</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-label">รายงานผล</div>
+    </div>
+  </nav>
+
+  <h1>อัปโหลดไฟล์ มคอ.2</h1>
+  <p class="lead">อัปโหลดเอกสารรายละเอียดหลักสูตร (มคอ.2) ทีละ 1 ไฟล์ เพื่อเริ่มตรวจสอบความสอดคล้อง</p>
+
+  <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="คลิกเพื่ออัปโหลดไฟล์ มคอ.2">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+    <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่</div>
+    <div class="dropzone-sub">รองรับไฟล์ PDF และ Word (.docx) — อัปโหลดได้ทีละ 1 ไฟล์ต่อครั้ง</div>
+  </div>
+
+  <div id="docCard" class="doc-card">
+    <span id="docStatusChip" class="status-chip success">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      สำเร็จ
+    </span>
+    <div class="doc-card-row">
+      <div class="doc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+      </div>
+      <div>
+        <p class="doc-name">มคอ2-วิศวกรรมคอมพิวเตอร์-2568.pdf</p>
+        <p class="doc-meta">อัปโหลดเมื่อ 23/08/2569 · ดึงข้อความจากไฟล์สำเร็จ</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="errorBanner" class="banner">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#991B1B" stroke-width="1.75" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+    <div>
+      <p class="banner-title">ไม่สามารถดึงข้อความจากไฟล์นี้ได้</p>
+      <p class="banner-body">ไฟล์นี้อาจเป็นภาพสแกนล้วนที่ไม่มีข้อความให้ดึงข้อมูล ระบบจึงปฏิเสธไฟล์นี้และยังไม่นับเป็นการอัปโหลด กรุณาแก้ไขไฟล์ให้เป็นแบบที่คัดลอกข้อความได้ (text-based) หรืออัปโหลดไฟล์ใหม่แทน</p>
+    </div>
+  </div>
+
+  <button type="button" class="test-link" id="testRejectBtn">ทดสอบกรณีไฟล์อัปโหลดไม่ผ่าน</button>
+
+  <div class="actions">
+    <a id="nextBtn" class="btn btn-primary" href="02-select-criteria.html" aria-disabled="true" tabindex="-1">ถัดไป: เลือกชุดเกณฑ์</a>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 01 "อัปโหลดและจัดการไฟล์ มคอ.2" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 1 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "อัปโหลดไฟล์ มคอ.2" / "ดึงข้อความจากไฟล์ได้หรือไม่" / "แจ้งเตือนและปฏิเสธไฟล์"
+</footer>
+
+<script>
+  var dropzone = document.getElementById('dropzone');
+  var docCard = document.getElementById('docCard');
+  var errorBanner = document.getElementById('errorBanner');
+  var nextBtn = document.getElementById('nextBtn');
+  var testRejectBtn = document.getElementById('testRejectBtn');
+
+  function enableNext() {
+    nextBtn.removeAttribute('aria-disabled');
+    nextBtn.removeAttribute('tabindex');
+  }
+
+  nextBtn.addEventListener('click', function (e) {
+    if (nextBtn.getAttribute('aria-disabled') === 'true') {
+      e.preventDefault();
+    }
+  });
+
+  function simulateUploadSuccess() {
+    errorBanner.classList.remove('show');
+    dropzone.style.display = 'none';
+    docCard.classList.add('show');
+    enableNext();
+  }
+
+  dropzone.addEventListener('click', simulateUploadSuccess);
+  dropzone.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      simulateUploadSuccess();
+    }
+  });
+
+  testRejectBtn.addEventListener('click', function () {
+    errorBanner.classList.add('show');
+  });
+</script>
+</body>
+</html>

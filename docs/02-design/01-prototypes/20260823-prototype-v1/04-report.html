@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>รายงานผลตรวจสอบ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-32);
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    flex-shrink: 0;
+  }
+  .step.done .step-dot {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: #FFFFFF;
+  }
+  .step.current .step-dot {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  .step.current .step-label { color: var(--color-primary); }
+  .step.done .step-label { color: var(--color-success); }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border-strong);
+    margin: 0 var(--space-8);
+  }
+  .step-line.done { background: var(--color-success); }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: var(--space-12);
+    margin-bottom: var(--space-24);
+  }
+  .filter-chip {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--radius-medium);
+    border: 1.5px solid var(--color-border-strong);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .filter-chip.active {
+    background: var(--color-info-bg);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .report-list {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    overflow: hidden;
+    margin-bottom: var(--space-32);
+  }
+  .report-row {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .report-row:last-child { border-bottom: none; }
+  .report-row.hidden { display: none; }
+
+  .report-row-main {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-16);
+    padding: var(--space-16);
+    cursor: pointer;
+    transition: background 150ms ease-out;
+  }
+  .report-row-main:hover { background: var(--color-bg); }
+
+  .report-row-body { flex: 1; }
+  .report-desc {
+    font-weight: 600;
+    font-size: 15px;
+    margin: 0 0 4px;
+  }
+  .report-location {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .report-category {
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    margin: 4px 0 0;
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .status-chip.error { background: var(--color-error-bg); color: var(--color-error-text); }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    height: 40px;
+    padding: 10px 20px;
+  }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    height: 40px;
+    padding: 10px 20px;
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-small {
+    font-size: 13px;
+    height: 32px;
+    padding: 6px 14px;
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    flex-shrink: 0;
+  }
+  .btn-small:hover { background: var(--color-info-bg); }
+
+  .report-detail {
+    display: none;
+    padding: 0 var(--space-16) var(--space-16) calc(var(--space-16) + 0px);
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+  }
+  .report-detail.show { display: block; }
+  .report-detail p { margin: var(--space-8) 0 0; }
+  .report-detail strong { color: var(--color-text-primary); }
+
+  .actions {
+    margin-top: var(--space-32);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <nav class="stepper" aria-label="ขั้นตอนการตรวจสอบเอกสาร">
+    <div class="step done">
+      <div class="step-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="step-label">อัปโหลด</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step done">
+      <div class="step-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="step-label">เลือกชุดเกณฑ์</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step done">
+      <div class="step-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="step-label">ตรวจสอบ</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step current">
+      <div class="step-dot">4</div>
+      <div class="step-label">รายงานผล</div>
+    </div>
+  </nav>
+
+  <h1>รายงานผลตรวจสอบ</h1>
+  <p class="lead">พบจุดที่ไม่สอดคล้องกันทั้งหมด 4 รายการ คลิกแต่ละรายการเพื่อดูรายละเอียดเพิ่มเติม</p>
+
+  <div class="filter-chips" role="group" aria-label="กรองประเภทจุดที่ไม่สอดคล้อง">
+    <button type="button" class="filter-chip active" data-filter="all">ทั้งหมด</button>
+    <button type="button" class="filter-chip" data-filter="internal">ภายในเล่ม</button>
+    <button type="button" class="filter-chip" data-filter="cross">ข้ามเล่ม</button>
+  </div>
+
+  <div class="report-list" id="reportList">
+
+    <div class="report-row" data-category="internal">
+      <div class="report-row-main" data-toggle="detail1">
+        <div class="report-row-body">
+          <p class="report-desc">รหัสวิชาไม่ตรงกันระหว่างหน้า 5 และหน้า 42</p>
+          <p class="report-location">หน้า 5, หน้า 42</p>
+          <p class="report-category">ภายในเล่ม</p>
+        </div>
+        <span class="status-chip error">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          สูง
+        </span>
+        <button type="button" class="btn btn-small">ดูในเอกสาร</button>
+      </div>
+      <div class="report-detail" id="detail1">
+        <p>รายวิชา "การเขียนโปรแกรมเชิงวัตถุ" ถูกระบุรหัสวิชาเป็น <strong>950-201</strong> ในหน้า 5 (หมวดโครงสร้างหลักสูตร) แต่ถูกระบุเป็น <strong>950-210</strong> ในหน้า 42 (คำอธิบายรายวิชา) ซึ่งเป็นเลขที่สลับกัน</p>
+        <p><strong>ข้อเสนอแนะ:</strong> ตรวจสอบและแก้ไขให้รหัสวิชาตรงกันทุกจุดที่ปรากฏในเล่ม</p>
+      </div>
+    </div>
+
+    <div class="report-row" data-category="internal">
+      <div class="report-row-main" data-toggle="detail2">
+        <div class="report-row-body">
+          <p class="report-desc">จำนวนหน่วยกิตของวิชาแกนไม่ตรงกันในหมวดโครงสร้างหลักสูตรกับคำอธิบายรายวิชา</p>
+          <p class="report-location">หน้า 8, หน้า 51</p>
+          <p class="report-category">ภายในเล่ม</p>
+        </div>
+        <span class="status-chip warning">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          ปานกลาง
+        </span>
+        <button type="button" class="btn btn-small">ดูในเอกสาร</button>
+      </div>
+      <div class="report-detail" id="detail2">
+        <p>วิชา "คณิตศาสตร์วิศวกรรม 1" ระบุหน่วยกิตเป็น <strong>3(3-0-6)</strong> ในหน้า 8 แต่ระบุเป็น <strong>3(2-2-5)</strong> ในหน้า 51</p>
+        <p><strong>ข้อเสนอแนะ:</strong> ยืนยันโครงสร้างหน่วยกิตที่ถูกต้องและแก้ไขให้ตรงกันทั้งสองจุด</p>
+      </div>
+    </div>
+
+    <div class="report-row" data-category="cross">
+      <div class="report-row-main" data-toggle="detail3">
+        <div class="report-row-body">
+          <p class="report-desc">รหัสวิชาซ้ำกับอีกหลักสูตรหนึ่งที่อยู่ในระบบ</p>
+          <p class="report-location">หน้า 15 (เล่มนี้) · หน้า 22 (วิศวกรรมซอฟต์แวร์ 2568)</p>
+          <p class="report-category">ข้ามเล่ม</p>
+        </div>
+        <span class="status-chip error">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+          สูง
+        </span>
+        <button type="button" class="btn btn-small">ดูในเอกสาร</button>
+      </div>
+      <div class="report-detail" id="detail3">
+        <p>รหัสวิชา <strong>950-305</strong> ถูกใช้ซ้ำกับวิชา "ระบบฝังตัว" ของหลักสูตรวิศวกรรมซอฟต์แวร์ 2568 ที่มีอยู่แล้วในระบบ ทั้งที่เป็นวิชาคนละเนื้อหากัน</p>
+        <p><strong>ข้อเสนอแนะ:</strong> ประสานงานกับผู้จัดทำหลักสูตรอีกเล่มเพื่อออกรหัสวิชาใหม่ที่ไม่ซ้ำกัน</p>
+      </div>
+    </div>
+
+    <div class="report-row" data-category="cross">
+      <div class="report-row-main" data-toggle="detail4">
+        <div class="report-row-body">
+          <p class="report-desc">วิชาแกนที่น่าจะเป็นวิชาเดียวกันแต่ถูกป้อนชื่อไม่ตรงกันระหว่างเล่ม</p>
+          <p class="report-location">หน้า 20 (เล่มนี้) · หน้า 33 (เทคโนโลยีสารสนเทศ 2568)</p>
+          <p class="report-category">ข้ามเล่ม</p>
+        </div>
+        <span class="status-chip warning">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          ปานกลาง
+        </span>
+        <button type="button" class="btn btn-small">ดูในเอกสาร</button>
+      </div>
+      <div class="report-detail" id="detail4">
+        <p>วิชา "หลักการวิศวกรรมซอฟต์แวร์" (รหัส 950-410) ในเล่มนี้ มีคำอธิบายรายวิชาคล้ายกับวิชา "วิศวกรรมซอฟต์แวร์เบื้องต้น" (รหัส 951-220) ของหลักสูตรเทคโนโลยีสารสนเทศ 2568 มาก อาจเป็นวิชาแกนเดียวกันที่ถูกป้อนไม่ตรงกัน</p>
+        <p><strong>ข้อเสนอแนะ:</strong> ตรวจสอบกับผู้จัดทำหลักสูตรอีกเล่มว่าเป็นวิชาเดียวกันหรือไม่ และพิจารณาใช้รหัส/ชื่อร่วมกัน</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <a class="btn btn-secondary" href="03-processing.html">ย้อนกลับ</a>
+    <a class="btn btn-secondary" href="01-upload-mco2.html">กลับไปหน้าอัปโหลด</a>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 05 "รายงานผลตรวจสอบ" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 5 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "แสดงรายงานสรุปผลตรวจสอบ" / "ทบทวนรายงานและนำไปแก้ไข/ส่งอนุมัติ"
+</footer>
+
+<script>
+  var filterChips = document.querySelectorAll('.filter-chip');
+  var reportRows = document.querySelectorAll('.report-row');
+
+  filterChips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      filterChips.forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      var filter = chip.getAttribute('data-filter');
+      reportRows.forEach(function (row) {
+        if (filter === 'all' || row.getAttribute('data-category') === filter) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.report-row-main').forEach(function (rowMain) {
+    rowMain.addEventListener('click', function (e) {
+      if (e.target.closest('.btn-small')) { return; }
+      var detailId = rowMain.getAttribute('data-toggle');
+      var detail = document.getElementById(detailId);
+      detail.classList.toggle('show');
+    });
+  });
+
+  document.querySelectorAll('.btn-small').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      alert('ตัวอย่างต้นแบบ: ในระบบจริงจะเปิดเอกสารพร้อมเลื่อนไปยังตำแหน่งที่พบจุดนี้');
+    });
+  });
+</script>
+</body>
+</html>

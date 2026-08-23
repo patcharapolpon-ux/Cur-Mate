@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เลือกชุดเกณฑ์มาตรฐาน — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-32);
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    flex-shrink: 0;
+  }
+  .step.done .step-dot {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: #FFFFFF;
+  }
+  .step.current .step-dot {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  .step.current .step-label { color: var(--color-primary); }
+  .step.done .step-label { color: var(--color-success); }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border-strong);
+    margin: 0 var(--space-8);
+  }
+  .step-line.done { background: var(--color-success); }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-16);
+  }
+  .note {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    background: var(--color-info-bg);
+    border-radius: var(--radius-medium);
+    padding: var(--space-12) var(--space-16);
+    margin-bottom: var(--space-24);
+  }
+
+  .chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-16);
+  }
+  .criteria-chip {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--radius-medium);
+    border: 1.5px solid var(--color-border-strong);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+  }
+  .criteria-chip .check-icon { display: none; }
+  .criteria-chip.selected {
+    background: var(--color-info-bg);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  .criteria-chip.selected .check-icon { display: inline-flex; }
+  .criteria-chip:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .selected-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-32);
+  }
+  .selected-count.has-selection { color: var(--color-primary); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not([aria-disabled="true"]) { background: var(--color-primary-hover); }
+  .btn-primary[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+
+  .actions {
+    margin-top: var(--space-32);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <nav class="stepper" aria-label="ขั้นตอนการตรวจสอบเอกสาร">
+    <div class="step done">
+      <div class="step-dot">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="step-label">อัปโหลด</div>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step current">
+      <div class="step-dot">2</div>
+      <div class="step-label">เลือกชุดเกณฑ์</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-label">ตรวจสอบ</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-label">รายงานผล</div>
+    </div>
+  </nav>
+
+  <h1>เลือกชุดเกณฑ์มาตรฐาน</h1>
+  <p class="lead">เลือกชุดเกณฑ์ที่ต้องการใช้อ้างอิงในการตรวจสอบครั้งนี้ เลือกได้มากกว่า 1 ชุดพร้อมกัน</p>
+  <p class="note">รายการนี้แสดงเฉพาะชุดเกณฑ์ที่มีสถานะ "เปิดใช้งาน (active)" เท่านั้น ชุดเกณฑ์ที่ยังรอตรวจสอบ (pending) จะไม่ปรากฏในรายการนี้</p>
+
+  <div class="chip-list" id="chipList" role="group" aria-label="รายชื่อชุดเกณฑ์ที่เปิดใช้งาน">
+    <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565">
+      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565
+    </button>
+    <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.โท 2565">
+      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      เกณฑ์มาตรฐานหลักสูตร ป.โท 2565
+    </button>
+    <button type="button" class="criteria-chip" data-name="เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565">
+      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565
+    </button>
+    <button type="button" class="criteria-chip" data-name="เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565">
+      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565
+    </button>
+  </div>
+
+  <p class="selected-count" id="selectedCount">เลือกแล้ว 0 ชุด</p>
+
+  <div class="actions">
+    <a class="btn btn-secondary" href="01-upload-mco2.html">ย้อนกลับ</a>
+    <a id="startBtn" class="btn btn-primary" href="03-processing.html" aria-disabled="true" tabindex="-1">เริ่มตรวจสอบ</a>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 02 "เลือกชุดเกณฑ์มาตรฐานก่อนเริ่มตรวจสอบ/สนทนา" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 3 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "เลือกชุดเกณฑ์ criteria set" / "เลือกอย่างน้อย 1 ชุดแล้วหรือยัง" / "กดเริ่มตรวจสอบ"
+</footer>
+
+<script>
+  var chips = document.querySelectorAll('.criteria-chip');
+  var selectedCount = document.getElementById('selectedCount');
+  var startBtn = document.getElementById('startBtn');
+
+  function updateState() {
+    var selected = document.querySelectorAll('.criteria-chip.selected').length;
+    selectedCount.textContent = 'เลือกแล้ว ' + selected + ' ชุด';
+    selectedCount.classList.toggle('has-selection', selected > 0);
+    if (selected > 0) {
+      startBtn.removeAttribute('aria-disabled');
+      startBtn.removeAttribute('tabindex');
+    } else {
+      startBtn.setAttribute('aria-disabled', 'true');
+      startBtn.setAttribute('tabindex', '-1');
+    }
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      chip.classList.toggle('selected');
+      updateState();
+    });
+  });
+
+  startBtn.addEventListener('click', function (e) {
+    if (startBtn.getAttribute('aria-disabled') === 'true') {
+      e.preventDefault();
+    }
+  });
+
+  updateState();
+</script>
+</body>
+</html>
