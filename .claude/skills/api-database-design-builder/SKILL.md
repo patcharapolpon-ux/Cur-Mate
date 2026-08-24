@@ -1,0 +1,99 @@
+---
+name: api-database-design-builder
+description: สร้าง/ปรับปรุงเอกสาร Database Schema (docs/02-design/02-technical/database-schema.md) และ/หรือ API Spec (docs/02-design/02-technical/api-spec.md) ระดับ conceptual (ยังไม่ผูกมัดกับ DBMS/protocol/technical stack จริง) โดยอ้างอิงข้อมูลจาก Requirement (01-spec), Feature List, High-Level Architecture และ User Journey ที่มีอยู่ทั้งหมด หรือเจาะจงเฉพาะบางฟีเจอร์/entity/operation ก็ได้ ครอบคลุม ER Diagram, รายละเอียดแต่ละ entity/ตาราง (field/ประเภทข้อมูลเชิงแนวคิด/ความสัมพันธ์) และรายการ operation ของ API พร้อม actor/input/output/pre-post-condition ทุกครั้งต้องเสนอแผนก่อนแล้วรอผู้ใช้ยืนยันก่อนสร้าง/แก้ไขจริงเสมอ ใช้เมื่อผู้ใช้ขอให้ "สร้าง database schema" "ทำ ER diagram" "ออกแบบ data model" "สร้าง api spec" "ทำ conceptual api design" "ทำ operation ของระบบ" หรือ "อัปเดต database schema/api spec เดิม"
+---
+
+# API & Database Design Builder
+
+Skill นี้แปลงข้อมูลที่มีอยู่ในสาย **Requirement (01-spec) → Feature List → High-Level Architecture (ถ้ามี) → User Journey** ของโปรเจกต์ Curmate ให้กลายเป็นเอกสารเชิงเทคนิคระดับ **conceptual** 2 ฉบับใน `docs/02-design/02-technical/`:
+
+- **Database Schema** (`database-schema.md`) — ER Diagram + รายละเอียดแต่ละ entity/ตาราง (field, ประเภทข้อมูลเชิงแนวคิด, ความสัมพันธ์) ดูแลโดย agent `database-schema-writer`
+- **API Spec** (`api-spec.md`) — รายการ operation/การกระทำที่ระบบรองรับ พร้อม actor, input/output เชิงแนวคิด, pre/post-condition, กรณีข้อผิดพลาด ดูแลโดย agent `api-spec-writer`
+
+ทั้งสองฉบับ**ไม่ผูกมัดกับ technical stack จริง** (ไม่มีชื่อ DBMS/protocol/framework/library เฉพาะเจาะจง) รายละเอียดการ implement จริงเป็นเอกสารคนละฉบับที่ยังไม่มี agent/skill ดูแล — ถ้าผู้ใช้ขอให้ลงรายละเอียดระดับนั้น ให้แจ้งว่าอยู่นอกสโคปของ skill นี้แทนการเดาลงไปในเอกสาร conceptual
+
+ผู้ใช้อาจสั่งให้ทำทั้งสองเอกสาร หรือเจาะจงเฉพาะเอกสารใดเอกสารหนึ่งก็ได้ — ทุกกรณีต้องผ่านขั้นตอนเสนอแผนและรอการยืนยันก่อนสร้าง/แก้ไขจริงเหมือนกัน **ห้ามข้ามขั้นตอนเสนอแผนไม่ว่ากรณีใด**
+
+ทุกจุดที่ไม่แน่ใจหรือข้อมูลไม่พอ ให้ถามผู้ใช้ก่อนเสมอ — **ห้ามเดาแทนผู้ใช้ในจุดที่กระทบผลลัพธ์เอกสารอย่างมีนัยสำคัญ** ทุกคำถามเลือกทาง (ไม่ใช่คำถามยืนยัน) ต้องมีตัวเลือกอย่างน้อย 3 แนวทางเสมอ พร้อมเหตุผล ข้อดี ข้อเสีย และคำแนะนำอันดับแรก (ผู้ใช้ยังเลือก "Other" เพิ่มเองได้เสมออยู่แล้ว)
+
+**อย่าเรียก agent `backlog-consistency-auditor` จากสกิลนี้** สงวนไว้เฉพาะ skill `feature-journey-sync` เท่านั้น เพื่อให้มีจุดตรวจสอบความสอดคล้องของทั้งสายอยู่ที่เดียวเสมอ
+
+## ขั้นตอน
+
+### 1. ตรวจไฟล์เดิมก่อนเสมอ (existing-first)
+
+- Glob หา `docs/02-design/02-technical/database-schema.md` และ `docs/02-design/02-technical/api-spec.md`
+- ไฟล์ใดมีอยู่แล้ว ให้เปิดอ่านทั้งไฟล์ก่อนเสมอ เพื่อรู้ว่ามี entity/field/ความสัมพันธ์/operation ใดถูกบันทึกไว้แล้วบ้าง (จะได้ต่อยอด ไม่ใช่เขียนซ้ำ/ขัดแย้งของเดิม)
+- ไฟล์ใดยังไม่มี ถือเป็นการสร้างครั้งแรกของฉบับนั้น
+
+### 2. กำหนดสโคปของเอกสาร
+
+ถามผู้ใช้ด้วย `AskUserQuestion` ว่าต้องการทำเอกสารใด (ถ้าคำขอเดิมของผู้ใช้ยังไม่ชัดเจน):
+
+- "ทั้ง 2 เอกสาร: Database Schema + API Spec (แนะนำถ้ายังไม่เคยทำมาก่อน)" — เพราะ API operation ส่วนใหญ่อ้างอิง entity จาก database schema โดยตรง ทำคู่กันจะสอดคล้องกันตั้งแต่ต้น
+- "เฉพาะ Database Schema"
+- "เฉพาะ API Spec" (ถ้าเลือกนี้และยังไม่มี `database-schema.md` อยู่เลย ให้แจ้งผู้ใช้ว่า operation จะยังไม่มี entity อ้างอิงชัดเจน แนะนำให้ทำ database schema ก่อน แต่ถ้าผู้ใช้ยืนยันจะทำ API Spec อย่างเดียวก็ทำได้ โดยระบุ entity เป็น "ยังไม่กำหนด" ไปก่อน)
+
+### 3. กำหนดสโคปของเนื้อหา (ครอบคลุมทั้งหมด หรือเจาะจง)
+
+- ถ้าผู้ใช้ระบุเจาะจงมาแล้วในคำขอ (ชื่อฟีเจอร์/entity/operation เฉพาะ) ใช้ตามนั้นได้เลย
+- ถ้าไม่ได้ระบุ ให้อ่าน `docs/01-requirements/01-spec/*.md`, `docs/01-requirements/02-plan/feature-list.md`, `docs/02-design/02-technical/high-level-architecture.md` (ถ้ามี โดยเฉพาะหัวข้อ "Conceptual Data Entities") และไฟล์ user journey ใน `docs/02-design/01-prototypes/*-user-journey-*.md` มาสรุปเป็นตัวเลือกแล้วถามผู้ใช้ด้วย `AskUserQuestion` ว่าต้องการสโคปแบบใด เช่น "ทั้งหมดที่มีอยู่ (แนะนำถ้ายังไม่เคยทำมาก่อน)", "เฉพาะฟีเจอร์/entity ที่ระบุ", "เจาะจงเลือกเอง"
+- อ่านเอกสารต้นทางในสโคปที่เลือกให้ครบ
+
+### 4. วิเคราะห์ entity/field/ความสัมพันธ์ (สำหรับ Database Schema)
+
+- ระบุ entity เชิงแนวคิดที่ต้องมี จาก Conceptual Data Entities ใน `high-level-architecture.md` (ถ้ามี) และจากข้อมูลที่ spec/feature-list พูดถึงเพิ่มเติม — **ห้ามตั้งชื่อ entity/field ตามคอลัมน์/ตารางที่ผูกกับเทคโนโลยีใดๆ**
+- สำหรับแต่ละ entity ระบุ field ที่ต้องมี พร้อมประเภทข้อมูลเชิงแนวคิด (เลือกจาก 7 ประเภท: Text, Number, Boolean, Date/Time, Enum, Reference, File/Media) และบังคับ/ไม่บังคับ
+- ระบุความสัมพันธ์ระหว่าง entity ทั้งหมด พร้อม cardinality (1-1/1-N/N-N)
+
+จุดที่กำกวมหรือมีมากกว่า 1 ทางเลือกสมเหตุสมผล (เช่น ควรแยก entity ย่อยหรือรวมเป็น entity เดียว, field หนึ่งควรเป็น Enum หรือ Reference ไปยัง entity อื่น, ระดับความละเอียดของ field ที่ spec ไม่ได้ระบุไว้ชัด) ให้ถามผู้ใช้ตามกฎ 3 ทางเลือกในข้อ 6
+
+### 5. วิเคราะห์ operation (สำหรับ API Spec)
+
+- จัดกลุ่ม operation ตาม entity (จาก database-schema.md ถ้ามี) หรือตามฟีเจอร์ใน feature-list
+- ต่อ FR/ขั้นตอนใน user journey แต่ละจุดที่เป็นการกระทำ (เช่น "ผู้ใช้ยืนยันข้อมูล", "ระบบดึงรายชื่อ") ให้พิจารณาว่าควรเป็น operation แยกหรือไม่
+- สำหรับแต่ละ operation ระบุ actor, entity ที่เกี่ยวข้อง, input/output เชิงแนวคิด, pre-condition, post-condition, กรณีข้อผิดพลาดหลัก, และ requirement/ฟีเจอร์ต้นทาง
+
+จุดที่กำกวม (เช่น การกระทำหนึ่งควรแตกเป็นหลาย operation ย่อยหรือรวมเป็น operation เดียว, ขอบเขตของ input/output ที่ spec ไม่ได้ระบุไว้ชัด, กรณีข้อผิดพลาดที่ควรครอบคลุม) ให้ถามผู้ใช้ตามกฎ 3 ทางเลือกในข้อ 6
+
+### 6. ถามคำถามชี้แจงจุดที่ไม่แน่ใจ (ระหว่างขั้นตอน 2-5)
+
+ใช้ `AskUserQuestion` **ทุกคำถามที่เป็นการเลือกทาง (ไม่ใช่คำถามยืนยันแผน) ต้องมีตัวเลือกอย่างน้อย 3 แนวทางเสมอ** พร้อมคำอธิบายเหตุผล ข้อดี ข้อเสีย ของแต่ละแนวทาง และให้ตัวเลือกที่แนะนำมาเป็นอันดับแรกพร้อมระบุว่าแนะนำเพราะอะไร ถามเป็นชุดๆ จนกว่าจะมีข้อมูลพอร่างแผนในขั้นตอนที่ 7 ได้อย่างสมบูรณ์
+
+### 7. ร่างแผนแล้วเสนอให้ผู้ใช้ยืนยันก่อนเสมอ (ห้ามข้าม)
+
+ก่อนมอบหมายให้ agent สร้างไฟล์จริง ต้องสรุปแผนเป็นข้อความให้ผู้ใช้เห็นภาพรวมก่อนเสมอ ประกอบด้วย:
+
+- เอกสารที่จะสร้าง/อัปเดต (Database Schema / API Spec / ทั้งสอง) และเป็นการสร้างไฟล์ใหม่หรืออัปเดตไฟล์เดิม
+- สโคปของเนื้อหา (ฟีเจอร์/entity/operation ใดบ้าง)
+- (ถ้ามี Database Schema) รายชื่อ entity ที่จะอยู่ใน ER Diagram พร้อม field หลักและความสัมพันธ์
+- (ถ้ามี API Spec) รายชื่อกลุ่ม operation และ operation หลักในแต่ละกลุ่ม พร้อม actor
+
+จากนั้นใช้ `AskUserQuestion` ถามยืนยันเป็นขั้นสุดท้ายก่อนดำเนินการ เช่น ตัวเลือก "ยืนยัน สร้าง/อัปเดตตามแผนนี้ (Recommended)" และ "ขอปรับแผนก่อน" — ถ้าผู้ใช้เลือกขอปรับ ให้กลับไปคุยรายละเอียดที่ต้องการเปลี่ยนแล้วเสนอแผนใหม่ซ้ำจนกว่าจะได้รับการยืนยัน
+
+### 8. มอบหมายให้ agent เขียนไฟล์จริง (เรียงลำดับเสมอ: database-schema-writer ก่อน แล้วจึงตามด้วย api-spec-writer)
+
+**อย่าเขียนหรือแก้ไขไฟล์ใดๆ เองใน skill นี้** เมื่อผู้ใช้ยืนยันแผนแล้วเท่านั้น ให้เรียก Agent tool ตามลำดับนี้ (ถ้าสโคปมีทั้งสองเอกสาร ต้องรอ `database-schema-writer` เสร็จก่อน แล้วจึงส่งชื่อ entity ที่ยืนยัน/สร้างจริงต่อให้ `api-spec-writer` เพื่อให้ operation อ้างอิง entity ที่ถูกต้อง):
+
+1. ถ้าสโคปมี Database Schema: เรียก Agent tool โดยระบุ `subagent_type: "database-schema-writer"` พร้อมส่ง context ตามที่ agent ต้องการ (ดู "อินพุตที่คุณควรได้รับในคำสั่ง" ใน `.claude/agents/database-schema-writer.md`): วันที่ปัจจุบัน, รายชื่อ entity พร้อมคำอธิบาย, field ของแต่ละ entity, ความสัมพันธ์ที่ยืนยันแล้วทั้งหมด
+2. ถ้าสโคปมี API Spec: เรียก Agent tool โดยระบุ `subagent_type: "api-spec-writer"` พร้อมส่ง context ตามที่ agent ต้องการ (ดู "อินพุตที่คุณควรได้รับในคำสั่ง" ใน `.claude/agents/api-spec-writer.md`): วันที่ปัจจุบัน, รายชื่อกลุ่ม operation, รายละเอียดแต่ละ operation ที่ยืนยันแล้วทั้งหมด (คำอธิบาย, actor, entity ที่เกี่ยวข้อง, input, output, pre/post-condition, กรณีข้อผิดพลาด, requirement ต้นทาง)
+
+### 9. รายงานผลกลับผู้ใช้
+
+สรุปให้ผู้ใช้ทราบแบบกระชับ พร้อมลิงก์ไฟล์ (markdown link relative path) ไปยัง:
+- `docs/02-design/02-technical/database-schema.md` (ถ้าทำ)
+- `docs/02-design/02-technical/api-spec.md` (ถ้าทำ)
+- `docs/02-design/02-technical/index.md` (ถ้าอัปเดตครั้งแรก)
+- ไฟล์ log ของวันนี้
+
+ถ้าระหว่างทำงานพบว่ามีฟีเจอร์สำคัญที่ยังไม่มี user journey/high-level-architecture รองรับเลย (จึงประเมิน entity/operation ได้ไม่ครบ) ให้ระบุไว้ในรายงานว่าควรรัน skill `feature-journey-sync` หรือ `architecture-builder` ก่อน แล้วค่อยกลับมาเรียก skill นี้ต่อ
+
+## ข้อควรจำ
+
+- **ห้ามข้ามขั้นตอนเสนอแผนและรอยืนยัน (ข้อ 7)** ไม่ว่าสโคปจะเล็กแค่ไหน หรือผู้ใช้จะเคยยืนยันแผนคล้ายกันมาก่อนในบทสนทนาเดียวกันก็ตาม
+- **ห้ามระบุชื่อ DBMS/protocol/framework/library/cloud product เฉพาะเจาะจงในเอกสารทั้งสองฉบับเด็ดขาด** เอกสารต้องอยู่ในระดับ conceptual เสมอ — ถ้าผู้ใช้พูดถึงชื่อ stack มาระหว่างคุย ให้แปลงเป็นแนวคิด/หน้าที่ก่อนส่งต่อให้ agent
+- เนื้อหาเอกสารทั้งหมดต้องเป็นภาษาไทยตาม `CLAUDE.md`
+- Database Schema และ API Spec มีไฟล์เดียวต่อโปรเจกต์เสมอ เป็น living document — ห้ามลบเนื้อหา/entity/operation เดิม ให้ทำเครื่องหมายล้าสมัยแทนเมื่อของเดิมเลิกใช้
+- การอ้างอิงข้ามเอกสาร `.md` ของ vault ใช้ Obsidian wikilink แบบ relative path เสมอ (ไม่ใช้ heading-anchor)
+- agent `database-schema-writer` และ `api-spec-writer` เป็นผู้เขียนไฟล์จริงทั้งหมดเท่านั้น (เอกสารหลัก, index, log) — skill นี้ทำหน้าที่สำรวจข้อมูล/ถามคำถาม/ยืนยันแผนเท่านั้น
+- **ห้ามใช้ skill นี้เขียนรายละเอียดการ implement จริง** (DBMS/protocol/framework ที่เลือกใช้, payload format, authentication) — ถ้าผู้ใช้ต้องการเอกสารระดับนั้น ให้แจ้งว่าอยู่นอกสโคปของ skill นี้
