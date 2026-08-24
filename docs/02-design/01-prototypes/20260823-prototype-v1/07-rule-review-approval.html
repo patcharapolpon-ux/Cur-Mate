@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตรวจสอบและอนุมัติกฎเกณฑ์ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-overlay: 0 16px 40px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .admin-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .set-name {
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+    margin-bottom: var(--space-24);
+    flex-wrap: wrap;
+  }
+  .progress-note {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+  .progress-note.all-done { color: var(--color-success-text); }
+
+  .rule-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    margin-bottom: var(--space-32);
+  }
+
+  .rule-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-ai-accent);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-subtle);
+    transition: border-color 150ms ease-out, background 150ms ease-out;
+  }
+  .rule-card.approved {
+    border-color: var(--color-success);
+    border-left-color: var(--color-success);
+    background: #F7FEF9;
+  }
+
+  .rule-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--radius-small);
+    background: var(--color-ai-accent-bg);
+    color: var(--color-ai-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .rule-text {
+    font-size: 16px;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-16);
+  }
+  .rule-card.approved .rule-text { color: var(--color-text-secondary); }
+
+  .rule-actions {
+    display: flex;
+    gap: var(--space-12);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-small {
+    font-size: 13px;
+    height: 34px;
+    padding: 6px 14px;
+  }
+  .btn-approve {
+    background: var(--color-success);
+    color: #FFFFFF;
+  }
+  .btn-approve:hover:not(:disabled) { background: #15803D; }
+  .btn-approve:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-reject {
+    background: transparent;
+    color: var(--color-error);
+    border: 1.5px solid var(--color-error);
+  }
+  .btn-reject:hover:not(:disabled) { background: var(--color-error-bg); }
+  .btn-reject:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .approved-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-success-text);
+  }
+
+  .active-banner {
+    display: none;
+    align-items: flex-start;
+    gap: var(--space-12);
+    padding: var(--space-24);
+    border-radius: var(--radius-large);
+    background: var(--color-success-bg);
+    color: var(--color-success-text);
+    box-shadow: var(--shadow-overlay);
+    margin-bottom: var(--space-32);
+  }
+  .active-banner.show { display: flex; }
+  .active-banner-title { font-weight: 700; font-size: 17px; margin: 0 0 4px; }
+  .active-banner-body { font-size: 14px; margin: 0 0 var(--space-16); }
+
+  .actions {
+    margin-top: var(--space-32);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="05-criteria-dashboard.html">จัดการฐานความรู้เกณฑ์มาตรฐาน</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="current">ตรวจสอบและอนุมัติกฎเกณฑ์</span>
+    </nav>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1>ตรวจสอบและอนุมัติกฎเกณฑ์</h1>
+      <p class="set-name">ชุดเกณฑ์: เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569</p>
+    </div>
+    <span id="setStatusChip" class="status-chip warning">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      รอตรวจสอบ
+    </span>
+  </div>
+  <p class="lead">AI สกัดกฎเกณฑ์ต่อไปนี้จากเอกสารที่อัปโหลด กรุณาตรวจสอบและอนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน ชุดเกณฑ์จะเปิดใช้งาน (active) ได้ก็ต่อเมื่อกฎเกณฑ์ทุกข้อผ่านการอนุมัติแล้ว</p>
+
+  <div id="activeBanner" class="active-banner">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path d="M20 6L9 17l-5-5"/></svg>
+    <div>
+      <p class="active-banner-title">ชุดเกณฑ์นี้เปลี่ยนสถานะเป็นเปิดใช้งาน (active) แล้ว</p>
+      <p class="active-banner-body">กฎเกณฑ์ทั้งหมดผ่านการอนุมัติครบแล้ว ชุดเกณฑ์นี้จะปรากฏในรายการให้ผู้ใช้งานทั่วไปเลือกอ้างอิงตอนตรวจสอบเอกสารหรือสนทนากับแชทบอท</p>
+      <a class="btn btn-primary" href="05-criteria-dashboard.html">กลับไปหน้ารายการชุดเกณฑ์</a>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <p class="progress-note" id="progressNote">อนุมัติแล้ว 0 จาก 5 ข้อ</p>
+    <button type="button" class="btn btn-secondary" id="bulkApproveBtn">อนุมัติทั้งหมด (Bulk Approve)</button>
+  </div>
+
+  <div class="rule-list" id="ruleList">
+
+    <div class="rule-card" data-rule="1">
+      <div class="rule-card-top">
+        <span class="ai-badge">AI SUGGESTED</span>
+      </div>
+      <p class="rule-text">หมวดวิชาเลือกต้องมีหน่วยกิตไม่เกิน 24 หน่วยกิต</p>
+      <div class="rule-actions">
+        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+      </div>
+    </div>
+
+    <div class="rule-card" data-rule="2">
+      <div class="rule-card-top">
+        <span class="ai-badge">AI SUGGESTED</span>
+      </div>
+      <p class="rule-text">หลักสูตรปริญญาตรีต้องมีหน่วยกิตรวมไม่น้อยกว่า 120 หน่วยกิต</p>
+      <div class="rule-actions">
+        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+      </div>
+    </div>
+
+    <div class="rule-card" data-rule="3">
+      <div class="rule-card-top">
+        <span class="ai-badge">AI SUGGESTED</span>
+      </div>
+      <p class="rule-text">หมวดวิชาศึกษาทั่วไปต้องมีหน่วยกิตไม่น้อยกว่า 30 หน่วยกิต</p>
+      <div class="rule-actions">
+        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+      </div>
+    </div>
+
+    <div class="rule-card" data-rule="4">
+      <div class="rule-card-top">
+        <span class="ai-badge">AI SUGGESTED</span>
+      </div>
+      <p class="rule-text">สัดส่วนอาจารย์ประจำหลักสูตรต่อจำนวนนักศึกษาในหมวดปฏิบัติการต้องไม่เกิน 1:30</p>
+      <div class="rule-actions">
+        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+      </div>
+    </div>
+
+    <div class="rule-card" data-rule="5">
+      <div class="rule-card-top">
+        <span class="ai-badge">AI SUGGESTED</span>
+      </div>
+      <p class="rule-text">แผนการศึกษาต้องระบุจำนวนหน่วยกิตรายวิชาในแต่ละภาคการศึกษาปกติไม่เกิน 22 หน่วยกิต</p>
+      <div class="rule-actions">
+        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <a class="btn btn-secondary" href="05-criteria-dashboard.html">ย้อนกลับ</a>
+    <a class="btn btn-secondary" href="06-create-criteria-set.html">อัปโหลดเอกสารเพิ่ม</a>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 07 "ตรวจสอบ แก้ไข และอนุมัติกฎเกณฑ์ที่ AI สกัดมา" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 4 · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "ตรวจสอบและแก้ไขกฎเกณฑ์แต่ละข้อ" / "เลือกวิธีอนุมัติ" / "อนุมัติทีละข้อ" / "อนุมัติรวดเดียวทั้งชุด bulk approve" / "ชุดเกณฑ์เปลี่ยนสถานะเป็น active" — การ "ปฏิเสธ (Reject)" ในหน้านี้เป็นตัวอย่างต้นแบบเท่านั้น เนื่องจาก spec ยังไม่ได้กำหนดพฤติกรรมของการปฏิเสธไว้ (คำถามเปิดใน spec ต้นทาง)
+</footer>
+
+<script>
+  var ruleCards = document.querySelectorAll('.rule-card');
+  var totalRules = ruleCards.length;
+  var progressNote = document.getElementById('progressNote');
+  var bulkApproveBtn = document.getElementById('bulkApproveBtn');
+  var activeBanner = document.getElementById('activeBanner');
+  var setStatusChip = document.getElementById('setStatusChip');
+
+  var successIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+
+  function approveCard(card) {
+    if (card.classList.contains('approved')) { return; }
+    card.classList.add('approved');
+    var actions = card.querySelector('.rule-actions');
+    actions.innerHTML = '<span class="approved-label">' + successIcon + 'อนุมัติแล้ว</span>';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    var approvedCount = document.querySelectorAll('.rule-card.approved').length;
+    progressNote.textContent = 'อนุมัติแล้ว ' + approvedCount + ' จาก ' + totalRules + ' ข้อ';
+    if (approvedCount >= totalRules) {
+      progressNote.classList.add('all-done');
+      progressNote.textContent = 'อนุมัติครบทุกข้อแล้ว (' + totalRules + '/' + totalRules + ')';
+      bulkApproveBtn.disabled = true;
+      activeBanner.classList.add('show');
+      setStatusChip.className = 'status-chip success';
+      setStatusChip.innerHTML = successIcon + 'เปิดใช้งาน';
+    }
+  }
+
+  ruleCards.forEach(function (card) {
+    card.querySelector('.btn-approve').addEventListener('click', function () {
+      approveCard(card);
+    });
+    card.querySelector('.btn-reject').addEventListener('click', function () {
+      alert('ตัวอย่างต้นแบบ: ระบบยังไม่ได้กำหนดพฤติกรรมของการปฏิเสธกฎเกณฑ์ (เป็นคำถามเปิดในเอกสาร spec ต้นทาง) ในเวอร์ชันจริงอาจลบทิ้ง ให้ AI สกัดใหม่ หรือให้แอดมินพิมพ์กฎเกณฑ์แทน');
+    });
+  });
+
+  bulkApproveBtn.addEventListener('click', function () {
+    ruleCards.forEach(function (card) { approveCard(card); });
+  });
+</script>
+</body>
+</html>

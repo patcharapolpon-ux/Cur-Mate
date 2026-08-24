@@ -1,6 +1,6 @@
 ---
 name: acceptance-criteria-writer
-description: เขียน/อัปเดตเอกสาร Acceptance Criteria (รูปแบบ Given-When-Then ต่อแต่ละ Backlog Item) ที่ docs/03-testing/01-test-plan/acceptance-criteria.md จาก backlog, feature-list, และเอกสาร spec/prototype/user journey ที่เกี่ยวข้อง พร้อมอัปเดต docs/03-testing/01-test-plan/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill test-design-builder เท่านั้น หลังจากที่สโคปและสถานการณ์ที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
+description: เขียน/อัปเดตเอกสาร Acceptance Criteria (รูปแบบ Given-When-Then ต่อแต่ละ Backlog Item) ที่ docs/03-testing/01-test-plan/acceptance-criteria.md จาก backlog, feature-list, และเอกสาร spec/prototype/user journey ที่เกี่ยวข้อง พร้อมอัปเดต docs/03-testing/01-test-plan/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill test-design-builder (สร้างสถานการณ์ใหม่ทั้งชุด) หรือ skill feature-journey-sync (แก้ไขจุดที่อ้างอิง requirement/backlog/feature-list ผิดหรือล้าสมัย ตามรายงานจาก agent backlog-consistency-auditor) หรือ skill pipeline-orchestrator (รัน pipeline ต่อเนื่องตั้งแต่ requirement ใหม่จนถึงชุดทดสอบในคำสั่งเดียว) เท่านั้น หลังจากที่สโคปและสถานการณ์ที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
@@ -12,6 +12,7 @@ model: sonnet
 ## อินพุตที่คุณควรได้รับในคำสั่ง
 
 - วันที่ปัจจุบันในรูปแบบ `YYYY-MM-DD`
+- กรณีถูกเรียกจาก skill `feature-journey-sync` เพื่อแก้ไขความไม่สอดคล้อง ให้ระบุด้วยว่าเป็นการแก้ไขจุดใด (เช่น สถานการณ์อ้าง FR ที่ไม่มีแล้ว, อ้างอิงฟีเจอร์/backlog item ที่เปลี่ยนชื่อ/ถูกยกเลิก) พร้อมอ้างอิงปัญหาที่ตรวจพบจาก agent `backlog-consistency-auditor`
 - รายการ Backlog Item ในสโคปรอบนี้ (เลขลำดับ + หัวข้อ ตรงกับแถวใน `backlog.md`) แต่ละรายการมี:
   - รายชื่อฟีเจอร์ (เลข + ชื่อ ตรงกับ `feature-list.md`) ที่อยู่ภายใต้ backlog item นั้นซึ่งต้องเขียน/อัปเดต AC
   - สำหรับแต่ละฟีเจอร์: สถานการณ์ (scenario) ที่ต้องครอบคลุมแล้ว วิเคราะห์มาแล้วว่าเป็น happy path หรือ negative/edge case พร้อม Given/When/Then คร่าวๆ ของแต่ละสถานการณ์, FR ข้อที่เกี่ยวข้องของ spec ต้นทาง, และหน้าจอ prototype/journey ที่เกี่ยวข้อง (ถ้ามี)

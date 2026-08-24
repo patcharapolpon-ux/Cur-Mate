@@ -27,7 +27,8 @@ Skill นี้แปลงข้อมูลที่มีอยู่ใน�
 
 - Glob/Read ตรวจว่า `docs/01-requirements/02-plan/feature-list.md` มีอยู่จริงและครอบคลุม backlog item ในสโคป — ถ้ายังไม่มีฟีเจอร์ที่จำเป็นเลย ให้แจ้งผู้ใช้ว่าต้องรัน skill `feature-journey-sync` ก่อนเพื่อแตก backlog เป็นฟีเจอร์ (ไม่ต้องรันเองแทน แค่แนะนำ)
 - สังเกตคร่าวๆ ว่า feature-list/journey ดูสอดคล้องกับ spec ปัจจุบันหรือไม่ (เช่น อ้างอิง FR ที่ยังมีอยู่จริง) — ถ้าพบสัญญาณล้าสมัยชัดเจน ให้แจ้งผู้ใช้และแนะนำให้รัน `feature-journey-sync` ก่อนเพื่อความถูกต้องของเอกสารทดสอบที่จะสร้างต่อ แต่ไม่บังคับ ถ้าผู้ใช้ยืนยันจะทำต่อเลยก็ทำตามสโคปที่ระบุ
-- อย่าเรียก agent `backlog-consistency-auditor` จาก skill นี้ — agent นั้นสงวนไว้เฉพาะ skill `feature-journey-sync` เท่านั้น
+- ถ้าพบว่าเอกสารทดสอบเดิม (`acceptance-criteria.md`/`test-plan.md`/`test-cases/*.md`) มีจุดที่อ้างอิง requirement/backlog/feature-list/journey ผิดหรือล้าสมัยระหว่างสำรวจข้อมูล ก็ให้แจ้งผู้ใช้และแนะนำ `feature-journey-sync` เช่นกัน (ครอบคลุมการซ่อมความสอดคล้องของเอกสารทดสอบด้วยแล้ว) แต่ไม่บังคับ
+- **อย่าเรียก agent `backlog-consistency-auditor` จาก skill นี้** — agent นั้นสงวนไว้เฉพาะ skill `feature-journey-sync` เท่านั้น เพื่อให้มีจุดตรวจสอบความสอดคล้องของทั้ง 7 ชั้น (Requirement → Backlog → Feature List → User Journey → Acceptance Criteria → Test Plan → Test Case) อยู่ที่เดียวเสมอ ไม่ซ้ำซ้อนหรือขัดแย้งกัน
 
 ### 3. สำรวจเอกสารต้นทางและเอกสารทดสอบที่มีอยู่แล้ว
 
