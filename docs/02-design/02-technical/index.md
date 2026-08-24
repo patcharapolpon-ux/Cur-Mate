@@ -14,3 +14,5 @@
 เอกสาร Database Schema (conceptual, ยังไม่ผูกกับ DBMS จริง) อยู่ที่ [[database-schema|database-schema]] ดูแลโดย skill `api-database-design-builder`
 
 เอกสาร API Spec (conceptual, ยังไม่ผูกกับ protocol จริง) อยู่ที่ [[api-spec|api-spec]] ดูแลโดย skill `api-database-design-builder`
+
+เอกสาร Detailed Design (conceptual, sequence flow ต่อ operation) อยู่ที่ [[detailed-design|detailed-design]] ดูแลโดย skill `detailed-design-builder`
