@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สร้างชุดเกณฑ์ใหม่ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .admin-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-32);
+  }
+
+  h2.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: var(--space-32) 0 var(--space-16);
+  }
+
+  .field { margin-bottom: var(--space-16); }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+  }
+  .field .helper {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin: 6px 0 0;
+  }
+  .text-input, .select-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+  }
+  .text-input:focus, .select-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
+
+  /* Dropzone */
+  .dropzone {
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius-large);
+    background: var(--color-bg);
+    padding: var(--space-32) var(--space-24);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 180ms ease-out;
+  }
+  .dropzone:hover, .dropzone:focus-visible {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+  .dropzone svg { margin-bottom: var(--space-12); }
+  .dropzone-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .dropzone-sub {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    margin-top: var(--space-16);
+  }
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    padding: var(--space-12) var(--space-16);
+  }
+  .file-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-medium);
+    background: var(--color-info-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+    word-break: break-all;
+  }
+  .file-meta {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    margin: 2px 0 0;
+  }
+  .file-remove {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: var(--font-body);
+    padding: 4px 8px;
+    border-radius: var(--radius-small);
+    flex-shrink: 0;
+  }
+  .file-remove:hover { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  .toast {
+    display: none;
+    align-items: flex-start;
+    gap: var(--space-12);
+    margin-top: var(--space-16);
+    padding: var(--space-16);
+    border-radius: var(--radius-medium);
+    background: var(--color-ai-accent-bg);
+    color: #4C1D95;
+    transition: opacity 180ms ease-out;
+  }
+  .toast.show { display: flex; }
+  .toast-title { font-weight: 600; margin: 0 0 4px; }
+  .toast-body { font-size: 14px; margin: 0; }
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(124, 58, 237, 0.25);
+    border-top-color: var(--color-ai-accent);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    margin-top: 2px;
+    animation: spin 800ms linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:active:not(:disabled) { background: var(--color-primary-active); }
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+
+  .actions {
+    margin-top: var(--space-32);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="05-criteria-dashboard.html">จัดการฐานความรู้เกณฑ์มาตรฐาน</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="current">สร้างชุดเกณฑ์ใหม่</span>
+    </nav>
+  </div>
+
+  <h1>สร้างชุดเกณฑ์ใหม่</h1>
+  <p class="lead">ตั้งชื่อและกรอกข้อมูลกำกับของชุดเกณฑ์ จากนั้นอัปโหลดเอกสารเกณฑ์มาตรฐาน (PDF/Word) เพื่อให้ AI สกัดกฎเกณฑ์โดยอัตโนมัติ</p>
+
+  <div class="field">
+    <label for="setName">ชื่อชุดเกณฑ์</label>
+    <input type="text" id="setName" class="text-input" placeholder="เช่น เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569" value="เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569">
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="setYear">ปี พ.ศ./ช่วงเวลาบังคับใช้</label>
+      <input type="text" id="setYear" class="text-input" placeholder="เช่น 2569" value="2569">
+    </div>
+    <div class="field">
+      <label for="setLevel">ระดับการศึกษา</label>
+      <select id="setLevel" class="select-input">
+        <option>ปริญญาตรี</option>
+        <option>ปริญญาโท</option>
+        <option>ปริญญาเอก</option>
+        <option>ประกาศนียบัตรบัณฑิต</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="setScope">ขอบเขต/สาขาที่เกี่ยวข้อง</label>
+    <input type="text" id="setScope" class="text-input" placeholder="เช่น วิทยาการคอมพิวเตอร์ หรือทุกสาขา" value="วิทยาการคอมพิวเตอร์">
+    <p class="helper">ใช้ให้ระบบช่วยแนะนำได้ว่าหลักสูตรหนึ่งควรอ้างอิงชุดเกณฑ์ใดตอนตรวจสอบ</p>
+  </div>
+
+  <h2 class="section-title">อัปโหลดเอกสารเข้าชุดเกณฑ์</h2>
+
+  <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="คลิกเพื่ออัปโหลดเอกสารเกณฑ์มาตรฐาน">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+    <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่</div>
+    <div class="dropzone-sub">รองรับไฟล์ PDF และ Word (.docx) — อัปโหลดได้หลายไฟล์ สะสมเป็นคลังเอกสารของชุดนี้</div>
+  </div>
+
+  <div id="fileList" class="file-list"></div>
+
+  <div id="toast" class="toast">
+    <div class="spinner"></div>
+    <div>
+      <p class="toast-title" id="toastTitle">กำลังสกัดกฎเกณฑ์ด้วย AI...</p>
+      <p class="toast-body" id="toastBody">ระบบกำลังอ่านเอกสารที่อัปโหลดและสกัดกฎเกณฑ์ออกมาเป็นรายการรอตรวจสอบ</p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a class="btn btn-secondary" href="05-criteria-dashboard.html">ย้อนกลับ</a>
+    <button type="button" id="extractBtn" class="btn btn-primary" disabled>บันทึกและสกัดกฎเกณฑ์</button>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 06 "จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร (สร้างชุดเกณฑ์ + อัปโหลดเอกสาร)" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 2 และ FR ข้อ 3 · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "สร้างและตั้งชื่อชุดเกณฑ์ใหม่ พร้อม metadata" / "อัปโหลดเอกสาร PDF/Word เข้าชุดเกณฑ์"
+</footer>
+
+<script>
+  var dropzone = document.getElementById('dropzone');
+  var fileList = document.getElementById('fileList');
+  var extractBtn = document.getElementById('extractBtn');
+  var toast = document.getElementById('toast');
+  var toastTitle = document.getElementById('toastTitle');
+  var toastBody = document.getElementById('toastBody');
+  var fileCount = 0;
+
+  var mockFileNames = [
+    'ประกาศเกณฑ์มาตรฐานหลักสูตร-วิทยาการคอมพิวเตอร์-2569.pdf',
+    'เกณฑ์มาตรฐานคุณวุฒิระดับปริญญาตรี-ภาคผนวก.docx',
+    'ตารางโครงสร้างหน่วยกิตหมวดวิชาเฉพาะ-2569.pdf'
+  ];
+
+  var docIcon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>';
+
+  function addFile() {
+    var name = mockFileNames[fileCount % mockFileNames.length];
+    fileCount += 1;
+    var item = document.createElement('div');
+    item.className = 'file-item';
+    item.innerHTML =
+      '<div class="file-icon">' + docIcon + '</div>' +
+      '<div class="file-info">' +
+        '<p class="file-name">' + name + '</p>' +
+        '<p class="file-meta">อัปโหลดสำเร็จ · เอกสารที่ ' + fileCount + ' ของชุดนี้</p>' +
+      '</div>' +
+      '<button type="button" class="file-remove">นำออก</button>';
+    item.querySelector('.file-remove').addEventListener('click', function () {
+      fileList.removeChild(item);
+      updateExtractState();
+    });
+    fileList.appendChild(item);
+    updateExtractState();
+  }
+
+  function updateExtractState() {
+    extractBtn.disabled = fileList.children.length === 0;
+  }
+
+  dropzone.addEventListener('click', addFile);
+  dropzone.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      addFile();
+    }
+  });
+
+  extractBtn.addEventListener('click', function () {
+    if (extractBtn.disabled) { return; }
+    extractBtn.disabled = true;
+    extractBtn.textContent = 'กำลังสกัดกฎเกณฑ์...';
+    toastTitle.textContent = 'กำลังสกัดกฎเกณฑ์ด้วย AI...';
+    toastBody.textContent = 'ระบบกำลังอ่านเอกสารที่อัปโหลดและสกัดกฎเกณฑ์ออกมาเป็นรายการรอตรวจสอบ';
+    toast.classList.add('show');
+    setTimeout(function () {
+      window.location.href = '07-rule-review-approval.html';
+    }, 700);
+  });
+</script>
+</body>
+</html>

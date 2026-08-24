@@ -1,6 +1,6 @@
 ---
 name: test-case-writer
-description: เขียน/อัปเดตเอกสาร Test Case แบบ step-by-step ต่อฟีเจอร์ที่ docs/03-testing/01-test-plan/test-cases/{NN}-{feature-slug}.md (พร้อมดูแล manifest docs/03-testing/01-test-plan/test-cases/index.md) จาก acceptance-criteria, backlog, feature-list, และ user journey ที่เกี่ยวข้อง โดยแต่ละ test case มีอย่างน้อย test id, ชื่อ test case, pre-condition, ขั้นตอนทดสอบ, ผลลัพธ์ที่คาดหวัง, test data พร้อมอ้างอิงกลับไปยัง requirement/acceptance-criteria/journey เสมอ พร้อมอัปเดต docs/03-testing/01-test-plan/index.md (ครั้งแรกที่มี test-cases/index.md) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill test-design-builder เท่านั้น หลังจากที่ฟีเจอร์และสถานการณ์ที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้ (เรียกทีละฟีเจอร์เท่านั้น ห้ามเรียกขนานกันหลายฟีเจอร์พร้อมกัน เพราะทุกครั้งต้องแก้ manifest ไฟล์เดียวกัน)
+description: เขียน/อัปเดตเอกสาร Test Case แบบ step-by-step ต่อฟีเจอร์ที่ docs/03-testing/01-test-plan/test-cases/{NN}-{feature-slug}.md (พร้อมดูแล manifest docs/03-testing/01-test-plan/test-cases/index.md) จาก acceptance-criteria, backlog, feature-list, และ user journey ที่เกี่ยวข้อง โดยแต่ละ test case มีอย่างน้อย test id, ชื่อ test case, pre-condition, ขั้นตอนทดสอบ, ผลลัพธ์ที่คาดหวัง, test data พร้อมอ้างอิงกลับไปยัง requirement/acceptance-criteria/journey เสมอ พร้อมอัปเดต docs/03-testing/01-test-plan/index.md (ครั้งแรกที่มี test-cases/index.md) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill test-design-builder (สร้าง test case ใหม่) หรือ skill feature-journey-sync (แก้ไขจุดที่อ้างอิง AC/feature/backlog ผิดหรือล้าสมัย ตามรายงานจาก agent backlog-consistency-auditor) หรือ skill pipeline-orchestrator (รัน pipeline ต่อเนื่องตั้งแต่ requirement ใหม่จนถึงชุดทดสอบในคำสั่งเดียว) เท่านั้น หลังจากที่ฟีเจอร์และสถานการณ์ที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้ (เรียกทีละฟีเจอร์เท่านั้น ห้ามเรียกขนานกันหลายฟีเจอร์พร้อมกัน เพราะทุกครั้งต้องแก้ manifest ไฟล์เดียวกัน)
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
@@ -12,6 +12,7 @@ model: sonnet
 ## อินพุตที่คุณควรได้รับในคำสั่ง
 
 - วันที่ปัจจุบันในรูปแบบ `YYYYMMDD`
+- กรณีถูกเรียกจาก skill `feature-journey-sync` เพื่อแก้ไขความไม่สอดคล้อง ให้ระบุด้วยว่าเป็นการแก้ไขจุดใด (เช่น แถวอ้าง AC ID ที่ไม่มีแล้ว, ฟีเจอร์/backlog อ้างอิงเปลี่ยนชื่อ) พร้อมอ้างอิงปัญหาที่ตรวจพบจาก agent `backlog-consistency-auditor`
 - ฟีเจอร์ที่รับผิดชอบรอบนี้ (เลข 2 หลัก + ชื่อ ตรงกับ `feature-list.md`) และ Backlog Item ที่ฟีเจอร์นี้สังกัดอยู่ (เลข + หัวข้อ ตรงกับ `backlog.md`)
 - รายการ AC ID ที่เกี่ยวข้องกับฟีเจอร์นี้จาก `acceptance-criteria.md` (เช่น `AC-01-01`, `AC-01-02`) พร้อมเนื้อหา Given-When-Then ของแต่ละ AC (หรือให้คุณเปิดไฟล์อ่านเองก็ได้)
 - User Journey ที่เกี่ยวข้อง (wikilink ถ้ามี) เพื่อใช้ลำดับขั้นตอนจริงที่ผู้ใช้ทำในหน้าจอ และ prototype ที่เกี่ยวข้อง (ถ้ามี) เพื่อใช้รายละเอียด UI/ปุ่ม/ข้อความจริงประกอบขั้นตอนทดสอบ

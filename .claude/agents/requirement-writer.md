@@ -1,6 +1,6 @@
 ---
 name: requirement-writer
-description: เขียน/แก้ไขเอกสาร requirement spec ใน docs/01-requirements/01-spec, อัปเดต docs/01-requirements/backlog.md และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill requirement-intake (requirement ใหม่/แก้ไข requirement) หรือ skill feature-journey-sync (แก้ spec/backlog ให้สอดคล้องกับ Feature List/User Journey ที่พบว่าล้าสมัยจากการตรวจสอบความสอดคล้อง) เท่านั้น หลังจากที่ requirement หรือการแก้ไขที่ต้องทำถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
+description: เขียน/แก้ไขเอกสาร requirement spec ใน docs/01-requirements/01-spec, อัปเดต docs/01-requirements/backlog.md และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill requirement-intake (requirement ใหม่/แก้ไข requirement) หรือ skill feature-journey-sync (แก้ spec/backlog ให้สอดคล้องกับ Feature List/User Journey ที่พบว่าล้าสมัยจากการตรวจสอบความสอดคล้อง) หรือ skill pipeline-orchestrator (รัน pipeline ต่อเนื่องตั้งแต่ requirement ใหม่จนถึงชุดทดสอบในคำสั่งเดียว) เท่านั้น หลังจากที่ requirement หรือการแก้ไขที่ต้องทำถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---

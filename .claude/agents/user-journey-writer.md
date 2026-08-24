@@ -1,6 +1,6 @@
 ---
 name: user-journey-writer
-description: เขียน/อัปเดตเอกสาร User Journey (วาดด้วย Mermaid diagram พร้อม mapping กลับไปยัง requirement แต่ละข้อ) ที่ docs/02-design/01-prototypes ต่อ journey หนึ่งไฟล์ พร้อมอัปเดต wikilink กลับใน docs/01-requirements/02-plan/feature-list.md และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault รวมถึงแก้ไขจุดที่ล้าสมัย/ไม่สอดคล้อง (เช่น mapping ที่อ้าง FR ซึ่งไม่ตรงกับ spec ปัจจุบัน, จำนวนโหนด/คำอธิบาย/mapping ไม่เท่ากัน) ตามรายงานจาก agent backlog-consistency-auditor ใช้งานผ่าน skill feature-journey-sync เท่านั้น หลังจากที่ flow ของ journey หรือจุดที่ต้องแก้ไขถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
+description: เขียน/อัปเดตเอกสาร User Journey (วาดด้วย Mermaid diagram พร้อม mapping กลับไปยัง requirement แต่ละข้อ) ที่ docs/02-design/01-prototypes ต่อ journey หนึ่งไฟล์ พร้อมอัปเดต wikilink กลับใน docs/01-requirements/02-plan/feature-list.md และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault รวมถึงแก้ไขจุดที่ล้าสมัย/ไม่สอดคล้อง (เช่น mapping ที่อ้าง FR ซึ่งไม่ตรงกับ spec ปัจจุบัน, จำนวนโหนด/คำอธิบาย/mapping ไม่เท่ากัน) ตามรายงานจาก agent backlog-consistency-auditor ใช้งานผ่าน skill feature-journey-sync หรือ skill pipeline-orchestrator (รัน pipeline ต่อเนื่องตั้งแต่ requirement ใหม่จนถึงชุดทดสอบในคำสั่งเดียว) เท่านั้น หลังจากที่ flow ของ journey หรือจุดที่ต้องแก้ไขถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---

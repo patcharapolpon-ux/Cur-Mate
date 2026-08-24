@@ -1,6 +1,6 @@
 ---
 name: feature-list-writer
-description: เขียน/อัปเดตเอกสาร Feature List (จัดลำดับความสำคัญแบบ MoSCoW) ที่ docs/01-requirements/02-plan/feature-list.md จาก backlog และเอกสาร spec ที่มีอยู่ พร้อมอัปเดต docs/01-requirements/02-plan/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault รวมถึงแก้ไขจุดที่ล้าสมัย/ไม่สอดคล้อง (เช่น wikilink เสีย, อ้างอิง FR ที่ไม่ตรงกับ spec ปัจจุบัน) ตามรายงานจาก agent backlog-consistency-auditor ใช้งานผ่าน skill feature-journey-sync เท่านั้น หลังจากที่รายการฟีเจอร์/จุดที่ต้องแก้ไขถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
+description: เขียน/อัปเดตเอกสาร Feature List (จัดลำดับความสำคัญแบบ MoSCoW) ที่ docs/01-requirements/02-plan/feature-list.md จาก backlog และเอกสาร spec ที่มีอยู่ พร้อมอัปเดต docs/01-requirements/02-plan/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault รวมถึงแก้ไขจุดที่ล้าสมัย/ไม่สอดคล้อง (เช่น wikilink เสีย, อ้างอิง FR ที่ไม่ตรงกับ spec ปัจจุบัน) ตามรายงานจาก agent backlog-consistency-auditor ใช้งานผ่าน skill feature-journey-sync หรือ skill pipeline-orchestrator (รัน pipeline ต่อเนื่องตั้งแต่ requirement ใหม่จนถึงชุดทดสอบในคำสั่งเดียว) เท่านั้น หลังจากที่รายการฟีเจอร์/จุดที่ต้องแก้ไขถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---

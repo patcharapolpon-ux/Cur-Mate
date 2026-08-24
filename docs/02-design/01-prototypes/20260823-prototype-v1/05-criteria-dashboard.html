@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>รายการชุดเกณฑ์มาตรฐาน — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  /* Admin zone identity — แยกจาก stepper ของฝั่งผู้ใช้งานทั่วไป */
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .admin-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-32);
+  }
+
+  .criteria-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    margin-bottom: var(--space-32);
+  }
+
+  .criteria-set-card {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-subtle);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 150ms ease-out;
+  }
+  .criteria-set-card:hover { border-color: var(--color-border-strong); }
+  .criteria-set-card.clickable { cursor: pointer; }
+
+  .criteria-set-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+  .criteria-set-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .criteria-set-meta {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  .criteria-set-hint {
+    font-size: 13px;
+    color: var(--color-warning-text);
+    font-weight: 600;
+    margin: var(--space-12) 0 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .criteria-set-hint-active {
+    font-size: 13px;
+    color: var(--color-text-disabled);
+    margin: var(--space-12) 0 0;
+  }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-primary:active { background: var(--color-primary-active); }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <span class="current">จัดการฐานความรู้เกณฑ์มาตรฐาน</span>
+    </nav>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1>รายการชุดเกณฑ์มาตรฐาน</h1>
+    </div>
+    <a class="btn btn-primary" href="06-create-criteria-set.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      สร้างชุดเกณฑ์ใหม่
+    </a>
+  </div>
+  <p class="lead">ชุดเกณฑ์ที่มีสถานะ "เปิดใช้งาน (active)" จะปรากฏให้ผู้ใช้งานทั่วไปเลือกอ้างอิงตอนตรวจสอบเอกสารหรือสนทนากับแชทบอท ส่วนชุดที่ยังรอตรวจสอบ (pending) จะถูกซ่อนจากผู้ใช้งานทั่วไปจนกว่าจะอนุมัติกฎเกณฑ์ครบทุกข้อ — คลิกที่ชุดเกณฑ์สถานะรอตรวจสอบเพื่อไปตรวจสอบและอนุมัติกฎเกณฑ์</p>
+
+  <div class="criteria-list">
+
+    <div class="criteria-set-card">
+      <div class="criteria-set-row">
+        <div>
+          <p class="criteria-set-name">เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565</p>
+          <p class="criteria-set-meta">ปีบังคับใช้ 2565 · ระดับปริญญาตรี · ขอบเขต: ทุกสาขา</p>
+        </div>
+        <span class="status-chip success">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          เปิดใช้งาน
+        </span>
+      </div>
+      <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+    </div>
+
+    <div class="criteria-set-card">
+      <div class="criteria-set-row">
+        <div>
+          <p class="criteria-set-name">เกณฑ์มาตรฐานหลักสูตร ป.โท 2565</p>
+          <p class="criteria-set-meta">ปีบังคับใช้ 2565 · ระดับปริญญาโท · ขอบเขต: ทุกสาขา</p>
+        </div>
+        <span class="status-chip success">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          เปิดใช้งาน
+        </span>
+      </div>
+      <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+    </div>
+
+    <div class="criteria-set-card">
+      <div class="criteria-set-row">
+        <div>
+          <p class="criteria-set-name">เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565</p>
+          <p class="criteria-set-meta">ปีบังคับใช้ 2565 · ระดับปริญญาตรี · ขอบเขต: วิศวกรรมคอมพิวเตอร์</p>
+        </div>
+        <span class="status-chip success">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          เปิดใช้งาน
+        </span>
+      </div>
+      <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+    </div>
+
+    <div class="criteria-set-card">
+      <div class="criteria-set-row">
+        <div>
+          <p class="criteria-set-name">เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565</p>
+          <p class="criteria-set-meta">ปีบังคับใช้ 2565 · ระดับปริญญาตรี · ขอบเขต: เทคโนโลยีสารสนเทศ</p>
+        </div>
+        <span class="status-chip success">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          เปิดใช้งาน
+        </span>
+      </div>
+      <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+    </div>
+
+    <a class="criteria-set-card clickable" href="07-rule-review-approval.html">
+      <div class="criteria-set-row">
+        <div>
+          <p class="criteria-set-name">เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569</p>
+          <p class="criteria-set-meta">ปีบังคับใช้ 2569 · ระดับปริญญาตรี · ขอบเขต: วิทยาการคอมพิวเตอร์</p>
+        </div>
+        <span class="status-chip warning">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          รอตรวจสอบ
+        </span>
+      </div>
+      <p class="criteria-set-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        คลิกเพื่อตรวจสอบและอนุมัติกฎเกณฑ์ที่ AI สกัดมา
+      </p>
+    </a>
+
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 06 "จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร (สร้างชุดเกณฑ์ + อัปโหลดเอกสาร)" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 1 และ FR ข้อ 2 · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "เข้าสู่หน้าจัดการฐานความรู้เกณฑ์มาตรฐาน" / "ปรากฏในรายการให้ผู้ใช้งานทั่วไปเลือกใช้อ้างอิง"
+</footer>
+</body>
+</html>
