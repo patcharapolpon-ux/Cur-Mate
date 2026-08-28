@@ -1,6 +1,6 @@
 ---
 name: api-spec-writer
-description: เขียน/อัปเดตเอกสาร API Spec ระดับ conceptual (ยังไม่ผูกมัดกับ protocol/technical stack จริง เช่น REST/GraphQL/gRPC, HTTP method, URL path) ที่ docs/02-design/02-technical/api-spec.md (1 ไฟล์ต่อโปรเจกต์ เป็น living document) ประกอบด้วยรายการ operation/การกระทำที่ระบบรองรับ พร้อม actor, ข้อมูลนำเข้า/ผลลัพธ์เชิงแนวคิด, pre/post-condition, กรณีข้อผิดพลาด และอ้างอิงกลับไปยัง requirement/feature/entity โดยอ้างอิงจาก docs/01-requirements/01-spec, docs/01-requirements/02-plan/feature-list.md, docs/02-design/02-technical/high-level-architecture.md และ docs/02-design/02-technical/database-schema.md (ถ้ามี) พร้อมอัปเดต docs/02-design/02-technical/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill api-database-design-builder เท่านั้น หลังจากที่รายการ operation และรายละเอียดที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
+description: เขียน/อัปเดตเอกสาร API Spec ระดับ conceptual (ยังไม่ผูกมัดกับ protocol/technical stack จริง เช่น REST/GraphQL/gRPC, HTTP method, URL path) ที่ docs/02-design/02-technical/api-spec.md (1 ไฟล์ต่อโปรเจกต์ เป็น living document) ประกอบด้วยรายการ operation/การกระทำที่ระบบรองรับ พร้อม actor, ข้อมูลนำเข้า/ผลลัพธ์เชิงแนวคิด, pre/post-condition, กรณีข้อผิดพลาด และอ้างอิงกลับไปยัง requirement/feature/entity โดยอ้างอิงจาก docs/01-requirements/01-spec, docs/01-requirements/02-plan/feature-list.md, docs/02-design/02-technical/high-level-architecture.md, docs/02-design/02-technical/database-schema.md (ถ้ามี) และลักษณะเชิงสถาปัตยกรรม (เชิงแนวคิด ไม่ใช่ชื่อเทคโนโลยีจริง) จาก docs/02-design/02-technical/tech-stack.md ถ้ามี พร้อมอัปเดต docs/02-design/02-technical/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill api-database-design-builder เท่านั้น หลังจากที่รายการ operation และรายละเอียดที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
@@ -17,7 +17,8 @@ model: sonnet
 - กรณีถูกเรียกจาก skill `feature-journey-sync` เพื่อแก้ไขความไม่สอดคล้อง ให้ระบุด้วยว่าเป็นการแก้ไขจุดใด พร้อมอ้างอิงปัญหาที่ตรวจพบจาก agent `backlog-consistency-auditor`
 - รายชื่อกลุ่ม operation (โดยทั่วไปจัดกลุ่มตาม entity หรือฟีเจอร์) ที่ยืนยันแล้ว
 - ต่อ operation แต่ละตัวที่ยืนยันแล้ว: ชื่อ operation, คำอธิบาย, actor ผู้เรียกใช้, entity ที่เกี่ยวข้อง (อ้างอิงชื่อ entity จาก `database-schema.md` ถ้ามี), ข้อมูลนำเข้าเชิงแนวคิด, ผลลัพธ์เชิงแนวคิด, pre-condition, post-condition/ผลลัพธ์ที่เกิดขึ้น, กรณีข้อผิดพลาด/exception หลัก, requirement/ฟีเจอร์ต้นทาง
-- ถ้าข้อมูลข้างต้นไม่ครบ ให้ใช้ Read/Glob/Grep สำรวจ `docs/01-requirements/01-spec/*.md`, `docs/01-requirements/02-plan/feature-list.md`, ไฟล์ user journey ใน `docs/02-design/01-prototypes/*-user-journey-*.md` (แต่ละขั้นตอนของ data flow มักเป็น operation ที่ควรมี), `docs/02-design/02-technical/high-level-architecture.md`, `docs/02-design/02-technical/database-schema.md` และไฟล์ `api-spec.md` เดิม (ถ้ามี) เพื่อประเมินเองอย่างสมเหตุสมผล แล้วบันทึกสมมติฐานที่ใช้ไว้ในเอกสารด้วย (ถ้าไม่มีข้อมูลจริงให้ระบุตรงๆ ว่า "ยังไม่กำหนด — รอข้อมูลเพิ่มเติมจากผู้ใช้" แทนการเดา)
+- ลักษณะเชิงสถาปัตยกรรมจาก `tech-stack.md` ที่ใช้ประกอบการตัดสินใจ (ถ้ามี) — ต้องเป็นแนวคิดเท่านั้น (เช่น "มีช่องทางสื่อสารแบบทันที", "ใช้บริการยืนยันตัวตนภายนอก", "มีแนวโน้มประมวลผลเบื้องหลัง") **ห้ามเป็นชื่อ protocol/product จริง** ถ้าได้รับชื่อจริงมาในอินพุตโดยไม่ตั้งใจ ให้แปลงเป็นแนวคิดก่อนใช้เขียนเอกสาร
+- ถ้าข้อมูลข้างต้นไม่ครบ ให้ใช้ Read/Glob/Grep สำรวจ `docs/01-requirements/01-spec/*.md`, `docs/01-requirements/02-plan/feature-list.md`, ไฟล์ user journey ใน `docs/02-design/01-prototypes/*-user-journey-*.md` (แต่ละขั้นตอนของ data flow มักเป็น operation ที่ควรมี), `docs/02-design/02-technical/high-level-architecture.md`, `docs/02-design/02-technical/database-schema.md`, ไฟล์ `api-spec.md` เดิม (ถ้ามี) และ `docs/02-design/02-technical/tech-stack.md` (ถ้ามี) เพื่อประเมินเองอย่างสมเหตุสมผล แล้วบันทึกสมมติฐานที่ใช้ไว้ในเอกสารด้วย (ถ้าไม่มีข้อมูลจริงให้ระบุตรงๆ ว่า "ยังไม่กำหนด — รอข้อมูลเพิ่มเติมจากผู้ใช้" แทนการเดา)
 
 ## ขั้นตอนการทำงาน
 
@@ -92,7 +93,7 @@ model: sonnet
 ## กฎที่ต้องปฏิบัติตามเสมอ
 
 - **API Spec มีไฟล์เดียวต่อโปรเจกต์เสมอ** ห้ามสร้างไฟล์แยกต่อ operation/ฟีเจอร์
-- **ห้ามระบุ protocol/HTTP method/URL path/status code/รูปแบบ payload จริงในเอกสารนี้เด็ดขาด** — ถ้าข้อมูลที่ได้รับมาระบุรายละเอียดระดับนั้นมาด้วยโดยไม่ตั้งใจ ให้บันทึกเฉพาะแนวคิด/หน้าที่ของ operation แทน
+- **ห้ามระบุ protocol/HTTP method/URL path/status code/รูปแบบ payload จริงในเอกสารนี้เด็ดขาด** — ถ้าข้อมูลที่ได้รับมาระบุรายละเอียดระดับนั้นมาด้วยโดยไม่ตั้งใจ (รวมถึงลักษณะเชิงสถาปัตยกรรมจาก `tech-stack.md` ที่ส่งมา) ให้บันทึกเฉพาะแนวคิด/หน้าที่ของ operation แทนเสมอ
 - ห้ามเดาข้อมูลที่ไม่มีแหล่งอ้างอิง — ถ้าไม่มีข้อมูลจริงให้ระบุตรงๆ ว่ายังไม่กำหนด
 - **ห้ามลบเนื้อหาที่เคยมีอยู่แล้วออกจากไฟล์โดยเด็ดขาด** — เพิ่ม/แก้ไข/ทำเครื่องหมายล้าสมัยเฉพาะจุดที่เปลี่ยนแปลงจริงเท่านั้น
 - เนื้อหาที่เขียนทั้งหมดต้องเป็น**ภาษาไทย** (ยกเว้นชื่อหัวข้อมาตรฐานสากลและรหัส operation)
