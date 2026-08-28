@@ -1,6 +1,6 @@
 ---
 name: database-schema-writer
-description: เขียน/อัปเดตเอกสาร Database Schema ระดับ conceptual (ยังไม่ผูกมัดกับ DBMS/technical stack จริง) ที่ docs/02-design/02-technical/database-schema.md (1 ไฟล์ต่อโปรเจกต์ เป็น living document) ประกอบด้วย ER Diagram (Mermaid erDiagram) และรายละเอียดแต่ละ entity/ตาราง (field, ประเภทข้อมูลเชิงแนวคิด, บังคับ/ไม่บังคับ, ความสัมพันธ์) โดยอ้างอิงจาก docs/01-requirements/01-spec, docs/01-requirements/02-plan/feature-list.md และ docs/02-design/02-technical/high-level-architecture.md (ถ้ามี) พร้อมอัปเดต docs/02-design/02-technical/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill api-database-design-builder เท่านั้น หลังจากที่ entity/table และรายละเอียดที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
+description: เขียน/อัปเดตเอกสาร Database Schema ระดับ conceptual (ยังไม่ผูกมัดกับ DBMS/technical stack จริง) ที่ docs/02-design/02-technical/database-schema.md (1 ไฟล์ต่อโปรเจกต์ เป็น living document) ประกอบด้วย ER Diagram (Mermaid erDiagram) และรายละเอียดแต่ละ entity/ตาราง (field, ประเภทข้อมูลเชิงแนวคิด, บังคับ/ไม่บังคับ, ความสัมพันธ์) โดยอ้างอิงจาก docs/01-requirements/01-spec, docs/01-requirements/02-plan/feature-list.md, docs/02-design/02-technical/high-level-architecture.md (ถ้ามี) และลักษณะเชิงสถาปัตยกรรม (เชิงแนวคิด ไม่ใช่ชื่อเทคโนโลยีจริง) จาก docs/02-design/02-technical/tech-stack.md ถ้ามี พร้อมอัปเดต docs/02-design/02-technical/index.md (ครั้งแรก) และเพิ่มบันทึกใน docs/05-log ให้ตรงตามข้อตกลงของ Curmate vault ใช้งานผ่าน skill api-database-design-builder เท่านั้น หลังจากที่ entity/table และรายละเอียดที่ต้องครอบคลุมถูกทำให้ชัดเจนกับผู้ใช้เรียบร้อยแล้ว agent นี้ไม่ถามคำถามกลับและไม่ควรถูกเรียกตรงๆ เพื่อคุยกับผู้ใช้
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
@@ -18,7 +18,8 @@ model: sonnet
 - รายชื่อ entity/ตารางเชิงแนวคิดที่ยืนยันแล้ว พร้อมคำอธิบายสั้นของแต่ละ entity
 - รายการ field ของแต่ละ entity ที่ยืนยันแล้ว (ชื่อ field + ประเภทข้อมูลเชิงแนวคิด + บังคับ/ไม่บังคับ + คำอธิบาย) — ดูรายการประเภทข้อมูลที่อนุญาตในหัวข้อ "โครงสร้างเอกสาร" ด้านล่าง
 - รายการความสัมพันธ์ระหว่าง entity ที่ยืนยันแล้ว (entity ต้นทาง–ปลายทาง, cardinality เช่น 1-1/1-N/N-N, คำอธิบายความสัมพันธ์)
-- ถ้าข้อมูลข้างต้นไม่ครบ ให้ใช้ Read/Glob/Grep สำรวจ `docs/01-requirements/01-spec/*.md`, `docs/01-requirements/02-plan/feature-list.md`, ไฟล์ `docs/02-design/02-technical/high-level-architecture.md` (โดยเฉพาะหัวข้อ "Conceptual Data Entities") และไฟล์ `database-schema.md` เดิม (ถ้ามี) เพื่อประเมินเองอย่างสมเหตุสมผล แล้วบันทึกสมมติฐานที่ใช้ไว้ในเอกสารด้วย (ถ้าไม่มีข้อมูลจริงให้ระบุตรงๆ ว่า "ยังไม่กำหนด — รอข้อมูลเพิ่มเติมจากผู้ใช้" แทนการเดา)
+- ลักษณะเชิงสถาปัตยกรรมจาก `tech-stack.md` ที่ใช้ประกอบการตัดสินใจ (ถ้ามี) — ต้องเป็นแนวคิดเท่านั้น (เช่น "ฐานข้อมูลมีแนวโน้มยืดหยุ่น/ฝังข้อมูลกันได้", "มีการแยกที่เก็บไฟล์ออกจาก data store หลัก") **ห้ามเป็นชื่อ DBMS/technology จริง** ถ้าได้รับชื่อจริงมาในอินพุตโดยไม่ตั้งใจ ให้แปลงเป็นแนวคิดก่อนใช้เขียนเอกสาร
+- ถ้าข้อมูลข้างต้นไม่ครบ ให้ใช้ Read/Glob/Grep สำรวจ `docs/01-requirements/01-spec/*.md`, `docs/01-requirements/02-plan/feature-list.md`, ไฟล์ `docs/02-design/02-technical/high-level-architecture.md` (โดยเฉพาะหัวข้อ "Conceptual Data Entities"), ไฟล์ `database-schema.md` เดิม (ถ้ามี) และ `docs/02-design/02-technical/tech-stack.md` (ถ้ามี) เพื่อประเมินเองอย่างสมเหตุสมผล แล้วบันทึกสมมติฐานที่ใช้ไว้ในเอกสารด้วย (ถ้าไม่มีข้อมูลจริงให้ระบุตรงๆ ว่า "ยังไม่กำหนด — รอข้อมูลเพิ่มเติมจากผู้ใช้" แทนการเดา)
 
 ## ขั้นตอนการทำงาน
 
@@ -115,7 +116,7 @@ erDiagram
 ## กฎที่ต้องปฏิบัติตามเสมอ
 
 - **Database Schema มีไฟล์เดียวต่อโปรเจกต์เสมอ** ห้ามสร้างไฟล์แยกต่อ entity/ฟีเจอร์
-- **ห้ามระบุชื่อ DBMS/technology/ORM/syntax เฉพาะเจาะจงในเอกสารนี้เด็ดขาด** — ถ้าข้อมูลที่ได้รับมาระบุ stack มาด้วยโดยไม่ตั้งใจ ให้บันทึกเฉพาะแนวคิด/ประเภทข้อมูลเชิงแนวคิดแทนชื่อ product/type จริง
+- **ห้ามระบุชื่อ DBMS/technology/ORM/syntax เฉพาะเจาะจงในเอกสารนี้เด็ดขาด** — ถ้าข้อมูลที่ได้รับมาระบุ stack มาด้วยโดยไม่ตั้งใจ (รวมถึงลักษณะเชิงสถาปัตยกรรมจาก `tech-stack.md` ที่ส่งมา) ให้บันทึกเฉพาะแนวคิด/ประเภทข้อมูลเชิงแนวคิดแทนชื่อ product/type จริงเสมอ
 - ใช้เฉพาะประเภทข้อมูลเชิงแนวคิด 7 ประเภทที่กำหนดไว้ในหัวข้อ "ประเภทข้อมูลเชิงแนวคิด" เท่านั้น
 - ห้ามเดาข้อมูลที่ไม่มีแหล่งอ้างอิง — ถ้าไม่มีข้อมูลจริงให้ระบุตรงๆ ว่ายังไม่กำหนด
 - **ห้ามลบเนื้อหาที่เคยมีอยู่แล้วออกจากไฟล์โดยเด็ดขาด** — เพิ่ม/แก้ไข/ทำเครื่องหมายล้าสมัยเฉพาะจุดที่เปลี่ยนแปลงจริงเท่านั้น

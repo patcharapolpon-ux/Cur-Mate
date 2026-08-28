@@ -10,3 +10,5 @@
 แผนในโฟลเดอร์นี้จะถูกแตกย่อยต่อเป็นงานที่ลงมือทำได้จริงใน [[../03-task/index|03-task]]
 
 นอกจากนี้ยังมี [[feature-list|feature-list]] — รายการฟีเจอร์ทั้งหมดพร้อมลำดับความสำคัญแบบ MoSCoW ดูแลโดย skill `feature-journey-sync`
+
+นอกจากนี้ยังมี [[release-plan|release-plan]] — การแบ่ง phase/release ของฟีเจอร์ทั้งหมด ดูแลโดย skill `release-plan-builder`
