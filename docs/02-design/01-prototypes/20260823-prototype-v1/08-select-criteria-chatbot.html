@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>เลือกชุดเกณฑ์มาตรฐาน — Curmate</title>
+<title>เลือกชุดเกณฑ์ — แชทบอทให้คำแนะนำ — Curmate</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -12,6 +12,7 @@
     --color-primary-hover: #1D4ED8;
     --color-primary-active: #1E40AF;
     --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
     --color-bg: #F8FAFC;
     --color-surface: #FFFFFF;
     --color-border: #E2E8F0;
@@ -77,55 +78,40 @@
     margin-bottom: var(--space-24);
   }
 
-  .stepper {
+  .topbar {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
     margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
   }
-  .step {
-    display: flex;
+  .chatbot-zone-badge {
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-8);
-  }
-  .step-dot {
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-ai-accent-bg);
+    border: 1px solid var(--color-ai-accent);
+    color: var(--color-ai-accent);
+    font-size: 12px;
     font-weight: 600;
-    border: 2px solid var(--color-border-strong);
-    color: var(--color-text-secondary);
-    background: var(--color-surface);
-    flex-shrink: 0;
-  }
-  .step.done .step-dot {
-    background: var(--color-success);
-    border-color: var(--color-success);
-    color: #FFFFFF;
-  }
-  .step.current .step-dot {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #FFFFFF;
-  }
-  .step-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
     white-space: nowrap;
   }
-  .step.current .step-label { color: var(--color-primary); }
-  .step.done .step-label { color: var(--color-success); }
-  .step-line {
-    flex: 1;
-    height: 2px;
-    background: var(--color-border-strong);
-    margin: 0 var(--space-8);
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
   }
-  .step-line.done { background: var(--color-success); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .breadcrumb-sep { color: var(--color-text-disabled); }
 
   h1 {
     font-size: 28px;
@@ -242,33 +228,23 @@
 <div class="page">
   <div class="wordmark">Curmate</div>
 
-  <nav class="stepper" aria-label="ขั้นตอนการตรวจสอบเอกสาร">
-    <div class="step done">
-      <div class="step-dot">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-      </div>
-      <div class="step-label">อัปโหลด</div>
-    </div>
-    <div class="step-line done"></div>
-    <div class="step current">
-      <div class="step-dot">2</div>
-      <div class="step-label">เลือกชุดเกณฑ์</div>
-    </div>
-    <div class="step-line"></div>
-    <div class="step">
-      <div class="step-dot">3</div>
-      <div class="step-label">ตรวจสอบ</div>
-    </div>
-    <div class="step-line"></div>
-    <div class="step">
-      <div class="step-dot">4</div>
-      <div class="step-label">รายงานผล</div>
-    </div>
-  </nav>
+  <div class="topbar">
+    <span class="chatbot-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      แชทบอทให้คำแนะนำ
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <span>หน้าหลัก</span>
+      <span class="breadcrumb-sep">›</span>
+      <span>แชทบอทให้คำแนะนำ</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="current">เลือกชุดเกณฑ์</span>
+    </nav>
+  </div>
 
-  <h1>เลือกชุดเกณฑ์มาตรฐาน</h1>
-  <p class="lead">เลือกชุดเกณฑ์ที่ต้องการใช้อ้างอิงในการตรวจสอบครั้งนี้ เลือกได้มากกว่า 1 ชุดพร้อมกัน</p>
-  <p class="note">รายการนี้แสดงเฉพาะชุดเกณฑ์ที่มีสถานะ "เปิดใช้งาน (active)" เท่านั้น ชุดเกณฑ์ที่ยังรอตรวจสอบ (pending) จะไม่ปรากฏในรายการนี้</p>
+  <h1>เลือกชุดเกณฑ์ก่อนเริ่มสนทนา</h1>
+  <p class="lead">เลือกชุดเกณฑ์มาตรฐานที่ต้องการให้แชทบอทใช้อ้างอิงระหว่างสนทนา เลือกได้มากกว่า 1 ชุดพร้อมกัน อย่างน้อย 1 ชุด</p>
+  <p class="note">รายการนี้แสดงเฉพาะชุดเกณฑ์ที่มีสถานะ "เปิดใช้งาน (active)" เท่านั้น เช่นเดียวกับหน้าเลือกชุดเกณฑ์ของฝั่งตรวจสอบเอกสาร — ชุดเกณฑ์ที่ยังรอตรวจสอบ (pending) จะไม่ปรากฏในรายการนี้</p>
 
   <div class="chip-list" id="chipList" role="group" aria-label="รายชื่อชุดเกณฑ์ที่เปิดใช้งาน">
     <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565">
@@ -292,13 +268,13 @@
   <p class="selected-count" id="selectedCount">เลือกแล้ว 0 ชุด</p>
 
   <div class="actions">
-    <a class="btn btn-secondary" href="01b-extract-confirm.html">ย้อนกลับ</a>
-    <a id="startBtn" class="btn btn-primary" href="03-processing.html" aria-disabled="true" tabindex="-1">เริ่มตรวจสอบ</a>
+    <span></span>
+    <a id="startBtn" class="btn btn-primary" href="09-chatbot-advisory.html" aria-disabled="true" tabindex="-1">เริ่มสนทนา</a>
   </div>
 </div>
 
 <footer class="dev-note">
-  ที่มา: feature-list.md ฟีเจอร์ 02 "เลือกชุดเกณฑ์มาตรฐานก่อนเริ่มตรวจสอบ/สนทนา" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 3 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "เลือกชุดเกณฑ์ criteria set" / "เลือกอย่างน้อย 1 ชุดแล้วหรือยัง" / "กดเริ่มตรวจสอบ"
+  ที่มา: feature-list.md ฟีเจอร์ 02 "เลือกชุดเกณฑ์มาตรฐานก่อนเริ่มตรวจสอบ/สนทนา" และฟีเจอร์ 09 "แชทบอทให้คำแนะนำระหว่างจัดทำหลักสูตร" · spec docs/01-requirements/01-spec/20260823-03-advisory-chatbot.md FR ข้อ 2 · user journey "ผู้จัดทำหลักสูตร ขอคำแนะนำระหว่างร่างหลักสูตรผ่านแชทบอท" โหนด "เลือกชุดเกณฑ์ criteria set ก่อนเริ่มสนทนา"
 </footer>
 
 <script>
