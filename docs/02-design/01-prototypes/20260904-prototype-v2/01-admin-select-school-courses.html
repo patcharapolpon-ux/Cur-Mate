@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>จัดการหลักสูตรสำหรับแดชบอร์ดผู้บริหาร — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .admin-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+
+  h1 { font-size: 28px; font-weight: 600; margin: 0 0 var(--space-8); }
+  p.lead { font-size: 18px; color: var(--color-text-secondary); margin: 0 0 var(--space-32); }
+
+  label.field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-8);
+  }
+
+  select.select-input {
+    width: 100%;
+    max-width: 420px;
+    height: 44px;
+    padding: 0 14px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    margin-bottom: var(--space-32);
+  }
+  select.select-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  }
+
+  .section-subhead {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 var(--space-16);
+  }
+
+  .course-list { display: flex; flex-direction: column; gap: var(--space-16); margin-bottom: var(--space-32); }
+
+  .course-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-subtle);
+  }
+  .course-card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-16); flex-wrap: wrap; }
+  .course-name { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+  .course-meta { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .course-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    margin-top: var(--space-8);
+  }
+
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: var(--space-48) var(--space-24);
+    border: 1.5px dashed var(--color-border-strong);
+    border-radius: var(--radius-large);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-32);
+  }
+  .empty-state.show { display: block; }
+  .empty-state-title { font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin: var(--space-12) 0 4px; }
+  .empty-state-body { font-size: 14px; margin: 0; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary { background: var(--color-primary); color: #FFFFFF; }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-primary:active { background: var(--color-primary-active); }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <span class="current">จัดการหลักสูตรสำหรับแดชบอร์ดผู้บริหาร</span>
+    </nav>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1>จัดการหลักสูตรสำหรับแดชบอร์ดผู้บริหาร</h1>
+    </div>
+    <a class="btn btn-primary" href="02-admin-add-course-modal.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      เพิ่มหลักสูตรใหม่
+    </a>
+  </div>
+  <p class="lead">เลือกสำนักวิชาเพื่อดูรายชื่อหลักสูตรที่เพิ่มไว้แล้ว หรือเพิ่มหลักสูตรใหม่พร้อมแนบไฟล์หลักสูตรที่จะเสนอเข้าที่ประชุม ไฟล์นี้เป็นไฟล์คนละชุดจากเล่ม มคอ.2 ที่ใช้ในระบบตรวจสอบความสอดคล้อง และข้อมูลชุดนี้ไม่เชื่อมโยงกับฐานความรู้เกณฑ์มาตรฐานเดิม</p>
+
+  <label class="field-label" for="schoolSelect">สำนักวิชา</label>
+  <select id="schoolSelect" class="select-input">
+    <option value="1">สำนักวิชาศิลปศาสตร์</option>
+    <option value="2">สำนักวิชาวิทยาศาสตร์</option>
+    <option value="3">สำนักวิชาการจัดการ</option>
+    <option value="4" selected>สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์</option>
+    <option value="5">สำนักวิชาอุตสาหกรรมเกษตร</option>
+    <option value="6">สำนักวิชานิติศาสตร์</option>
+    <option value="7">สำนักวิชาวิทยาศาสตร์เครื่องสำอาง</option>
+    <option value="8">สำนักวิชาวิทยาศาสตร์สุขภาพ</option>
+    <option value="9">สำนักวิชาพยาบาลศาสตร์</option>
+    <option value="10">สำนักวิชาเวชศาสตร์ชะลอวัยและฟื้นฟูสุขภาพ</option>
+    <option value="11">สำนักวิชาแพทยศาสตร์</option>
+    <option value="12">สำนักวิชาทันตแพทยศาสตร์</option>
+    <option value="13">สำนักวิชานวัตกรรมสังคม</option>
+    <option value="14">สำนักวิชาจีนวิทยา</option>
+    <option value="15">สำนักวิชาการแพทย์บูรณาการ</option>
+  </select>
+
+  <p class="section-subhead">หลักสูตรที่เพิ่มไว้แล้ว</p>
+
+  <div id="courseList" class="course-list"></div>
+
+  <div id="emptyState" class="empty-state">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+    <p class="empty-state-title">ยังไม่มีหลักสูตรในสำนักวิชานี้</p>
+    <p class="empty-state-body">ยังไม่มีการเพิ่มหลักสูตรสำหรับสำนักวิชาที่เลือก กด "เพิ่มหลักสูตรใหม่" ด้านบนเพื่อเริ่มเพิ่มหลักสูตรแรกของสำนักวิชานี้</p>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 10 "แอดมิน เพิ่ม/จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุมต่อสำนักวิชา" · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 3 และ FR ข้อ 4 · user journey "แอดมิน จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุม" ขั้นตอนที่ 1 "เข้าสู่หน้าจัดการหลักสูตรสำหรับแดชบอร์ดผู้บริหาร", ขั้นตอนที่ 2 "เลือกสำนักวิชาจากรายชื่อ 15 สำนักวิชาแบบคงที่" และขั้นตอนที่ 8 "เห็นรายชื่อหลักสูตรที่เพิ่มแล้วภายใต้สำนักวิชานั้น"
+</footer>
+
+<script>
+  var mockCoursesBySchool = {
+    "4": [
+      { name: "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)", date: "01/09/2569", file: "curriculum-comsci-2569.pdf" },
+      { name: "หลักสูตรวิทยาศาสตรบัณฑิต สาขาเทคโนโลยีสารสนเทศ (ปรับปรุง พ.ศ. 2568)", date: "15/08/2569", file: "curriculum-it-2568.docx" }
+    ],
+    "2": [
+      { name: "หลักสูตรวิทยาศาสตรบัณฑิต สาขาเคมีประยุกต์ (ปรับปรุง พ.ศ. 2568)", date: "20/08/2569", file: "curriculum-chemistry-2568.pdf" }
+    ]
+  };
+
+  var schoolSelect = document.getElementById('schoolSelect');
+  var courseList = document.getElementById('courseList');
+  var emptyState = document.getElementById('emptyState');
+
+  function escapeHtml(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  }
+
+  function render() {
+    var schoolId = schoolSelect.value;
+    var courses = mockCoursesBySchool[schoolId] || [];
+    if (courses.length === 0) {
+      courseList.innerHTML = '';
+      emptyState.classList.add('show');
+      return;
+    }
+    emptyState.classList.remove('show');
+    courseList.innerHTML = courses.map(function (c) {
+      return '<div class="course-card">' +
+        '<div class="course-card-row">' +
+        '<div>' +
+        '<p class="course-name">' + escapeHtml(c.name) + '</p>' +
+        '<p class="course-meta">เพิ่มเมื่อ ' + c.date + '</p>' +
+        '<div class="course-file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>' + c.file + '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  schoolSelect.addEventListener('change', render);
+  render();
+</script>
+</body>
+</html>

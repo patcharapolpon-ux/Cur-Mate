@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เลือกหลักสูตร — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+
+  .exec-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .exec-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-info-bg);
+    border: 1px solid var(--color-info);
+    color: var(--color-info);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+
+  h1 { font-size: 28px; font-weight: 600; margin: 0 0 var(--space-8); }
+  p.lead { font-size: 18px; color: var(--color-text-secondary); margin: 0 0 var(--space-32); }
+
+  .course-list { display: flex; flex-direction: column; gap: var(--space-16); margin-bottom: var(--space-24); }
+
+  .course-card {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-subtle);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 150ms ease-out;
+  }
+  .course-card:hover { border-color: var(--color-border-strong); }
+  .course-name { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+  .course-meta { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .course-hint {
+    font-size: 13px;
+    color: var(--color-primary);
+    margin: var(--space-12) 0 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* สถานะว่างเปล่า — แสดงเป็นทางเลือกแทนรายการหลักสูตรเมื่อสำนักวิชานั้นยังไม่มีหลักสูตรถูกเพิ่มไว้เลย
+     (ดูปุ่มทดสอบด้านล่างรายการเพื่อสลับดูตัวอย่างสถานะนี้) */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: var(--space-48) var(--space-24);
+    border: 1.5px dashed var(--color-border-strong);
+    border-radius: var(--radius-large);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-24);
+  }
+  .empty-state.show { display: block; }
+  .empty-state-title { font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin: var(--space-12) 0 4px; }
+  .empty-state-body { font-size: 14px; margin: 0; }
+
+  .test-link {
+    display: inline-block;
+    margin-bottom: var(--space-32);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    padding: 0;
+  }
+  .test-link:hover { color: var(--color-primary); }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="exec-topbar">
+    <span class="exec-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      มุมมองผู้บริหาร (ดูอย่างเดียว)
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="03-executive-select-school.html">เลือกสำนักวิชา</a>
+      <span> / </span>
+      <span class="current" id="schoolNameCrumb">สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์</span>
+    </nav>
+  </div>
+
+  <h1 id="schoolNameHeading">หลักสูตรใน สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์</h1>
+  <p class="lead">เลือกหลักสูตรที่ต้องการดูข้อมูลวิเคราะห์เชิงสถิติ รายชื่อด้านล่างเป็นหลักสูตรที่แอดมินเพิ่มไว้ล่วงหน้าเท่านั้น</p>
+
+  <div id="courseList" class="course-list">
+    <a class="course-card" href="05-executive-dashboard-stats.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)">
+      <p class="course-name">หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)</p>
+      <p class="course-meta">เพิ่มเมื่อ 01/09/2569</p>
+      <p class="course-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        คลิกเพื่อดูข้อมูลวิเคราะห์เชิงสถิติ
+      </p>
+    </a>
+    <a class="course-card" href="05-executive-dashboard-stats.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาเทคโนโลยีสารสนเทศ (ปรับปรุง พ.ศ. 2568)">
+      <p class="course-name">หลักสูตรวิทยาศาสตรบัณฑิต สาขาเทคโนโลยีสารสนเทศ (ปรับปรุง พ.ศ. 2568)</p>
+      <p class="course-meta">เพิ่มเมื่อ 15/08/2569</p>
+      <p class="course-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        คลิกเพื่อดูข้อมูลวิเคราะห์เชิงสถิติ
+      </p>
+    </a>
+  </div>
+
+  <!-- ตัวอย่างสถานะว่างเปล่า: กรณีสำนักวิชาที่เลือกยังไม่มีหลักสูตรถูกแอดมินเพิ่มไว้เลย ใช้ปุ่มด้านล่างเพื่อสลับดูตัวอย่าง -->
+  <div id="emptyState" class="empty-state">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-4"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
+    <p class="empty-state-title">ยังไม่มีหลักสูตรในสำนักวิชานี้</p>
+    <p class="empty-state-body">แอดมินยังไม่ได้เพิ่มหลักสูตรใดไว้ในสำนักวิชานี้ กรุณาเลือกสำนักวิชาอื่น หรือกลับมาตรวจสอบใหม่ภายหลังเมื่อแอดมินเพิ่มข้อมูลแล้ว</p>
+  </div>
+
+  <button type="button" class="test-link" id="toggleEmptyBtn">ทดสอบสถานะว่างเปล่า (ยังไม่มีหลักสูตรในสำนักวิชานี้)</button>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 11 "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตรตามสำนักวิชา/หลักสูตร" · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 2 · user journey "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร" ขั้นตอนที่ 3 "มีหลักสูตรที่แอดมินเพิ่มไว้ภายใต้สำนักวิชานี้หรือไม่" (เงื่อนไขแตกแขนง), ขั้นตอนที่ 4 "ระบบแสดงสถานะว่างเปล่า", ขั้นตอนที่ 5 "ระบบแสดงรายชื่อหลักสูตรที่แอดมินเพิ่มไว้ภายใต้สำนักวิชานั้น" และขั้นตอนที่ 6 "เลือกหลักสูตรที่ต้องการดู"
+</footer>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var schoolName = params.get('school') || 'สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์';
+  document.getElementById('schoolNameCrumb').textContent = schoolName;
+  document.getElementById('schoolNameHeading').textContent = 'หลักสูตรใน ' + schoolName;
+
+  var courseList = document.getElementById('courseList');
+  var emptyState = document.getElementById('emptyState');
+  var toggleEmptyBtn = document.getElementById('toggleEmptyBtn');
+  var showingEmpty = false;
+
+  toggleEmptyBtn.addEventListener('click', function () {
+    showingEmpty = !showingEmpty;
+    courseList.style.display = showingEmpty ? 'none' : '';
+    emptyState.classList.toggle('show', showingEmpty);
+    toggleEmptyBtn.textContent = showingEmpty
+      ? 'กลับไปดูรายการหลักสูตรตัวอย่าง'
+      : 'ทดสอบสถานะว่างเปล่า (ยังไม่มีหลักสูตรในสำนักวิชานี้)';
+  });
+</script>
+</body>
+</html>

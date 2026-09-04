@@ -13,6 +13,8 @@
 | 07 | ตรวจสอบ แก้ไข และอนุมัติกฎเกณฑ์ที่ AI สกัดมา | [[07-review-approve-criteria-rules\|07-review-approve-criteria-rules]] |
 | 08 | ตรวจสอบเนื้อหาจริงของหลักสูตรเทียบกับเกณฑ์มาตรฐาน | [[08-check-content-against-criteria\|08-check-content-against-criteria]] |
 | 09 | แชทบอทให้คำแนะนำระหว่างจัดทำหลักสูตร (รวม Q&A เกณฑ์มาตรฐาน) | [[09-advisory-chatbot\|09-advisory-chatbot]] |
+| 10 | แอดมิน เพิ่ม/จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุมต่อสำนักวิชา | [[10-admin-manage-executive-courses\|10-admin-manage-executive-courses]] |
+| 11 | ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตรตามสำนักวิชา/หลักสูตร | [[11-executive-view-dashboard\|11-executive-view-dashboard]] |
 
 ---
 [[../index|01-test-plan]] · [[../acceptance-criteria|acceptance-criteria]] · [[../test-plan|test-plan]]
