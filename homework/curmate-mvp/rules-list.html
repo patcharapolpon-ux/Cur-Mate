@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายการกฎเกณฑ์ · Curmate MVP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
+  <script src="js/firebase-config.js" defer></script>
+  <script src="js/rules-list.js" defer></script>
+</head>
+<body>
+  <nav class="topnav">
+    <a href="index.html">หน้าแรก</a>
+    <a href="rules-list.html">รายการกฎเกณฑ์</a>
+  </nav>
+  <div class="container">
+    <h1>รายการกฎเกณฑ์มาตรฐานหลักสูตร</h1>
+    <p class="subtitle">อ่านข้อมูลจาก Firestore collection <code>rules</code> โดยตรง</p>
+    <div id="rule-list"></div>
+  </div>
+</body>
+</html>
