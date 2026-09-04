@@ -1,17 +1,14 @@
 // ─────────────────────────────────────────────────────────────
-// js/firebase-config.js — ค่าตั้งค่า Firebase ของโปรเจกต์นี้
-// ยังไม่ได้ใส่ค่าจริง — ต้องสร้างโปรเจกต์ Firebase ก่อน แล้วคัดลอก
-// firebaseConfig จาก Firebase Console > Project settings > Your apps
-// มาแทนที่ค่า placeholder ด้านล่างทั้งหมด
+// js/firebase-config.js — ค่าตั้งค่า Firebase ของโปรเจกต์นี้ (โปรเจกต์ cur-mate)
 // ─────────────────────────────────────────────────────────────
 
 var firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID",
+  apiKey: "AIzaSyAMYyMDHKv01Rl8tAtIgdqgWQCG0E7PYs8",
+  authDomain: "cur-mate.firebaseapp.com",
+  projectId: "cur-mate",
+  storageBucket: "cur-mate.firebasestorage.app",
+  messagingSenderId: "208866272613",
+  appId: "1:208866272613:web:5aa6543f72d08d30e0ed8c",
 };
 
 firebase.initializeApp(firebaseConfig);
