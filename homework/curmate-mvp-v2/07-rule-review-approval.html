@@ -289,6 +289,13 @@
   }
   .btn-reject:hover:not(:disabled) { background: var(--color-error-bg); }
   .btn-reject:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-danger {
+    background: transparent;
+    color: var(--color-error);
+    border: 1.5px solid var(--color-error);
+  }
+  .btn-danger:hover:not(:disabled) { background: var(--color-error-bg); }
+  .btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .approved-label {
     display: inline-flex;
@@ -407,6 +414,9 @@
   ปุ่ม "เปิดใช้งานชุดเกณฑ์นี้" (enable เมื่อตรวจครบทุกข้อ) และ "แก้ไขชุดเกณฑ์นี้อีกครั้ง" (โผล่ตอน active เท่านั้น)
   แก้เฉพาะ field <code>status</code> ของ <code>criteriaSets/{setId}</code> สลับ <code>active</code> ↔ <code>pending</code>
   ตอนไม่ใช่ active กฎเกณฑ์ย่อยที่ตัดสินใจแล้วจะมีปุ่ม "แก้ไข" ให้เปลี่ยนใจ (approved ↔ rejected) ได้อีกครั้ง —
+  ปุ่ม "ลบ" ต่อข้อ (เพิ่มเมื่อ 2026-09-06) ถาม <code>confirm()</code> ก่อนทุกครั้ง ยกเลิกแล้วไม่ลบ ยืนยันแล้วลบ
+  <code>rules/{id}</code> พร้อม <code>reviewLog</code> ทั้งหมดใต้ข้อนั้น — ล็อกไว้ (ซ่อนปุ่ม) เหมือนปุ่ม "แก้ไข"
+  ตอนชุดเกณฑ์อยู่สถานะ active ต้องกด "แก้ไขชุดเกณฑ์นี้อีกครั้ง" ก่อนถึงจะลบข้อย่อยได้ ·
   ที่มา: feature-list.md ฟีเจอร์ 07 · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 4
 </footer>
 </body>

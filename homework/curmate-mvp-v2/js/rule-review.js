@@ -81,12 +81,16 @@
     if (status === "pending" || editing) {
       actionsEl.innerHTML =
         '<button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>' +
-        '<button type="button" class="btn btn-reject btn-small">ไม่อนุมัติ (Reject)</button>';
+        '<button type="button" class="btn btn-reject btn-small">ไม่อนุมัติ (Reject)</button>' +
+        '<button type="button" class="btn btn-danger btn-small">ลบ</button>';
       actionsEl.querySelector(".btn-approve").addEventListener("click", function () {
         approveRule(ruleId, card);
       });
       actionsEl.querySelector(".btn-reject").addEventListener("click", function () {
         rejectRule(ruleId, card);
+      });
+      actionsEl.querySelector(".btn-danger").addEventListener("click", function () {
+        deleteRule(ruleId, card);
       });
       return;
     }
@@ -96,16 +100,48 @@
         ? '<span class="approved-label">' + successIcon + "อนุมัติแล้ว</span>"
         : '<span class="rejected-label">' + rejectIcon + "ไม่อนุมัติ</span>";
 
+    // ตอนชุดเกณฑ์เป็น active ล็อกทั้งปุ่ม "แก้ไข" และปุ่ม "ลบ" — ต้องกด "แก้ไขชุดเกณฑ์นี้อีกครั้ง" ก่อน
     if (locked) {
       actionsEl.innerHTML = label;
       return;
     }
 
-    actionsEl.innerHTML = label + '<button type="button" class="btn btn-secondary btn-small">แก้ไข</button>';
+    actionsEl.innerHTML =
+      label +
+      '<button type="button" class="btn btn-secondary btn-small">แก้ไข</button>' +
+      '<button type="button" class="btn btn-danger btn-small">ลบ</button>';
     actionsEl.querySelector(".btn-secondary").addEventListener("click", function () {
       card.dataset.editing = "true";
       renderCardActions(card);
     });
+    actionsEl.querySelector(".btn-danger").addEventListener("click", function () {
+      deleteRule(ruleId, card);
+    });
+  }
+
+  // ลบ rules/{id} พร้อม reviewLog ทั้งหมดใต้ข้อนั้น — ถามยืนยันก่อนทุกครั้ง ยกเลิกแล้วไม่ลบ
+  async function deleteRule(ruleId, card) {
+    var ruleTextEl = card.querySelector(".rule-text");
+    var ruleText = ruleTextEl ? ruleTextEl.textContent : "";
+    var confirmed = window.confirm(
+      "ต้องการลบกฎเกณฑ์นี้ทิ้งถาวรหรือไม่?\n\n" + ruleText + "\n\nการลบนี้ไม่สามารถกู้คืนได้"
+    );
+    if (!confirmed) { return; }
+
+    var deleteBtn = card.querySelector(".btn-danger");
+    if (deleteBtn) { deleteBtn.disabled = true; }
+
+    var logSnapshot = await db.collection("rules").doc(ruleId).collection("reviewLog").get();
+    var logDeletions = [];
+    logSnapshot.forEach(function (logDoc) { logDeletions.push(logDoc.ref.delete()); });
+    await Promise.all(logDeletions);
+    await db.collection("rules").doc(ruleId).delete();
+
+    card.remove();
+    if (!ruleList.querySelector(".rule-card")) {
+      ruleList.innerHTML = "<p>ไม่มีกฎเกณฑ์เหลืออยู่ในชุดนี้แล้ว — ลบไปหมดแล้ว</p>";
+    }
+    updateProgress();
   }
 
   async function approveRule(ruleId, card) {
@@ -180,11 +216,14 @@
     var approvedCount = ruleList.querySelectorAll(".rule-card.approved").length;
     var rejectedCount = ruleList.querySelectorAll(".rule-card.rejected").length;
     var reviewedCount = approvedCount + rejectedCount;
-    var allReviewed = reviewedCount >= total;
+    // total === 0 (ลบกฎเกณฑ์ออกจนหมด) ต้องไม่ถือว่า "ตรวจครบแล้ว" เพราะ 0 >= 0 เป็นจริงเสมอ
+    var allReviewed = total > 0 && reviewedCount >= total;
 
     progressNote.classList.toggle("all-done", allReviewed);
-    bulkApproveBtn.disabled = allReviewed;
-    progressNote.textContent = allReviewed
+    bulkApproveBtn.disabled = allReviewed || total === 0;
+    progressNote.textContent = total === 0
+      ? "ไม่มีกฎเกณฑ์เหลืออยู่ในชุดนี้แล้ว"
+      : allReviewed
       ? "ตรวจสอบครบทุกข้อแล้ว (อนุมัติ " + approvedCount + ", ไม่อนุมัติ " + rejectedCount + " จาก " + total + ")"
       : "ดำเนินการแล้ว " + reviewedCount + " จาก " + total + " ข้อ (อนุมัติ " + approvedCount + ", ไม่อนุมัติ " + rejectedCount + ")";
 

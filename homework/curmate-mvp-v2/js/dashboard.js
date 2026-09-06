@@ -27,13 +27,53 @@
       "</div>" +
       (เป็นPending
         ? '<p class="criteria-set-hint">' + arrowIcon + "คลิกเพื่อตรวจสอบและอนุมัติกฎเกณฑ์ที่ AI สกัดมา</p>"
-        : '<p class="criteria-set-hint-active">' + arrowIcon + "คลิกเพื่อดู/แก้ไขกฎเกณฑ์ของชุดที่เปิดใช้งานแล้ว</p>");
+        : '<p class="criteria-set-hint-active">' + arrowIcon + "คลิกเพื่อดู/แก้ไขกฎเกณฑ์ของชุดที่เปิดใช้งานแล้ว</p>") +
+      '<div class="criteria-set-footer">' +
+        '<button type="button" class="btn btn-danger btn-small delete-set-btn">ลบชุดเกณฑ์นี้</button>' +
+      "</div>";
 
     var a = document.createElement("a");
     a.className = "criteria-set-card clickable";
     a.href = "07-rule-review-approval.html#setId=" + encodeURIComponent(id);
     a.innerHTML = inner;
+
+    a.querySelector(".delete-set-btn").addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      ลบชุดเกณฑ์(id, data.name, a);
+    });
+
     return a;
+  }
+
+  // ลบ criteriaSets/{id} พร้อมลบพ่วง (cascade) rules ทุกข้อของชุดนั้น
+  // และ reviewLog ใต้แต่ละ rule ด้วย — กันไม่ให้มีข้อมูลค้างอ้างอิง criteriaSetId ที่ไม่มีอยู่จริง
+  async function ลบชุดเกณฑ์(id, name, cardEl) {
+    var confirmed = window.confirm(
+      'ต้องการลบชุดเกณฑ์ "' + name + '" ทิ้งถาวรหรือไม่? ' +
+      "กฎเกณฑ์ย่อยทั้งหมดในชุดนี้ (รวมประวัติการตรวจสอบ) จะถูกลบไปด้วย และไม่สามารถกู้คืนได้"
+    );
+    if (!confirmed) { return; }
+
+    var deleteBtn = cardEl.querySelector(".delete-set-btn");
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = "กำลังลบ...";
+
+    var rulesSnapshot = await db.collection("rules").where("criteriaSetId", "==", id).get();
+    for (var i = 0; i < rulesSnapshot.docs.length; i++) {
+      var ruleRef = rulesSnapshot.docs[i].ref;
+      var logSnapshot = await ruleRef.collection("reviewLog").get();
+      var logDeletions = [];
+      logSnapshot.forEach(function (logDoc) { logDeletions.push(logDoc.ref.delete()); });
+      await Promise.all(logDeletions);
+      await ruleRef.delete();
+    }
+    await db.collection("criteriaSets").doc(id).delete();
+
+    cardEl.remove();
+    if (!list.querySelector(".criteria-set-card")) {
+      list.innerHTML = '<p style="color:var(--color-text-secondary);">ยังไม่มีข้อมูล — เปิด seed.html เพื่อใส่ข้อมูลตัวอย่างก่อน</p>';
+    }
   }
 
   async function โหลดรายการ() {

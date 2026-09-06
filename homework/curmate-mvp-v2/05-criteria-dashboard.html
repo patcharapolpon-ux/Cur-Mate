@@ -222,6 +222,24 @@
   }
   .btn-primary:hover { background: var(--color-primary-hover); }
   .btn-primary:active { background: var(--color-primary-active); }
+  .btn-small {
+    font-size: 13px;
+    height: 34px;
+    padding: 6px 14px;
+  }
+  .btn-danger {
+    background: transparent;
+    color: var(--color-error);
+    border: 1.5px solid var(--color-error);
+  }
+  .btn-danger:hover:not(:disabled) { background: var(--color-error-bg); }
+  .btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .criteria-set-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-12);
+  }
 
   footer.dev-note {
     margin-top: var(--space-64);
@@ -267,7 +285,10 @@
   ต่อยอดจาก <code>homework/curmate-mvp</code> (สัปดาห์ที่ 6) — หน้าตานี้นำมาจาก
   <code>docs/02-design/01-prototypes/20260823-prototype-v1/05-criteria-dashboard.html</code>
   แล้วต่อ Firestore จริงแทนข้อมูลจำลอง ที่มา: feature-list.md ฟีเจอร์ 06 "จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" ·
-  spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 1 และ FR ข้อ 2
+  spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 1 และ FR ข้อ 2 ·
+  ปุ่ม "ลบชุดเกณฑ์นี้" (เพิ่มเมื่อ 2026-09-06) ถาม <code>confirm()</code> ก่อนทุกครั้ง ยกเลิกแล้วไม่ลบ —
+  ยืนยันแล้วลบ <code>criteriaSets/{id}</code> พร้อมลบพ่วง (cascade) <code>rules</code> ทุกข้อของชุดนั้นและ
+  <code>reviewLog</code> ใต้แต่ละข้อด้วย
 </footer>
 </body>
 </html>
