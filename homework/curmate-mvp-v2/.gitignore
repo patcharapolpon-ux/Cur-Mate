@@ -1,0 +1,24 @@
+# Secrets / admin credentials — ห้าม push เด็ดขาด
+.env
+.env.*
+*serviceAccountKey*.json
+*firebase-adminsdk*.json
+credentials.json
+secrets.json
+
+# Local config override (ถ้าใครทำไฟล์ config ส่วนตัวแยกจาก firebase-config.js)
+*.local.js
+*.local.json
+
+# Firebase CLI local state/logs
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# Dependencies (เผื่อมีการติดตั้งในอนาคต)
+node_modules/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
