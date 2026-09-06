@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "homework/curmate-mvp", "-l", "5183"],
       "port": 5183
+    },
+    {
+      "name": "curmate-mvp-v2",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "homework/curmate-mvp-v2", "-l", "5184"],
+      "port": 5184
     }
   ]
 }
