@@ -72,9 +72,9 @@
     };
 
     db.collection("criteriaSets").add(newSet)
-      .then(function (docRef) {
+      .then(function () {
         setTimeout(function () {
-          window.location.href = "07-rule-review-approval.html#setId=" + encodeURIComponent(docRef.id);
+          window.location.href = "05-criteria-dashboard.html";
         }, 700);
       })
       .catch(function (err) {

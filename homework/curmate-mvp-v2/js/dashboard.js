@@ -1,6 +1,7 @@
 // ─────────────────────────────────────────────────────────────
 // js/dashboard.js — อ่านรายการ criteriaSets จาก Firestore แล้วแสดงผล
-// การ์ดที่สถานะ "รอตรวจสอบ (pending)" คลิกได้ พาไปหน้าตรวจสอบ/อนุมัติกฎเกณฑ์
+// การ์ดคลิกได้ทุกสถานะ พาไปหน้าตรวจสอบ/อนุมัติกฎเกณฑ์ (07) — ทั้ง pending (ตรวจ/อนุมัติ)
+// และ active (ดู/แก้ไขอีกครั้งผ่านปุ่ม "แก้ไขชุดเกณฑ์นี้อีกครั้ง" ที่หน้า 07)
 // ─────────────────────────────────────────────────────────────
 
 (function () {
@@ -26,19 +27,13 @@
       "</div>" +
       (เป็นPending
         ? '<p class="criteria-set-hint">' + arrowIcon + "คลิกเพื่อตรวจสอบและอนุมัติกฎเกณฑ์ที่ AI สกัดมา</p>"
-        : '<p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>');
+        : '<p class="criteria-set-hint-active">' + arrowIcon + "คลิกเพื่อดู/แก้ไขกฎเกณฑ์ของชุดที่เปิดใช้งานแล้ว</p>");
 
-    if (เป็นPending) {
-      var a = document.createElement("a");
-      a.className = "criteria-set-card clickable";
-      a.href = "07-rule-review-approval.html#setId=" + encodeURIComponent(id);
-      a.innerHTML = inner;
-      return a;
-    }
-    var div = document.createElement("div");
-    div.className = "criteria-set-card";
-    div.innerHTML = inner;
-    return div;
+    var a = document.createElement("a");
+    a.className = "criteria-set-card clickable";
+    a.href = "07-rule-review-approval.html#setId=" + encodeURIComponent(id);
+    a.innerHTML = inner;
+    return a;
   }
 
   async function โหลดรายการ() {

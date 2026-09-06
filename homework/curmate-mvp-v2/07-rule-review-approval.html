@@ -60,6 +60,7 @@
   }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
 
   body {
     margin: 0;
@@ -156,6 +157,14 @@
   .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
   .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
 
+  .page-head-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-8);
+    flex-shrink: 0;
+  }
+
   .toolbar {
     display: flex;
     justify-content: space-between;
@@ -192,6 +201,11 @@
     border-left-color: var(--color-success);
     background: #F7FEF9;
   }
+  .rule-card.rejected {
+    border-color: var(--color-error);
+    border-left-color: var(--color-error);
+    background: #FEF9F9;
+  }
 
   .rule-card-top {
     display: flex;
@@ -221,6 +235,7 @@
     margin: 0 0 var(--space-16);
   }
   .rule-card.approved .rule-text { color: var(--color-text-secondary); }
+  .rule-card.rejected .rule-text { color: var(--color-text-secondary); }
 
   .rule-actions {
     display: flex;
@@ -283,6 +298,14 @@
     font-weight: 600;
     color: var(--color-success-text);
   }
+  .rejected-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-error-text);
+  }
 
   .active-banner {
     display: none;
@@ -298,6 +321,7 @@
   .active-banner.show { display: flex; }
   .active-banner-title { font-weight: 700; font-size: 17px; margin: 0 0 4px; }
   .active-banner-body { font-size: 14px; margin: 0 0 var(--space-16); }
+  .active-banner-actions { display: flex; gap: var(--space-12); flex-wrap: wrap; }
 
   .actions {
     margin-top: var(--space-32);
@@ -338,19 +362,25 @@
       <h1>ตรวจสอบและอนุมัติกฎเกณฑ์</h1>
       <p class="set-name" id="setName">ชุดเกณฑ์: กำลังโหลด…</p>
     </div>
-    <span id="setStatusChip" class="status-chip warning">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-      รอตรวจสอบ
-    </span>
+    <div class="page-head-status">
+      <span id="setStatusChip" class="status-chip warning">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+        รอตรวจสอบ
+      </span>
+      <button type="button" id="deactivateSetBtn" class="btn btn-secondary btn-small" hidden>แก้ไขชุดเกณฑ์นี้อีกครั้ง</button>
+    </div>
   </div>
-  <p class="lead">อ่านกฎเกณฑ์ของชุดนี้จาก Firestore collection <code>rules</code> โดยตรง (กรองด้วย <code>criteriaSetId</code>) กรุณาตรวจสอบและอนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน — การกดอนุมัติจะเขียนสถานะกลับไปที่ Firestore จริง พร้อมบันทึกลง <code>reviewLog</code></p>
+  <p class="lead">อ่านกฎเกณฑ์ของชุดนี้จาก Firestore collection <code>rules</code> โดยตรง (กรองด้วย <code>criteriaSetId</code>) กรุณาตรวจสอบและอนุมัติ/ไม่อนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน — การกดอนุมัติ/ไม่อนุมัติจะแก้เฉพาะ field <code>status</code> กลับไปที่ Firestore จริง (<code>approved</code> / <code>rejected</code>) พร้อมบันทึกลง <code>reviewLog</code></p>
 
   <div id="activeBanner" class="active-banner">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path d="M20 6L9 17l-5-5"/></svg>
     <div>
-      <p class="active-banner-title">กฎเกณฑ์ทั้งหมดที่พบในชุดนี้ผ่านการอนุมัติครบแล้ว</p>
-      <p class="active-banner-body">หน้าจอนี้ยังไม่อัปเดตสถานะ <code>criteriaSets.status</code> เป็น active ให้อัตโนมัติ (เก็บไว้เป็นงานสัปดาห์ถัดไป ดู SCOPE.md)</p>
-      <a class="btn btn-primary" href="05-criteria-dashboard.html">กลับไปหน้ารายการชุดเกณฑ์</a>
+      <p class="active-banner-title" id="activeBannerTitle">ตรวจสอบกฎเกณฑ์ครบทุกข้อแล้ว</p>
+      <p class="active-banner-body" id="activeBannerBody">กดปุ่มด้านล่างเพื่อเปิดใช้งานชุดเกณฑ์นี้จริง — จะเขียนกลับ <code>criteriaSets.status</code> เป็น <code>active</code> ที่ Firestore</p>
+      <div class="active-banner-actions">
+        <button type="button" class="btn btn-primary" id="activateSetBtn">เปิดใช้งานชุดเกณฑ์นี้</button>
+        <a class="btn btn-secondary" href="05-criteria-dashboard.html">กลับไปหน้ารายการชุดเกณฑ์</a>
+      </div>
     </div>
   </div>
 
@@ -372,8 +402,11 @@
 <footer class="dev-note">
   ต่อยอดจาก <code>homework/curmate-mvp</code> (สัปดาห์ที่ 6) — หน้าตานี้นำมาจาก
   <code>docs/02-design/01-prototypes/20260823-prototype-v1/07-rule-review-approval.html</code>
-  แล้วต่อ Firestore จริงสำหรับอ่าน/อนุมัติกฎเกณฑ์ ปุ่ม "ปฏิเสธ (Reject)" ยังเป็นตัวอย่างต้นแบบเท่านั้น
-  เนื่องจาก spec ต้นทางยังไม่ได้กำหนดพฤติกรรมของการปฏิเสธไว้ —
+  แล้วต่อ Firestore จริงสำหรับอ่าน/อนุมัติ/ไม่อนุมัติกฎเกณฑ์ ทั้งสองปุ่มแก้เฉพาะ field <code>status</code>
+  ของ <code>rules/{id}</code> เท่านั้น (ค่าที่เป็นไปได้: <code>pending</code> / <code>approved</code> / <code>rejected</code>)
+  ปุ่ม "เปิดใช้งานชุดเกณฑ์นี้" (enable เมื่อตรวจครบทุกข้อ) และ "แก้ไขชุดเกณฑ์นี้อีกครั้ง" (โผล่ตอน active เท่านั้น)
+  แก้เฉพาะ field <code>status</code> ของ <code>criteriaSets/{setId}</code> สลับ <code>active</code> ↔ <code>pending</code>
+  ตอนไม่ใช่ active กฎเกณฑ์ย่อยที่ตัดสินใจแล้วจะมีปุ่ม "แก้ไข" ให้เปลี่ยนใจ (approved ↔ rejected) ได้อีกครั้ง —
   ที่มา: feature-list.md ฟีเจอร์ 07 · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 4
 </footer>
 </body>
