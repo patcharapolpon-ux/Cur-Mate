@@ -13,12 +13,13 @@ repository นี้เป็น **vault เอกสาร (Obsidian)** ขอ�
 เอกสารทั้งหมดอยู่ใต้ `docs/` จัดเรียงเป็น pipeline ที่มีลำดับตัวเลข โดยแต่ละขั้นตอนจะส่งต่อไปยังขั้นถัดไป:
 
 ```
+01-requirements/backlog.md → รายการสรุป requirement ดิบทั้งหมดแบบตาราง (จุดเริ่มก่อนแตกเป็น spec)
 01-requirements/01-spec    → สิ่งที่ระบบต้องมี (ต้นทาง/source of truth)
-01-requirements/02-plan    → roadmap/phase ที่แตกมาจาก spec
+01-requirements/02-plan    → roadmap/phase (feature-list, release-plan) ที่แตกมาจาก spec
 01-requirements/03-task    → งานย่อยที่ลงมือทำได้จริง แตกมาจาก plan
-02-design/01-prototypes    → mockup UI/UX อ้างอิงจาก 01-spec
+02-design/01-prototypes    → user journey (Mermaid) + mockup UI/UX (HTML) อ้างอิงจาก 01-spec/02-plan ตาม design system กลางใน DESIGN.md
 02-design/02-technical     → ออกแบบเชิงเทคนิค (architecture/DB/API) อ้างอิงจาก 01-prototypes
-03-testing/01-test-plan    → test case อ้างอิงจาก 02-technical และ 01-spec
+03-testing/01-test-plan    → acceptance criteria/test plan/test case อ้างอิงจาก 02-technical และ 01-spec
 03-testing/02-test-result  → ผลทดสอบ pass/fail และบั๊ก อ้างอิงจาก 01-test-plan
 04-retrospectives          → สรุปบทเรียน อ้างอิงจาก 02-test-result และ 05-log
 05-log                     → บันทึกความเคลื่อนไหว/การตัดสินใจตามลำดับเวลา
