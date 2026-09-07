@@ -8,7 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
 <script src="js/firebase-config.js" defer></script>
+<script src="js/auth.js" defer></script>
 <script src="js/create-criteria-set.js" defer></script>
 <style>
   :root {
@@ -59,6 +61,7 @@
   }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
 
   body {
     margin: 0;
@@ -116,6 +119,23 @@
   .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
   .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
   .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  .user-session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-left: auto;
+  }
+  .user-session-name {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  .btn-small {
+    font-size: 13px;
+    height: 34px;
+    padding: 6px 14px;
+  }
 
   h1 {
     font-size: 28px;
@@ -335,6 +355,11 @@
       <span class="breadcrumb-sep">›</span>
       <span class="current">สร้างชุดเกณฑ์ใหม่</span>
     </nav>
+    <div class="user-session" id="userSession" hidden>
+      <a href="manage-users.html" class="btn btn-secondary btn-small" id="manageUsersLink" hidden>จัดการผู้ใช้</a>
+      <span class="user-session-name" id="userSessionName"></span>
+      <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">ออกจากระบบ</button>
+    </div>
   </div>
 
   <h1>สร้างชุดเกณฑ์ใหม่</h1>

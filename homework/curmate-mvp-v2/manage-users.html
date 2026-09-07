@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>จัดการผู้ใช้และบทบาท — Curmate MVP v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
+<script src="js/firebase-config.js" defer></script>
+<script src="js/auth.js" defer></script>
+<script src="js/manage-users.js" defer></script>
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .admin-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  .user-session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-left: auto;
+  }
+  .user-session-name {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-32);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-small {
+    font-size: 13px;
+    height: 34px;
+    padding: 6px 14px;
+  }
+
+  .users-table-wrap {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-subtle);
+    overflow-x: auto;
+  }
+  table.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .users-table th, .users-table td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+  }
+  .users-table th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+  }
+  .users-table tr:last-child td { border-bottom: none; }
+
+  .role-select {
+    height: 36px;
+    padding: 0 10px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+  }
+  .role-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .self-note {
+    font-size: 12px;
+    color: var(--color-text-disabled);
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="05-criteria-dashboard.html">จัดการฐานความรู้เกณฑ์มาตรฐาน</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="current">จัดการผู้ใช้และบทบาท</span>
+    </nav>
+    <div class="user-session" id="userSession" hidden>
+      <span class="user-session-name" id="userSessionName"></span>
+      <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <h1>จัดการผู้ใช้และบทบาท</h1>
+  <p class="lead">อ่าน/แก้ไข field <code>role</code> ของแต่ละคนใน Firestore collection <code>users</code> โดยตรง (ค่าที่เป็นไปได้: <code>ADMIN</code> / <code>STAFF</code> — ดูสิทธิ์แต่ละบทบาทใน ACL.md) เลือกบทบาทใหม่แล้วบันทึกทันที — <strong>แก้ไขบทบาทของบัญชีตัวเองไม่ได้</strong></p>
+
+  <div class="users-table-wrap">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>ชื่อ</th>
+          <th>อีเมล</th>
+          <th>บทบาท</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody">
+        <tr><td colspan="3">กำลังโหลด…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="dev-note">
+  หน้านี้ไม่มีอยู่ใน Prototype v1 ต้นฉบับ — สร้างขึ้นใหม่สำหรับการบ้านสัปดาห์ที่ 7 (เพิ่มเมื่อ 2026-09-07) เพื่อให้ ADMIN
+  จัดการบทบาทผู้ใช้คนอื่นได้ตาม ACL.md โดยไม่ต้องเข้า Firebase Console — ห้ามแก้ไขบทบาทของบัญชีตัวเอง (บังคับด้วย UI
+  เท่านั้น ยังไม่มี Firestore Security Rules รองรับ — ดู CLAUDE.md หัวข้อ "ระบบ login")
+</footer>
+</body>
+</html>

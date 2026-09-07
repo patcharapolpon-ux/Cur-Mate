@@ -9,11 +9,13 @@
 ## วิธีเปิดดู
 
 1. เปิดโฟลเดอร์นี้ด้วย local web server (เช่น `npx serve .`)
-2. ใช้ Firebase project เดิม (`cur-mate`) ได้เลย — `js/firebase-config.js` ตั้งค่าไว้แล้ว
+2. ใช้ Firebase project เดิม (`cur-mate`) ได้เลย — `js/firebase-config.js` ตั้งค่าไว้แล้ว (ต้องเปิด Email/Password provider ใน Firebase Console → Authentication → Sign-in method ไว้ก่อนด้วย)
 3. เปิด `seed.html` แล้วกดปุ่มใส่ข้อมูลตัวอย่าง (กด seed ซ้ำได้อย่างปลอดภัย — เขียนทับด้วย id เดิม)
-4. เปิด `05-criteria-dashboard.html` เพื่อดูรายการชุดเกณฑ์ที่อ่านจาก Firestore จริง
-   - คลิกชุดเกณฑ์สถานะ "รอตรวจสอบ" เพื่อไปหน้า `07-rule-review-approval.html` ตรวจสอบ/อนุมัติกฎเกณฑ์
-   - กด "สร้างชุดเกณฑ์ใหม่" เพื่อไปหน้า `06-create-criteria-set.html` บันทึกชุดเกณฑ์ใหม่ลง Firestore จริง
+4. เปิด `signup.html` เพื่อสมัครสมาชิก (ไม่ต้องเลือกบทบาท — ทุกบัญชีใหม่ได้ role `STAFF` เสมอ) แล้ว **ตั้งบัญชีแรกให้เป็น `ADMIN` เองผ่าน Firebase Console** (Firestore Database → collection `users` → doc ของ uid ตัวเอง → แก้ field `role` เป็น `"ADMIN"`) จากนั้นเปิด `login.html` เพื่อเข้าสู่ระบบ
+5. เข้าสู่ระบบสำเร็จจะพาไป `05-criteria-dashboard.html` เพื่อดูรายการชุดเกณฑ์ที่อ่านจาก Firestore จริง
+   - **ADMIN**: คลิกชุดเกณฑ์สถานะ "รอตรวจสอบ" เพื่อไปหน้า `07-rule-review-approval.html` ตรวจสอบ/อนุมัติกฎเกณฑ์, กด "สร้างชุดเกณฑ์ใหม่" เพื่อไปหน้า `06-create-criteria-set.html`, กด "จัดการผู้ใช้" เพื่อไปหน้า `manage-users.html` เลื่อน/ลดบทบาทผู้ใช้คนอื่น (ยกเว้นตัวเอง)
+   - **STAFF**: เห็นเฉพาะชุดเกณฑ์ที่ "เปิดใช้งาน" แล้ว คลิกดูกฎเกณฑ์ในหน้า 07 ได้แบบอ่านอย่างเดียว (ไม่มีปุ่มจัดการใดๆ) เข้าหน้า 06/manage-users.html ไม่ได้
+   - ทุกหน้าต้อง login ก่อนเสมอ (เด้งไป `login.html` ถ้ายัง) — ดูสิทธิ์แบบเต็มใน [ACL.md](./ACL.md)
 
 ## โครงสร้างข้อมูล (เหมือนเดิมทุกประการ)
 
@@ -26,6 +28,6 @@
 
 ดูรายละเอียด field แต่ละ collection และสิ่งที่ยังจำลองอยู่ใน [SCOPE.md](./SCOPE.md)
 
-## แผนต่อไป (สัปดาห์ที่ 7)
+## ความคืบหน้าสัปดาห์ที่ 7
 
-โฟลเดอร์นี้จะถูกใช้ต่อยอดสำหรับการบ้านสัปดาห์ที่ 7 (เพิ่ม CRUD ให้ครบ + login) — ผู้เรียนจะทำต่อเอง
+เพิ่ม Firebase Authentication (Email/Password) แล้ว — สมัครสมาชิก/เข้าสู่ระบบ/ออกจากระบบ, auth guard เด้งไป `login.html` ถ้ายังไม่ login, และบันทึก uid ผู้ login จริงตอนสร้างชุดเกณฑ์/อนุมัติกฎเกณฑ์ (แทนค่าฮาร์ดโค้ดเดิม) พร้อมระบบจัดการบทบาท 2 role (`ADMIN`/`STAFF`) รวมหน้าใหม่ `manage-users.html` ให้ ADMIN เปลี่ยนบทบาทผู้ใช้คนอื่นได้ ดูสิทธิ์แบบเต็มใน [ACL.md](./ACL.md) และรายละเอียดที่ [SCOPE.md](./SCOPE.md) หัวข้อ "ระบบ login"/"ระบบจัดการบทบาท" — ยังไม่ทำ Firestore Security Rules ที่บังคับ auth จริง (ยังเป็น open test rules เหมือนเดิม)

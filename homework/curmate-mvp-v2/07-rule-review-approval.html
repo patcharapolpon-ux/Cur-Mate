@@ -8,7 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
 <script src="js/firebase-config.js" defer></script>
+<script src="js/auth.js" defer></script>
 <script src="js/rule-review.js" defer></script>
 <style>
   :root {
@@ -271,6 +273,18 @@
     border: 1.5px solid var(--color-primary);
   }
   .btn-secondary:hover { background: var(--color-info-bg); }
+
+  .user-session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-left: auto;
+  }
+  .user-session-name {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
   .btn-small {
     font-size: 13px;
     height: 34px;
@@ -362,11 +376,16 @@
       <span class="breadcrumb-sep">›</span>
       <span class="current">ตรวจสอบและอนุมัติกฎเกณฑ์</span>
     </nav>
+    <div class="user-session" id="userSession" hidden>
+      <a href="manage-users.html" class="btn btn-secondary btn-small" id="manageUsersLink" hidden>จัดการผู้ใช้</a>
+      <span class="user-session-name" id="userSessionName"></span>
+      <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">ออกจากระบบ</button>
+    </div>
   </div>
 
   <div class="page-head">
     <div>
-      <h1>ตรวจสอบและอนุมัติกฎเกณฑ์</h1>
+      <h1 id="pageTitle">ตรวจสอบและอนุมัติกฎเกณฑ์</h1>
       <p class="set-name" id="setName">ชุดเกณฑ์: กำลังโหลด…</p>
     </div>
     <div class="page-head-status">
@@ -377,7 +396,7 @@
       <button type="button" id="deactivateSetBtn" class="btn btn-secondary btn-small" hidden>แก้ไขชุดเกณฑ์นี้อีกครั้ง</button>
     </div>
   </div>
-  <p class="lead">อ่านกฎเกณฑ์ของชุดนี้จาก Firestore collection <code>rules</code> โดยตรง (กรองด้วย <code>criteriaSetId</code>) กรุณาตรวจสอบและอนุมัติ/ไม่อนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน — การกดอนุมัติ/ไม่อนุมัติจะแก้เฉพาะ field <code>status</code> กลับไปที่ Firestore จริง (<code>approved</code> / <code>rejected</code>) พร้อมบันทึกลง <code>reviewLog</code></p>
+  <p class="lead" id="pageLead">อ่านกฎเกณฑ์ของชุดนี้จาก Firestore collection <code>rules</code> โดยตรง (กรองด้วย <code>criteriaSetId</code>) กรุณาตรวจสอบและอนุมัติ/ไม่อนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน — การกดอนุมัติ/ไม่อนุมัติจะแก้เฉพาะ field <code>status</code> กลับไปที่ Firestore จริง (<code>approved</code> / <code>rejected</code>) พร้อมบันทึกลง <code>reviewLog</code></p>
 
   <div id="activeBanner" class="active-banner">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path d="M20 6L9 17l-5-5"/></svg>
@@ -391,7 +410,7 @@
     </div>
   </div>
 
-  <div class="toolbar">
+  <div class="toolbar" id="toolbar">
     <p class="progress-note" id="progressNote">กำลังโหลด…</p>
     <button type="button" class="btn btn-secondary" id="bulkApproveBtn" disabled>อนุมัติทั้งหมด (Bulk Approve)</button>
   </div>
@@ -402,7 +421,7 @@
 
   <div class="actions">
     <a class="btn btn-secondary" href="05-criteria-dashboard.html">ย้อนกลับ</a>
-    <a class="btn btn-secondary" href="06-create-criteria-set.html">อัปโหลดเอกสารเพิ่ม</a>
+    <a class="btn btn-secondary" id="uploadMoreLink" href="06-create-criteria-set.html">อัปโหลดเอกสารเพิ่ม</a>
   </div>
 </div>
 

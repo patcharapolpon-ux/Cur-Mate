@@ -1,15 +1,26 @@
 // ─────────────────────────────────────────────────────────────
 // js/rule-review.js — อ่าน rules ของชุดเกณฑ์ (?setId=...) จาก Firestore
+// เปิดให้ทั้ง role ADMIN และ STAFF เข้าดูได้ (ดู ACL.md) แต่ทำได้ไม่เท่ากัน:
+// - ADMIN: อนุมัติ/ไม่อนุมัติ/ลบ/แก้ไข/เปิดใช้งานชุดเกณฑ์ ได้ตามเดิมทุกประการ
+// - STAFF: อ่านอย่างเดียวเพื่อศึกษา — ไม่มีปุ่มใดๆ ทั้งสิ้น และเข้าดูได้เฉพาะชุดที่ "เปิดใช้งาน (active)"
+//   แล้วเท่านั้น (ชุดที่ยัง pending ยังไม่ผ่านตรวจ ไม่ให้ศึกษา)
+//
 // ปุ่มอนุมัติ/ไม่อนุมัติ/อนุมัติทั้งหมด เขียนสถานะจริงกลับไปที่ rules/{id}
 // (แก้เฉพาะ field status เท่านั้น) พร้อมบันทึก rules/{id}/reviewLog
 //
-// หมายเหตุ: ยังไม่มีระบบ login (จะทำสัปดาห์ที่ 7) จึงยังฮาร์ดโค้ด
-// ผู้อนุมัติเป็นแอดมินตัวอย่าง (u001) ไปก่อน
+// ผู้อนุมัติ (adminId/adminName ใน reviewLog) มาจากผู้ login อยู่จริง (js/auth.js)
+// ไม่ฮาร์ดโค้ดอีกต่อไป (เดิมฮาร์ดโค้ด u001 ไว้ก่อนมี login จริง)
 // ─────────────────────────────────────────────────────────────
 
 (function () {
-  var CURRENT_ADMIN_ID = "u001";
-  var CURRENT_ADMIN_NAME = "สมชาย ใจดี";
+  // ตั้งค่าจริงตอน window.CURMATE_AUTH_READY resolve (ดูท้ายไฟล์) — ก่อนหน้านั้นห้ามมีปุ่มไหนกดได้
+  // อยู่แล้วเพราะการ์ดกฎเกณฑ์ยังไม่ถูก render จนกว่าจะเรียก โหลดข้อมูล() หลัง auth พร้อม
+  var currentUser = null;
+  var isAdmin = false;
+  var toolbar = document.getElementById("toolbar");
+  var uploadMoreLink = document.getElementById("uploadMoreLink");
+  var pageTitle = document.getElementById("pageTitle");
+  var pageLead = document.getElementById("pageLead");
 
   // ใช้ hash (#setId=...) แทน query string (?setId=...) เพราะ local static server
   // บางตัว (เช่น npx serve ที่ redirect .html -> clean URL) จะตัด query string ทิ้ง
@@ -75,6 +86,19 @@
     var ruleId = card.dataset.ruleId;
     var status = cardStatus(card);
     var actionsEl = card.querySelector(".rule-actions");
+
+    // STAFF อ่านอย่างเดียวเพื่อศึกษา — ไม่มีปุ่มใดๆ ทั้งสิ้น ไม่ว่ากฎเกณฑ์ข้อนั้นจะอยู่สถานะไหน (ดู ACL.md)
+    if (!isAdmin) {
+      if (status === "approved") {
+        actionsEl.innerHTML = '<span class="approved-label">' + successIcon + "อนุมัติแล้ว</span>";
+      } else if (status === "rejected") {
+        actionsEl.innerHTML = '<span class="rejected-label">' + rejectIcon + "ไม่อนุมัติ</span>";
+      } else {
+        actionsEl.innerHTML = '<span class="status-chip warning">' + warningIcon + "รอตรวจสอบ</span>";
+      }
+      return;
+    }
+
     var locked = currentSetStatus === "active";
     var editing = card.dataset.editing === "true";
 
@@ -152,8 +176,8 @@
 
     await db.collection("rules").doc(ruleId).update({ status: "approved" });
     await db.collection("rules").doc(ruleId).collection("reviewLog").add({
-      adminId: CURRENT_ADMIN_ID,
-      adminName: CURRENT_ADMIN_NAME,
+      adminId: currentUser.uid,
+      adminName: currentUser.name,
       action: "approved",
       comment: "",
       createdAt: new Date().toISOString(),
@@ -174,8 +198,8 @@
 
     await db.collection("rules").doc(ruleId).update({ status: "rejected" });
     await db.collection("rules").doc(ruleId).collection("reviewLog").add({
-      adminId: CURRENT_ADMIN_ID,
-      adminName: CURRENT_ADMIN_NAME,
+      adminId: currentUser.uid,
+      adminName: currentUser.name,
       action: "rejected",
       comment: "",
       createdAt: new Date().toISOString(),
@@ -203,7 +227,8 @@
     if (currentSetStatus === "active") {
       setStatusChip.className = "status-chip success";
       setStatusChip.innerHTML = successIcon + "เปิดใช้งาน";
-      deactivateSetBtn.hidden = !setExists;
+      // ปุ่ม "แก้ไขชุดเกณฑ์นี้อีกครั้ง" เป็นสิทธิ์จัดการของ ADMIN เท่านั้น (ดู ACL.md)
+      deactivateSetBtn.hidden = !setExists || !isAdmin;
     } else {
       setStatusChip.className = "status-chip warning";
       setStatusChip.innerHTML = warningIcon + "รอตรวจสอบ";
@@ -227,7 +252,8 @@
       ? "ตรวจสอบครบทุกข้อแล้ว (อนุมัติ " + approvedCount + ", ไม่อนุมัติ " + rejectedCount + " จาก " + total + ")"
       : "ดำเนินการแล้ว " + reviewedCount + " จาก " + total + " ข้อ (อนุมัติ " + approvedCount + ", ไม่อนุมัติ " + rejectedCount + ")";
 
-    if (!allReviewed || !setExists) {
+    // banner "อนุมัติครบแล้ว/เปิดใช้งาน" เป็นข้อมูลเชิงจัดการของ ADMIN ล้วน — STAFF (อ่านอย่างเดียว) ไม่ต้องเห็น
+    if (!isAdmin || !allReviewed || !setExists) {
       activeBanner.classList.remove("show");
       return;
     }
@@ -300,6 +326,12 @@
     }
     renderSetStatusChip();
 
+    // STAFF ศึกษาได้เฉพาะชุดที่เปิดใช้งานแล้วเท่านั้น (ดู ACL.md) — ชุดที่ยัง pending ยังไม่ผ่านตรวจ
+    if (!isAdmin && currentSetStatus !== "active") {
+      ruleList.innerHTML = "<p>ชุดเกณฑ์นี้ยังไม่เปิดใช้งาน — ยังไม่พร้อมให้ศึกษา กลับไปเลือกชุดที่เปิดใช้งานแล้วจากหน้ารายการ</p>";
+      return;
+    }
+
     var snapshot = await db.collection("rules").where("criteriaSetId", "==", setId).get();
 
     if (snapshot.empty) {
@@ -316,7 +348,22 @@
     updateProgress();
   }
 
-  โหลดข้อมูล().catch(function (err) {
-    ruleList.innerHTML = "<p>โหลดข้อมูลไม่สำเร็จ: " + err.message + "</p>";
+  // รอ auth.js เช็ค login + role ก่อน ถึงจะเริ่มอ่าน Firestore (ดู js/auth.js)
+  window.CURMATE_AUTH_READY.then(function (user) {
+    currentUser = user;
+    isAdmin = user.role === "ADMIN";
+
+    if (!isAdmin) {
+      // STAFF: อ่านอย่างเดียวเพื่อศึกษา — ซ่อนทุกส่วนที่เป็นสิทธิ์จัดการของ ADMIN (ดู ACL.md)
+      pageTitle.textContent = "ศึกษากฎเกณฑ์มาตรฐาน";
+      pageLead.textContent = "อ่านกฎเกณฑ์ของชุดนี้จาก Firestore collection rules โดยตรง (กรองด้วย criteriaSetId) — หน้านี้เป็นแบบอ่านอย่างเดียวสำหรับศึกษาเกณฑ์";
+      toolbar.hidden = true;
+      uploadMoreLink.hidden = true;
+      activeBanner.classList.remove("show");
+    }
+
+    โหลดข้อมูล().catch(function (err) {
+      ruleList.innerHTML = "<p>โหลดข้อมูลไม่สำเร็จ: " + err.message + "</p>";
+    });
   });
 })();

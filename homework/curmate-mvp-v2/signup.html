@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สมัครสมาชิก — Curmate MVP v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
+<script src="js/firebase-config.js" defer></script>
+<script src="js/signup.js" defer></script>
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+
+    --radius-medium: 8px;
+    --radius-large: 12px;
+
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+    margin: var(--space-32) var(--space-16);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+    padding: var(--space-32) var(--space-24);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-8);
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 var(--space-24);
+  }
+
+  .field { margin-bottom: var(--space-16); }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .field .helper {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin: 6px 0 0;
+  }
+  .text-input, .select-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+  }
+  .text-input:focus, .select-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  .btn-primary {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: var(--radius-medium);
+    background: var(--color-primary);
+    color: #FFFFFF;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: var(--space-8);
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:active:not(:disabled) { background: var(--color-primary-active); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .error-box {
+    background: var(--color-error-bg);
+    color: var(--color-error-text);
+    border-radius: var(--radius-medium);
+    padding: 10px 14px;
+    font-size: 14px;
+    margin-bottom: var(--space-16);
+  }
+
+  .auth-switch {
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-24);
+  }
+  .auth-switch a { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+  .auth-switch a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="auth-card">
+  <div class="wordmark">Curmate</div>
+  <h1>สมัครสมาชิก</h1>
+
+  <p id="errorBox" class="error-box" hidden></p>
+
+  <form id="signupForm" novalidate>
+    <div class="field">
+      <label for="name">ชื่อ-นามสกุล</label>
+      <input type="text" id="name" class="text-input" required autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="email">อีเมล</label>
+      <input type="email" id="email" class="text-input" required autocomplete="username">
+    </div>
+    <div class="field">
+      <label for="password">รหัสผ่าน</label>
+      <input type="password" id="password" class="text-input" required autocomplete="new-password">
+      <p class="helper">อย่างน้อย 6 ตัวอักษร (ข้อกำหนดของ Firebase)</p>
+    </div>
+    <div class="field">
+      <label for="confirmPassword">ยืนยันรหัสผ่าน</label>
+      <input type="password" id="confirmPassword" class="text-input" required autocomplete="new-password">
+    </div>
+    <button type="submit" class="btn-primary" id="submitBtn">สมัครสมาชิก</button>
+  </form>
+  <p class="helper" style="text-align:center;margin-top:12px;">บัญชีใหม่ทุกบัญชีเริ่มต้นด้วยบทบาท STAFF เสมอ — ให้ ADMIN เลื่อนบทบาทให้ทีหลังผ่านหน้า "จัดการผู้ใช้"</p>
+
+  <p class="auth-switch">มีบัญชีอยู่แล้ว? <a href="login.html">เข้าสู่ระบบ</a></p>
+</div>
+</body>
+</html>

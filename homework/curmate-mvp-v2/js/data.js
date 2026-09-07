@@ -6,8 +6,8 @@
 
 window.CURMATE_DATA = {
   users: [
-    { id: "u001", name: "สมชาย ใจดี", email: "somchai@example.com", role: "admin" },
-    { id: "u002", name: "สมหญิง รักงาน", email: "somying@example.com", role: "admin" },
+    { id: "u001", name: "สมชาย ใจดี", email: "somchai@example.com", role: "ADMIN" },
+    { id: "u002", name: "สมหญิง รักงาน", email: "somying@example.com", role: "STAFF" },
   ],
 
   criteriaSets: [

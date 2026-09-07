@@ -13,6 +13,16 @@
   var toastBody = document.getElementById("toastBody");
   var fileCount = 0;
 
+  // หน้านี้เป็นของ ADMIN ล้วน (สร้าง/แก้ไขชุดเกณฑ์เป็นสิทธิ์จัดการ ไม่ใช่แค่ดู — ดู ACL.md)
+  // ผู้ login อยู่ตอนนี้ (จาก auth.js) — ใช้บันทึก uploadedBy/uploadedByName ตอนสร้างชุดเกณฑ์
+  // ยังเป็น null จนกว่า window.CURMATE_AUTH_READY จะ resolve
+  var currentUser = null;
+  window.CURMATE_AUTH_READY.then(function (user) {
+    if (!window.CURMATE_REQUIRE_ADMIN(user)) { return; }
+    currentUser = user;
+    updateExtractState();
+  });
+
   var mockFileNames = [
     "ประกาศเกณฑ์มาตรฐานหลักสูตร-วิทยาการคอมพิวเตอร์-2569.pdf",
     "เกณฑ์มาตรฐานคุณวุฒิระดับปริญญาตรี-ภาคผนวก.docx",
@@ -43,7 +53,7 @@
 
   function updateExtractState() {
     var ชื่อกรอกแล้ว = document.getElementById("setName").value.trim().length > 0;
-    extractBtn.disabled = fileList.children.length === 0 || !ชื่อกรอกแล้ว;
+    extractBtn.disabled = fileList.children.length === 0 || !ชื่อกรอกแล้ว || !currentUser;
   }
 
   dropzone.addEventListener("click", addFile);
@@ -69,6 +79,8 @@
       degreeLevel: document.getElementById("setLevel").value,
       scope: document.getElementById("setScope").value.trim(),
       status: "pending",
+      uploadedBy: currentUser.uid,
+      uploadedByName: currentUser.name,
     };
 
     db.collection("criteriaSets").add(newSet)

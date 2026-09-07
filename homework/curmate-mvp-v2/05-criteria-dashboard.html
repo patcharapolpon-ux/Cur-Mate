@@ -8,7 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
 <script src="js/firebase-config.js" defer></script>
+<script src="js/auth.js" defer></script>
 <script src="js/dashboard.js" defer></script>
 <style>
   :root {
@@ -59,6 +61,7 @@
   }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
 
   body {
     margin: 0;
@@ -234,6 +237,24 @@
   }
   .btn-danger:hover:not(:disabled) { background: var(--color-error-bg); }
   .btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+
+  .user-session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-left: auto;
+  }
+  .user-session-name {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
 
   .criteria-set-footer {
     display: flex;
@@ -263,13 +284,18 @@
     <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
       <span class="current">จัดการฐานความรู้เกณฑ์มาตรฐาน</span>
     </nav>
+    <div class="user-session" id="userSession" hidden>
+      <a href="manage-users.html" class="btn btn-secondary btn-small" id="manageUsersLink" hidden>จัดการผู้ใช้</a>
+      <span class="user-session-name" id="userSessionName"></span>
+      <button type="button" class="btn btn-secondary btn-small" id="logoutBtn">ออกจากระบบ</button>
+    </div>
   </div>
 
   <div class="page-head">
     <div>
       <h1>รายการชุดเกณฑ์มาตรฐาน</h1>
     </div>
-    <a class="btn btn-primary" href="06-create-criteria-set.html">
+    <a class="btn btn-primary" id="createSetLink" href="06-create-criteria-set.html" hidden>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       สร้างชุดเกณฑ์ใหม่
     </a>
