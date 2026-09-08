@@ -1,0 +1,25 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "**/.*",
+      "**/node_modules/**",
+      "CLAUDE.md",
+      "README.md",
+      "SCOPE.md",
+      "ACL.md"
+    ],
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "/login.html",
+        "type": 302
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

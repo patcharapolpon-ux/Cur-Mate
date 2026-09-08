@@ -15,7 +15,7 @@
 
 ## การบังคับใช้สิทธิ์ในโค้ด (ปัจจุบัน)
 
-- บังคับผ่าน **UI เท่านั้น** (`js/auth.js` + role-aware rendering ในแต่ละหน้า) — ยังไม่มี Firestore Security Rules รองรับ (โปรเจกต์ยังเป็น open test rules) ถ้ายิง Firestore API ตรงๆ ข้ามหน้าเว็บไป สิทธิ์เหล่านี้จะไม่ถูกบังคับใช้จริง
+- บังคับ 2 ชั้น: **UI** (`js/auth.js` + role-aware rendering ในแต่ละหน้า) **และ Firestore Security Rules จริง** ([firestore.rules](./firestore.rules), เพิ่มเมื่อ 2026-09-08 — ต้อง publish เองผ่าน Firebase Console) ตารางสิทธิ์ด้านบนตอนนี้ถูกบังคับที่ระดับฐานข้อมูลด้วยแล้ว ไม่ใช่แค่ผ่านหน้าเว็บ ถ้ายิง Firestore API ตรงๆ ข้ามหน้าเว็บไปก็ยังถูกกันไว้
 - หน้า `06-create-criteria-set.html` และ `manage-users.html` เป็น ADMIN ล้วน — เข้าด้วย role อื่นจะเจอ "ไม่มีสิทธิ์เข้าถึง" ทันที (ปิดกั้นด้วย `window.CURMATE_REQUIRE_ADMIN` ใน `js/auth.js`)
 - หน้า `05-criteria-dashboard.html` และ `07-rule-review-approval.html` เปิดให้ทั้งสอง role เข้าดูได้ — ปุ่ม/ข้อมูลที่เป็นสิทธิ์จัดการของ ADMIN (สร้าง/ลบ/อนุมัติ/เปิดใช้งาน) ถูกซ่อนสำหรับ STAFF และ STAFF เห็นเฉพาะชุดเกณฑ์สถานะ `active` เท่านั้น
 - บัญชีใหม่ทุกบัญชีจากหน้า `signup.html` ได้ role `STAFF` เสมอ (ไม่ให้เลือกเองแล้ว) — ADMIN คนแรกของระบบต้องตั้งค่าด้วยมือผ่าน Firebase Console (ผู้ใช้ระบบจัดการเอง ไม่ได้ทำอัตโนมัติในโค้ด) ADMIN คนถัดไปเลื่อนบทบาทให้กันเองผ่านหน้า `manage-users.html`

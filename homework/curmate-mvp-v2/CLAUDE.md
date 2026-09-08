@@ -69,7 +69,13 @@ role มี 2 ค่า (เก็บใน `users/{uid}.role` เป็นโ�
 
 `reviewLog.adminId`/`adminName` (หน้า 07) และ `criteriaSets.uploadedBy`/`uploadedByName` (หน้า 06) มาจากผู้ login อยู่จริงแล้ว ไม่ใช่ค่าคงที่อีกต่อไป
 
-**ยังไม่ทำ**: Firestore Security Rules ที่บังคับ auth/role ก่อน read/write จริง (ยังเป็น open test rules) — การล็อกอิน + สิทธิ์ตอนนี้ป้องกันได้แค่ผ่านหน้าเว็บ (UI) ไม่ได้กันการยิง Firestore API ตรงๆ ข้ามหน้าเว็บไปเลย
+## Firestore Security Rules (เพิ่มเมื่อ 2026-09-08)
+
+มี [firestore.rules](./firestore.rules) แล้ว — บังคับสิทธิ์ ADMIN/STAFF ตรงตาม ACL.md ที่ระดับฐานข้อมูลจริง (ไม่ใช่แค่ผ่าน UI แล้ว) **ต้อง copy เนื้อหาไปวางเองที่ Firebase Console → Firestore Database → Rules → Publish** (โฟลเดอร์นี้ไม่มี Firebase CLI/`firebase.json` ตั้งค่าไว้ ไม่สามารถ `firebase deploy` ได้) รายละเอียดเต็มดู [SCOPE.md](./SCOPE.md) หัวข้อ "Firestore Security Rules"
+
+- ใช้ pattern `get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role` เพื่อเช็ค role ของผู้ login อยู่ (helper functions `isAdmin()`/`isStaff()`) — สำหรับ `rules/{ruleId}` ต้อง `get()` ไปที่ document แม่ (`criteriaSets/{criteriaSetId}`) เพิ่มอีกชั้นเพื่อเช็คว่าเปิดใช้งาน (`active`) แล้วหรือยัง ก่อนให้ STAFF อ่านได้
+- **ไม่ได้บังคับซ้ำ** เรื่องล็อกแก้ไข/ลบ `rules` ตอน `criteriaSets.status == "active"` (ต่างจาก UI ที่ล็อกไว้ที่หน้า 07) เพราะจะทำให้ cascade delete ของ dashboard.js (ลบ `rules` ทุกข้อตอนลบทั้งชุดเกณฑ์ทิ้ง แม้ชุดนั้นจะ `active` อยู่) พังไปด้วย — ยังคงจำกัดว่าต้องเป็น ADMIN เท่านั้นถึงจะทำได้อยู่ดี ไม่ใช่ช่องโหว่
+- **`seed.html` จะพังหลัง publish กฎนี้** เพราะ `js/seed.js` เขียนตรงๆ โดยไม่ login และกำหนด document id เอง (ไม่ใช่ auth.uid) — ต้องสลับ Firestore กลับเป็น test rules ชั่วคราวถ้าต้อง seed ข้อมูลใหม่ ทำเสร็จแล้วค่อย publish `firestore.rules` กลับ
 
 ## ข้อห้าม/ข้อควรระวัง
 

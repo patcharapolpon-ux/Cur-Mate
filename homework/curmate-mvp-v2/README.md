@@ -2,6 +2,10 @@
 
 โฟลเดอร์นี้เป็นแบบฝึกหัดของคอร์ส ไม่ใช่แอปพลิเคชัน Curmate จริง — ดูรายละเอียดขอบเขตและสิ่งที่ต่างจาก `homework/curmate-mvp` เดิมใน [SCOPE.md](./SCOPE.md)
 
+## URL ออนไลน์
+
+https://cur-mate.web.app/ (deploy ผ่าน Firebase Hosting — เข้า root แล้ว redirect ไปหน้า `login.html` อัตโนมัติ)
+
 จุดต่างหลักจากโฟลเดอร์เดิม: หน้าตา (HTML) นำมาจาก Prototype v1 จริงของ Curmate
 (`docs/02-design/01-prototypes/20260823-prototype-v1/`) แล้วต่อ Firestore จริงแทนข้อมูลจำลอง
 แทนที่จะพิมพ์หน้าตาขึ้นมาใหม่ทุกครั้ง
@@ -30,4 +34,8 @@
 
 ## ความคืบหน้าสัปดาห์ที่ 7
 
-เพิ่ม Firebase Authentication (Email/Password) แล้ว — สมัครสมาชิก/เข้าสู่ระบบ/ออกจากระบบ, auth guard เด้งไป `login.html` ถ้ายังไม่ login, และบันทึก uid ผู้ login จริงตอนสร้างชุดเกณฑ์/อนุมัติกฎเกณฑ์ (แทนค่าฮาร์ดโค้ดเดิม) พร้อมระบบจัดการบทบาท 2 role (`ADMIN`/`STAFF`) รวมหน้าใหม่ `manage-users.html` ให้ ADMIN เปลี่ยนบทบาทผู้ใช้คนอื่นได้ ดูสิทธิ์แบบเต็มใน [ACL.md](./ACL.md) และรายละเอียดที่ [SCOPE.md](./SCOPE.md) หัวข้อ "ระบบ login"/"ระบบจัดการบทบาท" — ยังไม่ทำ Firestore Security Rules ที่บังคับ auth จริง (ยังเป็น open test rules เหมือนเดิม)
+เพิ่ม Firebase Authentication (Email/Password) แล้ว — สมัครสมาชิก/เข้าสู่ระบบ/ออกจากระบบ, auth guard เด้งไป `login.html` ถ้ายังไม่ login, และบันทึก uid ผู้ login จริงตอนสร้างชุดเกณฑ์/อนุมัติกฎเกณฑ์ (แทนค่าฮาร์ดโค้ดเดิม) พร้อมระบบจัดการบทบาท 2 role (`ADMIN`/`STAFF`) รวมหน้าใหม่ `manage-users.html` ให้ ADMIN เปลี่ยนบทบาทผู้ใช้คนอื่นได้ ดูสิทธิ์แบบเต็มใน [ACL.md](./ACL.md) และรายละเอียดที่ [SCOPE.md](./SCOPE.md) หัวข้อ "ระบบ login"/"ระบบจัดการบทบาท"
+
+## ความคืบหน้า 2026-09-08: Firestore Security Rules
+
+เพิ่ม [firestore.rules](./firestore.rules) บังคับสิทธิ์ ADMIN/STAFF จริงที่ระดับฐานข้อมูล (ตรงตาม ACL.md ทุกจุด) แทน open test rules เดิม — ต้องก็อปเนื้อหาไปวางเองที่ Firebase Console → Firestore Database → Rules (ไม่มี Firebase CLI ตั้งค่าไว้ในโฟลเดอร์นี้) รายละเอียดครบที่ [SCOPE.md](./SCOPE.md) หัวข้อ "Firestore Security Rules" **สำคัญ**: หลัง publish แล้ว `seed.html` จะใช้ไม่ได้อีก (ต้องสลับกลับ test rules ชั่วคราวถ้าต้อง seed ใหม่)

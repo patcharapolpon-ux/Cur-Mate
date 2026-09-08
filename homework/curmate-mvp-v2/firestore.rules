@@ -1,0 +1,105 @@
+// ─────────────────────────────────────────────────────────────
+// firestore.rules — Firestore Security Rules ของการบ้าน curmate-mvp-v2
+// (เพิ่มเมื่อ 2026-09-08 — แทนที่ open test rules เดิมที่หมดอายุ 2026-10-04)
+//
+// วิธีใช้ไฟล์นี้: ไม่มี Firebase CLI ตั้งค่าไว้ในโฟลเดอร์นี้ (ไม่มี firebase.json)
+// ต้องก็อปเนื้อหาทั้งหมดด้านล่างไปวางเองที่ Firebase Console →
+// โปรเจกต์ cur-mate → Firestore Database → แท็บ "Rules" → วางทับของเดิม → Publish
+//
+// อ้างอิงสิทธิ์ตรงตาม ACL.md ทุกจุด:
+// - ADMIN: จัดการ criteriaSets/rules/reviewLog ได้เต็มที่ + จัดการ role ผู้ใช้คนอื่น (ห้ามแก้ role ตัวเอง)
+// - STAFF: อ่าน criteriaSets/rules ได้เฉพาะที่ status == "active" เท่านั้น อ่านอย่างเดียว เขียนอะไรไม่ได้เลย
+// - ผู้ไม่ login: ทำอะไรไม่ได้เลยทุก collection
+//
+// ผลกระทบที่ต้องรู้: seed.html เขียนข้อมูลตรงๆ โดยไม่ login และเขียนทับ doc id ที่กำหนดเอง
+// (ไม่ใช่ auth.uid ของผู้เขียน) — กฎเหล่านี้จะทำให้ seed.html ใช้ไม่ได้อีกต่อไปหลัง Publish
+// (เหมือนที่ error message ใน js/seed.js เตือนไว้อยู่แล้ว) ถ้าต้อง seed ข้อมูลใหม่ ให้สลับกลับไป
+// ใช้ test rules ชั่วคราว ทำเสร็จแล้วค่อยเปลี่ยนกลับมาเป็นไฟล์นี้
+// ─────────────────────────────────────────────────────────────
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function role() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && role() == "ADMIN";
+    }
+
+    function isStaff() {
+      return isSignedIn() && role() == "STAFF";
+    }
+
+    // users/{uid} — profile + role ของแต่ละบัญชี
+    match /users/{uid} {
+      // อ่านได้แค่ของตัวเอง (auth.js ทุกหน้าอ่านแบบนี้) หรือ ADMIN อ่านของใครก็ได้ (manage-users.html)
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+
+      // สมัครสมาชิก (signup.js): สร้างได้แค่ doc ของตัวเอง และบังคับ role เป็น STAFF เสมอ
+      // (ADMIN คนแรก/ถัดไปตั้งด้วยมือผ่าน Firebase Console หรือ manage-users.html เท่านั้น ไม่ผ่าน path นี้)
+      allow create: if isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == "STAFF"
+        && request.resource.data.keys().hasAll(["name", "email", "role"]);
+
+      // manage-users.js: มีแค่ ADMIN แก้ role ผู้ใช้ "คนอื่น" ได้ (ห้ามแก้ของตัวเอง แก้แค่ field role เท่านั้น)
+      allow update: if isAdmin()
+        && request.auth.uid != uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["role"])
+        && request.resource.data.role in ["ADMIN", "STAFF"];
+
+      allow delete: if false; // ไม่มีฟีเจอร์ลบผู้ใช้ในระบบ
+    }
+
+    // criteriaSets/{setId} — ชุดเกณฑ์
+    match /criteriaSets/{setId} {
+      // ADMIN อ่านได้ทุกสถานะ (dashboard.js, rule-review.js); STAFF อ่านได้เฉพาะ status == "active"
+      allow read: if isAdmin() || (isStaff() && resource.data.status == "active");
+
+      // create-criteria-set.js: ADMIN ล้วน, ต้องระบุ uploadedBy เป็นตัวเอง และเริ่มที่ status "pending" เสมอ
+      allow create: if isAdmin()
+        && request.resource.data.uploadedBy == request.auth.uid
+        && request.resource.data.status == "pending";
+
+      // rule-review.js เปลี่ยน status ระหว่าง pending/active ได้ — ADMIN ล้วน ทุกสถานะ
+      allow update: if isAdmin();
+
+      // dashboard.js: ลบได้ทุกสถานะ (ไม่ล็อกตอน active — ตรงตาม SCOPE.md)
+      allow delete: if isAdmin();
+    }
+
+    // rules/{ruleId} — กฎเกณฑ์ย่อยของแต่ละชุด (มี criteriaSetId ชี้กลับไปหา criteriaSets)
+    match /rules/{ruleId} {
+      // STAFF อ่านได้เฉพาะกฎเกณฑ์ที่ชุดแม่ (criteriaSets) เป็น active แล้วเท่านั้น (เช็คผ่าน get() ของ parent)
+      allow read: if isAdmin()
+        || (isStaff() && get(/databases/$(database)/documents/criteriaSets/$(resource.data.criteriaSetId)).data.status == "active");
+
+      // ไม่มีหน้าไหนสร้าง rules ตรงๆ ผ่าน UI ปกติ (มีแค่ seed.html) — สงวนไว้ให้ ADMIN เท่านั้น
+      allow create: if isAdmin();
+
+      // rule-review.js: อนุมัติ/ไม่อนุมัติ/แก้ไขสถานะ — ADMIN ล้วน
+      allow update: if isAdmin();
+
+      // rule-review.js/dashboard.js (cascade delete): ลบได้ทุกสถานะของชุดแม่ — ADMIN ล้วน
+      allow delete: if isAdmin();
+
+      // rules/{ruleId}/reviewLog/{logId} — ประวัติการตรวจสอบของกฎเกณฑ์ข้อนั้น
+      match /reviewLog/{logId} {
+        allow read: if isAdmin();
+        allow create: if isAdmin() && request.resource.data.adminId == request.auth.uid;
+        allow update: if false; // ไม่มีฟีเจอร์แก้ไขประวัติย้อนหลัง
+        allow delete: if isAdmin(); // cascade delete ตอนลบ rule/ชุดเกณฑ์ทิ้ง
+      }
+    }
+
+    // path อื่นนอกเหนือจากนี้: ปฏิเสธโดยปริยาย (Firestore default-deny)
+  }
+}
