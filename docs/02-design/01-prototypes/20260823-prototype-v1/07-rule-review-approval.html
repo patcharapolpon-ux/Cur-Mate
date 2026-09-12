@@ -114,6 +114,21 @@
   .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
   .breadcrumb-sep { color: var(--color-text-disabled); }
 
+  .btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out, color 150ms ease-out;
+  }
+  .btn-logout:hover { background: var(--color-error-bg); color: var(--color-error-text); }
+
   .page-head {
     display: flex;
     justify-content: space-between;
@@ -151,6 +166,7 @@
   }
   .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
   .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .status-chip.error { background: var(--color-error-bg); color: var(--color-error-text); }
 
   .toolbar {
     display: flex;
@@ -187,6 +203,11 @@
     border-color: var(--color-success);
     border-left-color: var(--color-success);
     background: #F7FEF9;
+  }
+  .rule-card.rejected {
+    border-color: var(--color-error);
+    border-left-color: var(--color-error);
+    background: #FEF7F7;
   }
 
   .rule-card-top {
@@ -270,6 +291,17 @@
   }
   .btn-reject:hover:not(:disabled) { background: var(--color-error-bg); }
   .btn-reject:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost-delete {
+    background: transparent;
+    color: var(--color-text-secondary);
+  }
+  .btn-ghost-delete:hover { background: var(--color-error-bg); color: var(--color-error-text); }
+  .btn-destructive {
+    background: var(--color-error);
+    color: #FFFFFF;
+  }
+  .btn-destructive:hover:not(:disabled) { background: #B91C1C; }
+  .btn-destructive:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .approved-label {
     display: inline-flex;
@@ -278,6 +310,43 @@
     font-size: 13px;
     font-weight: 600;
     color: var(--color-success-text);
+  }
+
+  /* Confirmation Dialog — ตาม DESIGN.md ใช้กับการกระทำที่ย้อนกลับไม่ได้ */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-24);
+    z-index: 50;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal-dialog {
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-surface);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-overlay);
+    padding: var(--space-24);
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-primary);
+  }
+  .modal-body {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-12);
   }
 
   .active-banner {
@@ -322,6 +391,10 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
       แผงแอดมิน
     </span>
+    <a class="btn-logout" href="10-login.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      ออกจากระบบ
+    </a>
     <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
       <a href="05-criteria-dashboard.html">จัดการฐานความรู้เกณฑ์มาตรฐาน</a>
       <span class="breadcrumb-sep">›</span>
@@ -334,25 +407,29 @@
       <h1>ตรวจสอบและอนุมัติกฎเกณฑ์</h1>
       <p class="set-name">ชุดเกณฑ์: เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569</p>
     </div>
-    <span id="setStatusChip" class="status-chip warning">
+    <span id="setStatusChip" class="status-chip warning" data-state="pending">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
       รอตรวจสอบ
     </span>
   </div>
-  <p class="lead">AI สกัดกฎเกณฑ์ต่อไปนี้จากเอกสารที่อัปโหลด กรุณาตรวจสอบและอนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน ชุดเกณฑ์จะเปิดใช้งาน (active) ได้ก็ต่อเมื่อกฎเกณฑ์ทุกข้อผ่านการอนุมัติแล้ว</p>
+  <p class="lead">AI สกัดกฎเกณฑ์ต่อไปนี้จากเอกสารที่อัปโหลด กรุณาตรวจสอบแต่ละข้อ: อนุมัติ ปฏิเสธ (ไม่อนุมัติ) หรือ ลบทิ้ง เมื่อตรวจครบทุกข้อแล้ว (อนุมัติหรือไม่อนุมัติ) จึงจะกดเปิดใช้งานชุดเกณฑ์ได้ กฎเกณฑ์ที่ถูกปฏิเสธจะไม่ถูกลบทิ้ง สามารถกลับมาพิจารณาใหม่ภายหลังได้เสมอ</p>
 
   <div id="activeBanner" class="active-banner">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path d="M20 6L9 17l-5-5"/></svg>
     <div>
       <p class="active-banner-title">ชุดเกณฑ์นี้เปลี่ยนสถานะเป็นเปิดใช้งาน (active) แล้ว</p>
-      <p class="active-banner-body">กฎเกณฑ์ทั้งหมดผ่านการอนุมัติครบแล้ว ชุดเกณฑ์นี้จะปรากฏในรายการให้ผู้ใช้งานทั่วไปเลือกอ้างอิงตอนตรวจสอบเอกสารหรือสนทนากับแชทบอท</p>
+      <p class="active-banner-body">ชุดเกณฑ์นี้จะปรากฏในรายการให้ผู้ใช้งานทั่วไปเลือกอ้างอิงตอนตรวจสอบเอกสารหรือสนทนากับแชทบอท หากต้องการแก้ไขการอนุมัติกฎเกณฑ์เดิมอีกครั้ง สามารถกดปุ่ม "แก้ไขชุดเกณฑ์นี้อีกครั้ง" ด้านบนได้ทุกเมื่อ</p>
       <a class="btn btn-primary" href="05-criteria-dashboard.html">กลับไปหน้ารายการชุดเกณฑ์</a>
     </div>
   </div>
 
   <div class="toolbar">
-    <p class="progress-note" id="progressNote">อนุมัติแล้ว 0 จาก 5 ข้อ</p>
-    <button type="button" class="btn btn-secondary" id="bulkApproveBtn">อนุมัติทั้งหมด (Bulk Approve)</button>
+    <p class="progress-note" id="progressNote">ตรวจสอบแล้ว 0 จาก 5 ข้อ (อนุมัติ 0 · ไม่อนุมัติ 0)</p>
+    <div style="display:flex; gap: var(--space-12); flex-wrap: wrap;">
+      <button type="button" class="btn btn-secondary" id="bulkApproveBtn">อนุมัติทั้งหมด (Bulk Approve)</button>
+      <button type="button" class="btn btn-primary" id="activateSetBtn" style="display:none;">เปิดใช้งานชุดเกณฑ์นี้</button>
+      <button type="button" class="btn btn-secondary" id="reopenSetBtn" style="display:none;">แก้ไขชุดเกณฑ์นี้อีกครั้ง</button>
+    </div>
   </div>
 
   <div class="rule-list" id="ruleList">
@@ -363,8 +440,9 @@
       </div>
       <p class="rule-text">หมวดวิชาเลือกต้องมีหน่วยกิตไม่เกิน 24 หน่วยกิต</p>
       <div class="rule-actions">
-        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
-        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
       </div>
     </div>
 
@@ -374,8 +452,9 @@
       </div>
       <p class="rule-text">หลักสูตรปริญญาตรีต้องมีหน่วยกิตรวมไม่น้อยกว่า 120 หน่วยกิต</p>
       <div class="rule-actions">
-        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
-        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
       </div>
     </div>
 
@@ -385,8 +464,9 @@
       </div>
       <p class="rule-text">หมวดวิชาศึกษาทั่วไปต้องมีหน่วยกิตไม่น้อยกว่า 30 หน่วยกิต</p>
       <div class="rule-actions">
-        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
-        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
       </div>
     </div>
 
@@ -396,8 +476,9 @@
       </div>
       <p class="rule-text">สัดส่วนอาจารย์ประจำหลักสูตรต่อจำนวนนักศึกษาในหมวดปฏิบัติการต้องไม่เกิน 1:30</p>
       <div class="rule-actions">
-        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
-        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
       </div>
     </div>
 
@@ -407,8 +488,9 @@
       </div>
       <p class="rule-text">แผนการศึกษาต้องระบุจำนวนหน่วยกิตรายวิชาในแต่ละภาคการศึกษาปกติไม่เกิน 22 หน่วยกิต</p>
       <div class="rule-actions">
-        <button type="button" class="btn btn-approve btn-small">อนุมัติ (Approve)</button>
-        <button type="button" class="btn btn-reject btn-small">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
       </div>
     </div>
 
@@ -420,53 +502,181 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="confirmBackdrop">
+  <div class="modal-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmBody">
+    <p class="modal-title" id="confirmTitle">ยืนยันการดำเนินการ</p>
+    <p class="modal-body" id="confirmBody"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" id="confirmCancelBtn">ยกเลิก</button>
+      <button type="button" class="btn btn-destructive" id="confirmOkBtn">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
 <footer class="dev-note">
-  ที่มา: feature-list.md ฟีเจอร์ 07 "ตรวจสอบ แก้ไข และอนุมัติกฎเกณฑ์ที่ AI สกัดมา" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 4 · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "ตรวจสอบและแก้ไขกฎเกณฑ์แต่ละข้อ" / "เลือกวิธีอนุมัติ" / "อนุมัติทีละข้อ" / "อนุมัติรวดเดียวทั้งชุด bulk approve" / "ชุดเกณฑ์เปลี่ยนสถานะเป็น active" — การ "ปฏิเสธ (Reject)" ในหน้านี้เป็นตัวอย่างต้นแบบเท่านั้น เนื่องจาก spec ยังไม่ได้กำหนดพฤติกรรมของการปฏิเสธไว้ (คำถามเปิดใน spec ต้นทาง)
+  ที่มา: feature-list.md ฟีเจอร์ 07 "ตรวจสอบ แก้ไข และอนุมัติกฎเกณฑ์ที่ AI สกัดมา" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 4 (ตรวจสอบ/อนุมัติทีละข้อ/bulk approve), FR ข้อ 7 (ปฏิเสธ = ไม่อนุมัติ ไม่ลบถาวร กลับมาพิจารณาใหม่ได้), FR ข้อ 8 (ลบกฎเกณฑ์ย่อยรายข้อพร้อมขั้นตอนยืนยัน) และ FR ข้อ 9 (นำชุดเกณฑ์ active กลับไป pending เพื่อแก้ไขการอนุมัติเดิม) · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "ตรวจสอบและแก้ไขกฎเกณฑ์แต่ละข้อ" / "อนุมัติทีละข้อ" / "อนุมัติรวดเดียวทั้งชุด bulk approve" / "ปฏิเสธกฎเกณฑ์ (ไม่อนุมัติ)" / "ลบกฎเกณฑ์ย่อย" / "ชุดเกณฑ์เปลี่ยนสถานะเป็น active" / "นำชุดเกณฑ์กลับไปสู่สถานะ pending" — (อัปเดต 2026-09-12) ปุ่ม "ปฏิเสธ (Reject)" ทำงานจริงแล้วในหน้าต้นแบบนี้ตาม FR ข้อ 7 ที่ spec ต้นทางตอบคำถามเปิดไปแล้ว ไม่ใช่ mock alert อีกต่อไป กฎเกณฑ์ที่ถูกปฏิเสธจะแสดงสถานะ "ไม่อนุมัติ" พร้อมปุ่ม "พิจารณาใหม่" ให้กลับมาเปลี่ยนการตัดสินใจได้ในภายหลัง ทั้งหมดยังเป็นการจำลอง (mock) ในฝั่งหน้าจอเท่านั้น ไม่มีการบันทึกประวัติการเปลี่ยนสถานะ (audit trail) จริงตามที่ FR ข้อ 7 กำหนดไว้ · (อัปเดต 2026-09-12) เพิ่มปุ่ม "ออกจากระบบ" ข้าง admin zone badge ตาม AC-12-05/TC-12-006 คลิกแล้วจำลอง redirect ไปหน้า `10-login.html` เป็นลิงก์ธรรมดา ยังไม่มีการจบ session จริงฝั่ง backend
 </footer>
 
 <script>
-  var ruleCards = document.querySelectorAll('.rule-card');
-  var totalRules = ruleCards.length;
+  var ruleList = document.getElementById('ruleList');
   var progressNote = document.getElementById('progressNote');
   var bulkApproveBtn = document.getElementById('bulkApproveBtn');
+  var activateSetBtn = document.getElementById('activateSetBtn');
+  var reopenSetBtn = document.getElementById('reopenSetBtn');
   var activeBanner = document.getElementById('activeBanner');
   var setStatusChip = document.getElementById('setStatusChip');
 
+  var confirmBackdrop = document.getElementById('confirmBackdrop');
+  var confirmTitle = document.getElementById('confirmTitle');
+  var confirmBody = document.getElementById('confirmBody');
+  var confirmCancelBtn = document.getElementById('confirmCancelBtn');
+  var confirmOkBtn = document.getElementById('confirmOkBtn');
+  var pendingConfirmAction = null;
+
   var successIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+  var warningIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>';
+  var errorIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>';
 
-  function approveCard(card) {
-    if (card.classList.contains('approved')) { return; }
-    card.classList.add('approved');
-    var actions = card.querySelector('.rule-actions');
-    actions.innerHTML = '<span class="approved-label">' + successIcon + 'อนุมัติแล้ว</span>';
-    updateProgress();
+  function openConfirm(title, body, confirmLabel, onConfirm, variant) {
+    confirmTitle.textContent = title;
+    confirmBody.textContent = body;
+    confirmOkBtn.textContent = confirmLabel;
+    confirmOkBtn.className = variant === 'primary' ? 'btn btn-primary' : 'btn btn-destructive';
+    pendingConfirmAction = onConfirm;
+    confirmBackdrop.classList.add('show');
   }
+  function closeConfirm() {
+    confirmBackdrop.classList.remove('show');
+    pendingConfirmAction = null;
+  }
+  confirmCancelBtn.addEventListener('click', closeConfirm);
+  confirmOkBtn.addEventListener('click', function () {
+    if (pendingConfirmAction) { pendingConfirmAction(); }
+    closeConfirm();
+  });
+  confirmBackdrop.addEventListener('click', function (e) {
+    if (e.target === confirmBackdrop) { closeConfirm(); }
+  });
 
-  function updateProgress() {
-    var approvedCount = document.querySelectorAll('.rule-card.approved').length;
-    progressNote.textContent = 'อนุมัติแล้ว ' + approvedCount + ' จาก ' + totalRules + ' ข้อ';
-    if (approvedCount >= totalRules) {
-      progressNote.classList.add('all-done');
-      progressNote.textContent = 'อนุมัติครบทุกข้อแล้ว (' + totalRules + '/' + totalRules + ')';
-      bulkApproveBtn.disabled = true;
-      activeBanner.classList.add('show');
-      setStatusChip.className = 'status-chip success';
-      setStatusChip.innerHTML = successIcon + 'เปิดใช้งาน';
+  function renderCardState(card, state) {
+    var top = card.querySelector('.rule-card-top');
+    var actions = card.querySelector('.rule-actions');
+    card.classList.remove('approved', 'rejected');
+
+    if (state === 'approved') {
+      card.classList.add('approved');
+      top.innerHTML = '<span class="ai-badge">AI SUGGESTED</span>';
+      actions.innerHTML =
+        '<span class="approved-label">' + successIcon + 'อนุมัติแล้ว</span>' +
+        '<button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>';
+    } else if (state === 'rejected') {
+      card.classList.add('rejected');
+      top.innerHTML =
+        '<span class="ai-badge">AI SUGGESTED</span>' +
+        '<span class="status-chip error">' + errorIcon + 'ไม่อนุมัติ</span>';
+      actions.innerHTML =
+        '<button type="button" class="btn btn-secondary btn-small" data-action="reconsider">พิจารณาใหม่</button>' +
+        '<button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>';
+    } else {
+      top.innerHTML = '<span class="ai-badge">AI SUGGESTED</span>';
+      actions.innerHTML =
+        '<button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>' +
+        '<button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>' +
+        '<button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>';
     }
   }
 
-  ruleCards.forEach(function (card) {
-    card.querySelector('.btn-approve').addEventListener('click', function () {
-      approveCard(card);
-    });
-    card.querySelector('.btn-reject').addEventListener('click', function () {
-      alert('ตัวอย่างต้นแบบ: ระบบยังไม่ได้กำหนดพฤติกรรมของการปฏิเสธกฎเกณฑ์ (เป็นคำถามเปิดในเอกสาร spec ต้นทาง) ในเวอร์ชันจริงอาจลบทิ้ง ให้ AI สกัดใหม่ หรือให้แอดมินพิมพ์กฎเกณฑ์แทน');
-    });
+  function updateProgress() {
+    var cards = ruleList.querySelectorAll('.rule-card');
+    var total = cards.length;
+    var approvedCount = ruleList.querySelectorAll('.rule-card.approved').length;
+    var rejectedCount = ruleList.querySelectorAll('.rule-card.rejected').length;
+    var reviewedCount = approvedCount + rejectedCount;
+
+    if (total === 0) {
+      progressNote.textContent = 'ไม่มีกฎเกณฑ์เหลืออยู่ในชุดนี้แล้ว';
+      bulkApproveBtn.disabled = true;
+      activateSetBtn.style.display = 'none';
+      return;
+    }
+
+    var isActive = setStatusChip.getAttribute('data-state') === 'active';
+    progressNote.textContent = 'ตรวจสอบแล้ว ' + reviewedCount + ' จาก ' + total + ' ข้อ (อนุมัติ ' + approvedCount + ' · ไม่อนุมัติ ' + rejectedCount + ')';
+
+    if (reviewedCount >= total) {
+      progressNote.classList.add('all-done');
+      bulkApproveBtn.disabled = true;
+      if (!isActive) { activateSetBtn.style.display = 'inline-flex'; }
+    } else {
+      progressNote.classList.remove('all-done');
+      bulkApproveBtn.disabled = false;
+      activateSetBtn.style.display = 'none';
+    }
+  }
+
+  ruleList.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-action]');
+    if (!btn) { return; }
+    var card = btn.closest('.rule-card');
+    var action = btn.getAttribute('data-action');
+
+    if (action === 'approve') {
+      renderCardState(card, 'approved');
+      updateProgress();
+    } else if (action === 'reject') {
+      renderCardState(card, 'rejected');
+      updateProgress();
+    } else if (action === 'reconsider') {
+      renderCardState(card, 'default');
+      updateProgress();
+    } else if (action === 'delete') {
+      var ruleText = card.querySelector('.rule-text').textContent;
+      openConfirm(
+        'ยืนยันการลบกฎเกณฑ์ย่อย',
+        'จะลบกฎเกณฑ์ "' + ruleText + '" ออกจากชุดนี้ถาวร ไม่สามารถกู้คืนได้',
+        'ลบกฎเกณฑ์นี้',
+        function () {
+          card.remove();
+          updateProgress();
+        }
+      );
+    }
   });
 
   bulkApproveBtn.addEventListener('click', function () {
-    ruleCards.forEach(function (card) { approveCard(card); });
+    ruleList.querySelectorAll('.rule-card').forEach(function (card) {
+      renderCardState(card, 'approved');
+    });
+    updateProgress();
   });
+
+  activateSetBtn.addEventListener('click', function () {
+    setStatusChip.setAttribute('data-state', 'active');
+    setStatusChip.className = 'status-chip success';
+    setStatusChip.innerHTML = successIcon + 'เปิดใช้งาน';
+    activeBanner.classList.add('show');
+    activateSetBtn.style.display = 'none';
+    reopenSetBtn.style.display = 'inline-flex';
+  });
+
+  reopenSetBtn.addEventListener('click', function () {
+    openConfirm(
+      'ยืนยันการนำชุดเกณฑ์กลับไปแก้ไข',
+      'จะนำชุดเกณฑ์นี้กลับไปสู่สถานะรอตรวจสอบ (pending) เพื่อแก้ไขการอนุมัติกฎเกณฑ์อีกครั้ง กฎเกณฑ์เดิมยังใช้งานได้ตามปกติระหว่างที่แก้ไข',
+      'นำกลับไปสู่สถานะรอตรวจสอบ',
+      function () {
+        setStatusChip.setAttribute('data-state', 'pending');
+        setStatusChip.className = 'status-chip warning';
+        setStatusChip.innerHTML = warningIcon + 'รอตรวจสอบ';
+        activeBanner.classList.remove('show');
+        reopenSetBtn.style.display = 'none';
+        updateProgress();
+      },
+      'primary'
+    );
+  });
+
+  updateProgress();
 </script>
 </body>
 </html>

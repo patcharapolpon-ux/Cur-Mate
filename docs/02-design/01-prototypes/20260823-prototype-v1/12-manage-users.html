@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>จัดการผู้ใช้งานและบทบาท — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: var(--space-32) var(--space-24) var(--space-64);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-24);
+  }
+
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .admin-zone-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  .btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out, color 150ms ease-out;
+  }
+  .btn-logout:hover { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-8);
+  }
+  p.lead {
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+
+  .banner {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    border-radius: var(--radius-medium);
+    margin-bottom: var(--space-24);
+    font-size: 14px;
+    background: var(--color-info-bg);
+    color: var(--color-text-primary);
+  }
+  .banner svg { flex-shrink: 0; margin-top: 1px; color: var(--color-info); }
+
+  .table-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-subtle);
+    overflow: hidden;
+  }
+
+  table.users-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .users-table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    padding: var(--space-12) var(--space-16);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .users-table td {
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+    font-size: 15px;
+    vertical-align: middle;
+  }
+  .users-table tr:last-child td { border-bottom: none; }
+  .users-table tr:hover td { background: var(--color-bg); }
+  .users-table tr.is-self td { background: #FAFBFF; }
+  .users-table tr.role-updated td { background: var(--color-success-bg); transition: background 300ms ease-out; }
+
+  .email-cell {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .role-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .self-note {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--color-text-disabled);
+  }
+
+  .select-input {
+    height: 38px;
+    padding: 0 10px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+  }
+  .select-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  footer.dev-note {
+    margin-top: var(--space-64);
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--color-border);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <a class="btn-logout" href="10-login.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      ออกจากระบบ
+    </a>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <span class="current">จัดการผู้ใช้งานและบทบาท</span>
+    </nav>
+  </div>
+
+  <h1>จัดการผู้ใช้งานและบทบาท</h1>
+  <p class="lead">รายชื่อผู้ใช้ทั้งหมดในระบบพร้อมบทบาทปัจจุบัน แอดมินสามารถเลื่อน/ปรับบทบาทของผู้ใช้คนอื่นได้ ยกเว้นบัญชีของตัวเอง เพื่อป้องกันไม่ให้ระบบเหลือแอดมิน 0 คนโดยไม่ตั้งใจ</p>
+
+  <div class="banner">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16v-4"/><path d="M12 8h.01"/><circle cx="12" cy="12" r="10"/></svg>
+    <span>การเปลี่ยนบทบาททุกครั้งต้องผ่านการตรวจสอบสิทธิ์ที่เซิร์ฟเวอร์ (backend) เสมอ ไม่ใช่แค่การควบคุมฝั่งหน้าจอ เพื่อป้องกันการเรียกใช้งานข้าม UI</span>
+  </div>
+
+  <div class="table-card">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>ชื่อ-นามสกุล</th>
+          <th>อีเมล</th>
+          <th>บทบาทปัจจุบัน</th>
+          <th>เปลี่ยนบทบาทเป็น</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="user-row is-self">
+          <td>สุดา คุณวุฒิ</td>
+          <td class="email-cell">suda.k@curmate.ac.th</td>
+          <td><span class="role-chip">แอดมิน</span></td>
+          <td><span class="self-note">(บัญชีของคุณ)</span></td>
+        </tr>
+        <tr class="user-row">
+          <td>สมชาย พงศ์ไพศาล</td>
+          <td class="email-cell">somchai.p@curmate.ac.th</td>
+          <td><span class="role-chip">ผู้ใช้งานทั่วไป</span></td>
+          <td>
+            <select class="select-input role-select">
+              <option value="ผู้ใช้งานทั่วไป" selected>ผู้ใช้งานทั่วไป</option>
+              <option value="แอดมิน">แอดมิน</option>
+              <option value="ผู้บริหาร">ผู้บริหาร</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="user-row">
+          <td>อารยา วงศ์สกุล</td>
+          <td class="email-cell">araya.w@curmate.ac.th</td>
+          <td><span class="role-chip">ผู้ใช้งานทั่วไป</span></td>
+          <td>
+            <select class="select-input role-select">
+              <option value="ผู้ใช้งานทั่วไป" selected>ผู้ใช้งานทั่วไป</option>
+              <option value="แอดมิน">แอดมิน</option>
+              <option value="ผู้บริหาร">ผู้บริหาร</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="user-row">
+          <td>ธนพล สกุลไทย</td>
+          <td class="email-cell">thanapon.s@curmate.ac.th</td>
+          <td><span class="role-chip">ผู้บริหาร</span></td>
+          <td>
+            <select class="select-input role-select">
+              <option value="ผู้ใช้งานทั่วไป">ผู้ใช้งานทั่วไป</option>
+              <option value="แอดมิน">แอดมิน</option>
+              <option value="ผู้บริหาร" selected>ผู้บริหาร</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="user-row">
+          <td>ณิชกานต์ รัตนโชติ</td>
+          <td class="email-cell">nichakan.r@curmate.ac.th</td>
+          <td><span class="role-chip">แอดมิน</span></td>
+          <td>
+            <select class="select-input role-select">
+              <option value="ผู้ใช้งานทั่วไป">ผู้ใช้งานทั่วไป</option>
+              <option value="แอดมิน" selected>แอดมิน</option>
+              <option value="ผู้บริหาร">ผู้บริหาร</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 13 "แอดมินจัดการบทบาทผู้ใช้" · spec docs/01-requirements/01-spec/20260912-05-authentication-user-roles.md FR ข้อ 3, 4, 5 · user journey "แอดมิน จัดการบทบาทผู้ใช้" โหนด "ระบบแสดงรายชื่อผู้ใช้ทั้งหมดพร้อมบทบาทปัจจุบัน" / "แอดมินเลือกบทบาทใหม่ให้ผู้ใช้" / "ผู้ใช้ที่เลือกคือบัญชีของแอดมินเองหรือไม่" / "ระบบปฏิเสธ/บล็อกไม่ให้แก้ไขบทบาทตัวเอง" — รายชื่อผู้ใช้เป็นข้อมูลจำลอง (mock data) การเปลี่ยนบทบาทในหน้านี้อัปเดตเฉพาะฝั่งหน้าจอทันทีเพื่อสาธิต UI เท่านั้น ไม่ได้เชื่อมต่อการตรวจสอบสิทธิ์ backend จริงตามที่ NFR ของ spec ต้นทางกำหนด · (อัปเดต 2026-09-12) เพิ่มปุ่ม "ออกจากระบบ" ข้าง admin zone badge ตาม AC-12-05/TC-12-006 คลิกแล้วจำลอง redirect ไปหน้า `10-login.html` เป็นลิงก์ธรรมดา ยังไม่มีการจบ session จริงฝั่ง backend
+</footer>
+
+<script>
+  document.querySelectorAll('.role-select').forEach(function (select) {
+    select.addEventListener('change', function () {
+      var row = select.closest('tr');
+      var chip = row.querySelector('.role-chip');
+      chip.textContent = select.value;
+      row.classList.add('role-updated');
+      setTimeout(function () {
+        row.classList.remove('role-updated');
+      }, 900);
+    });
+  });
+</script>
+</body>
+</html>

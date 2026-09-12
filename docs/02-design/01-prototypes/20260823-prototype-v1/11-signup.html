@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สมัครสมาชิก — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-disabled: #94A3B8;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-error: #DC2626;
+    --color-error-bg: #FEE2E2;
+    --color-error-text: #991B1B;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-32) var(--space-24);
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+    padding: var(--space-32) var(--space-24);
+  }
+
+  .wordmark {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 20px;
+    margin-bottom: var(--space-8);
+  }
+  .auth-tagline {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 var(--space-24);
+  }
+
+  .field { margin-bottom: var(--space-16); }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+  }
+  .text-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+  }
+  .text-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+  .text-input.has-error {
+    border-color: var(--color-error);
+  }
+  .text-input.has-error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+  }
+  .field-error-text {
+    display: none;
+    font-size: 12px;
+    color: var(--color-error);
+    margin: 6px 0 0;
+  }
+  .field-error-text.show { display: block; }
+
+  .banner {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+    padding: var(--space-16);
+    border-radius: var(--radius-medium);
+    margin-bottom: var(--space-16);
+    font-size: 14px;
+  }
+  .banner svg { flex-shrink: 0; margin-top: 1px; }
+  .banner.error { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    height: 44px;
+    padding: 10px 20px;
+    border-radius: var(--radius-medium);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:active:not(:disabled) { background: var(--color-primary-active); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-full { width: 100%; margin-top: var(--space-8); }
+
+  .auth-switch {
+    text-align: center;
+    margin-top: var(--space-24);
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+  .auth-switch a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .auth-switch a:hover { text-decoration: underline; }
+
+  footer.dev-note {
+    max-width: 420px;
+    margin: var(--space-32) auto 0;
+    padding: 0 var(--space-24);
+    font-size: 12px;
+    color: var(--color-text-disabled);
+    line-height: 1.6;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="wordmark">Curmate</div>
+    <p class="auth-tagline">เพื่อนคู่คิดของผู้จัดทำหลักสูตร</p>
+
+    <h1>สมัครสมาชิก</h1>
+
+    <div id="errorBanner" class="banner error" style="display:none;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+      <span id="errorBannerText">กรุณากรอกข้อมูลให้ครบถ้วน</span>
+    </div>
+
+    <form id="signupForm" novalidate>
+      <div class="field">
+        <label for="fullName">ชื่อ-นามสกุล</label>
+        <input type="text" id="fullName" class="text-input" placeholder="เช่น สมชาย พงศ์ไพศาล">
+      </div>
+      <div class="field">
+        <label for="email">อีเมล</label>
+        <input type="email" id="email" class="text-input" placeholder="name@organization.ac.th">
+        <p class="field-error-text" id="emailErrorText">รูปแบบอีเมลไม่ถูกต้อง กรุณากรอกในรูปแบบ name@organization.ac.th</p>
+      </div>
+      <div class="field">
+        <label for="password">รหัสผ่าน</label>
+        <input type="password" id="password" class="text-input" placeholder="ตั้งรหัสผ่าน">
+      </div>
+      <button type="submit" id="signupSubmitBtn" class="btn btn-primary btn-full">สมัครสมาชิก</button>
+    </form>
+
+    <p class="auth-switch">มีบัญชีผู้ใช้อยู่แล้ว? <a href="10-login.html">เข้าสู่ระบบ</a></p>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 12 "สมัครสมาชิกและเข้าสู่ระบบ" · spec docs/01-requirements/01-spec/20260912-05-authentication-user-roles.md FR ข้อ 1 และ FR ข้อ 2 · user journey "ผู้ใช้สมัครสมาชิกและเข้าสู่ระบบ" โหนด "สมัครสมาชิกด้วยอีเมลและรหัสผ่าน" / "ระบบสร้างบัญชีผู้ใช้ใหม่" — บทบาทเริ่มต้นของบัญชีใหม่ยังไม่ยืนยัน (คำถามเปิดในสเปกต้นทาง) หน้าต้นแบบนี้จึงไม่แสดงการเลือกบทบาทตอนสมัครสมาชิก · (อัปเดต 2026-09-12) เพิ่มการตรวจสอบรูปแบบอีเมลอย่างง่ายก่อน submit ตาม AC-12-04/TC-12-004 ที่เพิ่งเขียนไว้ ยังเป็นการตรวจสอบฝั่งหน้าจอ (client-side mock) เท่านั้น
+</footer>
+
+<script>
+  var form = document.getElementById('signupForm');
+  var errorBanner = document.getElementById('errorBanner');
+  var errorBannerText = document.getElementById('errorBannerText');
+  var submitBtn = document.getElementById('signupSubmitBtn');
+  var emailInput = document.getElementById('email');
+  var emailErrorText = document.getElementById('emailErrorText');
+  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function clearEmailError() {
+    emailInput.classList.remove('has-error');
+    emailErrorText.classList.remove('show');
+  }
+  emailInput.addEventListener('input', clearEmailError);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var fullName = document.getElementById('fullName').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value.trim();
+
+    clearEmailError();
+
+    if (!fullName || !email || !password) {
+      errorBannerText.textContent = 'กรุณากรอกชื่อ-นามสกุล อีเมล และรหัสผ่านให้ครบถ้วน';
+      errorBanner.style.display = 'flex';
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      errorBanner.style.display = 'none';
+      emailInput.classList.add('has-error');
+      emailErrorText.classList.add('show');
+      return;
+    }
+
+    errorBanner.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'กำลังสมัครสมาชิก...';
+
+    // จำลองสมัครสมาชิกสำเร็จแล้วพากลับไปหน้าเข้าสู่ระบบพร้อม toast แจ้งผล
+    setTimeout(function () {
+      window.location.href = '10-login.html?signup=success';
+    }, 500);
+  });
+</script>
+</body>
+</html>

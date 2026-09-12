@@ -19,6 +19,8 @@
 - [[20260823-03-user-journey-admin-manage-criteria-knowledge-base|แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร]]
 - [[20260904-04-user-journey-admin-manage-executive-courses|แอดมิน จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุม]]
 - [[20260904-05-user-journey-executive-view-dashboard|ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]]
+- [[20260912-06-user-journey-signup-login|ผู้ใช้สมัครสมาชิกและเข้าสู่ระบบ]]
+- [[20260912-07-user-journey-admin-manage-user-roles|แอดมิน จัดการบทบาทผู้ใช้]]
 
 ## Prototype
 

@@ -52,6 +52,7 @@
 
     --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
     --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-overlay: 0 16px 40px rgba(0,0,0,0.12);
   }
 
   * { box-sizing: border-box; }
@@ -113,6 +114,21 @@
   .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
   .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
   .breadcrumb-sep { color: var(--color-text-disabled); }
+
+  .btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 150ms ease-out, color 150ms ease-out;
+  }
+  .btn-logout:hover { background: var(--color-error-bg); color: var(--color-error-text); }
 
   .page-head {
     display: flex;
@@ -178,7 +194,10 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    text-decoration: none;
+    cursor: pointer;
   }
+  .criteria-set-hint:hover { text-decoration: underline; }
   .criteria-set-hint-active {
     font-size: 13px;
     color: var(--color-text-disabled);
@@ -222,6 +241,66 @@
   }
   .btn-primary:hover { background: var(--color-primary-hover); }
   .btn-primary:active { background: var(--color-primary-active); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+  }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-destructive {
+    background: var(--color-error);
+    color: #FFFFFF;
+  }
+  .btn-destructive:hover { background: #B91C1C; }
+  .btn-small {
+    font-size: 13px;
+    height: 34px;
+    padding: 6px 14px;
+  }
+
+  .criteria-set-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-12);
+    margin-top: var(--space-16);
+  }
+
+  /* Confirmation Dialog — ตาม DESIGN.md ใช้กับการกระทำที่ย้อนกลับไม่ได้ */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-24);
+    z-index: 50;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal-dialog {
+    width: 100%;
+    max-width: 420px;
+    background: var(--color-surface);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-overlay);
+    padding: var(--space-24);
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-primary);
+  }
+  .modal-body {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-24);
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-12);
+  }
 
   footer.dev-note {
     margin-top: var(--space-64);
@@ -242,6 +321,10 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
       แผงแอดมิน
     </span>
+    <a class="btn-logout" href="10-login.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      ออกจากระบบ
+    </a>
     <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
       <span class="current">จัดการฐานความรู้เกณฑ์มาตรฐาน</span>
     </nav>
@@ -260,7 +343,7 @@
 
   <div class="criteria-list">
 
-    <div class="criteria-set-card">
+    <div class="criteria-set-card" data-set-name="เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565">
       <div class="criteria-set-row">
         <div>
           <p class="criteria-set-name">เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565</p>
@@ -272,9 +355,12 @@
         </span>
       </div>
       <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+      <div class="criteria-set-actions">
+        <button type="button" class="btn btn-destructive btn-small delete-set-btn">ลบชุดเกณฑ์นี้</button>
+      </div>
     </div>
 
-    <div class="criteria-set-card">
+    <div class="criteria-set-card" data-set-name="เกณฑ์มาตรฐานหลักสูตร ป.โท 2565">
       <div class="criteria-set-row">
         <div>
           <p class="criteria-set-name">เกณฑ์มาตรฐานหลักสูตร ป.โท 2565</p>
@@ -286,9 +372,12 @@
         </span>
       </div>
       <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+      <div class="criteria-set-actions">
+        <button type="button" class="btn btn-destructive btn-small delete-set-btn">ลบชุดเกณฑ์นี้</button>
+      </div>
     </div>
 
-    <div class="criteria-set-card">
+    <div class="criteria-set-card" data-set-name="เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565">
       <div class="criteria-set-row">
         <div>
           <p class="criteria-set-name">เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565</p>
@@ -300,9 +389,12 @@
         </span>
       </div>
       <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+      <div class="criteria-set-actions">
+        <button type="button" class="btn btn-destructive btn-small delete-set-btn">ลบชุดเกณฑ์นี้</button>
+      </div>
     </div>
 
-    <div class="criteria-set-card">
+    <div class="criteria-set-card" data-set-name="เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565">
       <div class="criteria-set-row">
         <div>
           <p class="criteria-set-name">เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565</p>
@@ -314,9 +406,12 @@
         </span>
       </div>
       <p class="criteria-set-hint-active">อนุมัติกฎเกณฑ์ครบแล้ว · พร้อมให้ผู้ใช้งานทั่วไปเลือกอ้างอิง</p>
+      <div class="criteria-set-actions">
+        <button type="button" class="btn btn-destructive btn-small delete-set-btn">ลบชุดเกณฑ์นี้</button>
+      </div>
     </div>
 
-    <a class="criteria-set-card clickable" href="07-rule-review-approval.html">
+    <div class="criteria-set-card" data-set-name="เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569">
       <div class="criteria-set-row">
         <div>
           <p class="criteria-set-name">เกณฑ์คุณวุฒิ วิทยาการคอมพิวเตอร์ 2569</p>
@@ -327,17 +422,72 @@
           รอตรวจสอบ
         </span>
       </div>
-      <p class="criteria-set-hint">
+      <a class="criteria-set-hint" href="07-rule-review-approval.html">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         คลิกเพื่อตรวจสอบและอนุมัติกฎเกณฑ์ที่ AI สกัดมา
-      </p>
-    </a>
+      </a>
+      <div class="criteria-set-actions">
+        <a class="btn btn-secondary btn-small" href="07-rule-review-approval.html">ตรวจสอบและอนุมัติ</a>
+        <button type="button" class="btn btn-destructive btn-small delete-set-btn">ลบชุดเกณฑ์นี้</button>
+      </div>
+    </div>
 
   </div>
 </div>
 
+<div class="modal-backdrop" id="confirmBackdrop">
+  <div class="modal-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmBody">
+    <p class="modal-title" id="confirmTitle">ยืนยันการลบชุดเกณฑ์</p>
+    <p class="modal-body" id="confirmBody">จะลบชุดเกณฑ์นี้พร้อมกฎเกณฑ์ย่อยทั้งหมดถาวร ไม่สามารถกู้คืนได้</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" id="confirmCancelBtn">ยกเลิก</button>
+      <button type="button" class="btn btn-destructive" id="confirmOkBtn">ลบชุดเกณฑ์นี้</button>
+    </div>
+  </div>
+</div>
+
 <footer class="dev-note">
-  ที่มา: feature-list.md ฟีเจอร์ 06 "จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร (สร้างชุดเกณฑ์ + อัปโหลดเอกสาร)" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 1 และ FR ข้อ 2 · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "เข้าสู่หน้าจัดการฐานความรู้เกณฑ์มาตรฐาน" / "ปรากฏในรายการให้ผู้ใช้งานทั่วไปเลือกใช้อ้างอิง"
+  ที่มา: feature-list.md ฟีเจอร์ 06 "จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร (สร้างชุดเกณฑ์ + อัปโหลดเอกสาร)" และฟีเจอร์ 07 "ตรวจสอบ แก้ไข และอนุมัติกฎเกณฑ์ที่ AI สกัดมา" · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 1, FR ข้อ 2 และ FR ข้อ 8 (การลบชุดเกณฑ์แบบ cascade พร้อมขั้นตอนยืนยัน) · user journey "แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร" โหนด "เข้าสู่หน้าจัดการฐานความรู้เกณฑ์มาตรฐาน" / "ปรากฏในรายการให้ผู้ใช้งานทั่วไปเลือกใช้อ้างอิง" / "ลบชุดเกณฑ์ทั้งชุด (cascade)" — ปุ่ม "ลบชุดเกณฑ์นี้" ในหน้านี้เป็นการจำลอง (mock) การลบพ่วง (cascade) เท่านั้น คลิกยืนยันแล้วการ์ดจะหายไปจากรายการทันทีในฝั่งหน้าจอ ไม่ได้เชื่อมต่อการลบข้อมูลจริงหรือฐานข้อมูลใดๆ · (อัปเดต 2026-09-12) เพิ่มปุ่ม "ออกจากระบบ" ข้าง admin zone badge ตาม AC-12-05/TC-12-006 คลิกแล้วจำลอง redirect ไปหน้า `10-login.html` เป็นลิงก์ธรรมดา ยังไม่มีการจบ session จริงฝั่ง backend
 </footer>
+
+<script>
+  var confirmBackdrop = document.getElementById('confirmBackdrop');
+  var confirmTitle = document.getElementById('confirmTitle');
+  var confirmBody = document.getElementById('confirmBody');
+  var confirmCancelBtn = document.getElementById('confirmCancelBtn');
+  var confirmOkBtn = document.getElementById('confirmOkBtn');
+  var pendingConfirmAction = null;
+
+  function openConfirm(title, body, onConfirm) {
+    confirmTitle.textContent = title;
+    confirmBody.textContent = body;
+    pendingConfirmAction = onConfirm;
+    confirmBackdrop.classList.add('show');
+  }
+  function closeConfirm() {
+    confirmBackdrop.classList.remove('show');
+    pendingConfirmAction = null;
+  }
+  confirmCancelBtn.addEventListener('click', closeConfirm);
+  confirmOkBtn.addEventListener('click', function () {
+    if (pendingConfirmAction) { pendingConfirmAction(); }
+    closeConfirm();
+  });
+  confirmBackdrop.addEventListener('click', function (e) {
+    if (e.target === confirmBackdrop) { closeConfirm(); }
+  });
+
+  document.querySelectorAll('.delete-set-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var card = btn.closest('.criteria-set-card');
+      var name = card.getAttribute('data-set-name');
+      openConfirm(
+        'ยืนยันการลบชุดเกณฑ์',
+        'จะลบชุดเกณฑ์ "' + name + '" พร้อมกฎเกณฑ์ย่อยทั้งหมดถาวร ไม่สามารถกู้คืนได้',
+        function () { card.remove(); }
+      );
+    });
+  });
+</script>
 </body>
 </html>

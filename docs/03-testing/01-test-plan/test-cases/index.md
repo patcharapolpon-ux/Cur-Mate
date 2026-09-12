@@ -15,6 +15,8 @@
 | 09 | แชทบอทให้คำแนะนำระหว่างจัดทำหลักสูตร (รวม Q&A เกณฑ์มาตรฐาน) | [[09-advisory-chatbot\|09-advisory-chatbot]] |
 | 10 | แอดมิน เพิ่ม/จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุมต่อสำนักวิชา | [[10-admin-manage-executive-courses\|10-admin-manage-executive-courses]] |
 | 11 | ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตรตามสำนักวิชา/หลักสูตร | [[11-executive-view-dashboard\|11-executive-view-dashboard]] |
+| 12 | สมัครสมาชิกและเข้าสู่ระบบ | [[12-signup-login\|12-signup-login]] |
+| 13 | แอดมินจัดการบทบาทผู้ใช้ | [[13-admin-manage-user-roles\|13-admin-manage-user-roles]] |
 
 ---
 [[../index|01-test-plan]] · [[../acceptance-criteria|acceptance-criteria]] · [[../test-plan|test-plan]]
