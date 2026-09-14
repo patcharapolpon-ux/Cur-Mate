@@ -21,6 +21,7 @@
 - [[20260904-05-user-journey-executive-view-dashboard|ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]]
 - [[20260912-06-user-journey-signup-login|ผู้ใช้สมัครสมาชิกและเข้าสู่ระบบ]]
 - [[20260912-07-user-journey-admin-manage-user-roles|แอดมิน จัดการบทบาทผู้ใช้]]
+- [[20260913-08-user-journey-admin-manage-skill-framework|แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
 
 ## Prototype
 
