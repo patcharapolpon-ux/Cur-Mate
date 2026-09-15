@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ผลวิเคราะห์สุขภาพหลักสูตร — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8;
+    --color-ai-accent: #7C3AED; --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-warning: #D97706; --color-warning-bg: #FEF3C7; --color-warning-text: #92400E;
+    --color-error: #DC2626; --color-error-bg: #FEE2E2; --color-error-text: #991B1B;
+    --color-info: #0284C7; --color-info-bg: #EFF6FF;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-text-primary); font-size: 16px; line-height: 1.6; }
+  .page { max-width: 920px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+  .exec-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-32); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); }
+  .exec-zone-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); background: var(--color-info-bg); border: 1px solid var(--color-info); color: var(--color-info); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+
+  .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-16); flex-wrap: wrap; margin-bottom: 4px; }
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 4px; }
+  p.course-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 var(--space-24); font-family: var(--font-mono); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-body); font-size: 15px; font-weight: 600; height: 40px; padding: 10px 20px; border-radius: var(--radius-medium); border: none; cursor: pointer; text-decoration: none; transition: background 150ms ease-out; white-space: nowrap; }
+  .btn-primary { background: var(--color-primary); color: #FFFFFF; }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-secondary { background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary); }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-small { font-size: 13px; height: 34px; padding: 6px 14px; }
+
+  .section-subhead { font-size: 18px; font-weight: 700; margin: var(--space-32) 0 var(--space-16); display: flex; align-items: center; gap: var(--space-8); }
+  .section-subhead .num { color: var(--color-text-disabled); font-family: var(--font-mono); font-size: 13px; }
+
+  .dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin-bottom: var(--space-8); }
+  .dim-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-large); padding: var(--space-16); box-shadow: var(--shadow-subtle); }
+  .dim-title { font-size: 14px; font-weight: 700; margin: 0 0 var(--space-8); }
+  .level-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-small); font-size: 12px; font-weight: 700; white-space: nowrap; margin-bottom: var(--space-8); }
+  .level-badge.good { background: var(--color-success-bg); color: var(--color-success-text); }
+  .level-badge.medium { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .level-badge.na { background: var(--color-bg); color: var(--color-text-disabled); border: 1px dashed var(--color-border-strong); }
+  .dim-evidence { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 var(--space-8); }
+  .dim-cite { font-size: 12px; color: var(--color-text-secondary); background: var(--color-bg); border-left: 3px solid var(--color-ai-accent); padding: 6px 10px; border-radius: 0 var(--radius-small) var(--radius-small) 0; margin: 0 0 var(--space-8); }
+  .dim-completeness { font-size: 11px; color: var(--color-text-disabled); font-family: var(--font-mono); }
+
+  .consistency-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-large); padding: var(--space-16); box-shadow: var(--shadow-subtle); margin-bottom: var(--space-8); }
+  .consistency-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-12); }
+  .status-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-small); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .status-chip.error { background: var(--color-error-bg); color: var(--color-error-text); }
+  .issue-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-8); }
+  .issue-list li { font-size: 13px; color: var(--color-text-secondary); border-left: 3px solid var(--color-warning); padding: 6px 10px; background: var(--color-bg); border-radius: 0 var(--radius-small) var(--radius-small) 0; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-16); margin-bottom: var(--space-8); }
+  .stat-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-large); padding: var(--space-16); box-shadow: var(--shadow-subtle); }
+  .stat-label { font-size: 12px; font-weight: 600; color: var(--color-text-secondary); margin: 0 0 6px; }
+  .stat-value { font-size: 22px; font-weight: 700; margin: 0; }
+  .stat-unit { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-left: 4px; }
+  .donut-wrap { display: flex; align-items: center; gap: var(--space-16); flex-wrap: wrap; }
+  .donut { width: 96px; height: 96px; border-radius: 50%; background: conic-gradient(var(--color-primary) 0% 22.7%, var(--color-ai-accent) 22.7% 95.5%, var(--color-success) 95.5% 100%); position: relative; flex-shrink: 0; }
+  .donut::after { content: ""; position: absolute; inset: 16px; background: var(--color-surface); border-radius: 50%; }
+  .legend { display: flex; flex-direction: column; gap: 6px; font-size: 12px; flex: 1; min-width: 160px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  .provenance-panel { background: var(--color-ai-accent-bg); border: 1px solid var(--color-ai-accent); border-radius: var(--radius-large); padding: var(--space-16); margin-bottom: var(--space-8); }
+  .provenance-title { font-size: 13px; font-weight: 700; color: var(--color-ai-accent); text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 var(--space-12); }
+  .provenance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12); font-size: 13px; color: #4C1D95; }
+  .provenance-grid dt { font-weight: 700; margin-bottom: 2px; }
+  .provenance-grid dd { margin: 0 0 var(--space-8); color: var(--color-text-secondary); }
+  .confidence-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: var(--radius-small); font-size: 11px; font-weight: 700; letter-spacing: 0.03em; }
+  .confidence-badge.high { background: var(--color-success-bg); color: var(--color-success-text); }
+  .confidence-badge.medium { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .tone-note { font-size: 12px; color: #4C1D95; margin-top: var(--space-8); font-weight: 600; }
+
+  .readonly-note { display: flex; gap: var(--space-12); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-medium); padding: var(--space-16); color: var(--color-text-secondary); font-size: 13px; align-items: flex-start; margin-top: var(--space-24); }
+
+  footer.dev-note { margin-top: var(--space-64); padding-top: var(--space-16); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-disabled); line-height: 1.6; }
+
+  @media (max-width: 640px) {
+    .dim-grid { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .provenance-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="exec-topbar">
+    <span class="exec-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      มุมมองผู้บริหาร (ดูอย่างเดียว)
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="03-executive-select-school.html">เลือกสำนักวิชา</a>
+      <span> / </span>
+      <a href="04-executive-school-summary.html?school=สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์">ภาพรวมสำนักวิชา</a>
+      <span> / </span>
+      <span class="current">ผลวิเคราะห์สุขภาพหลักสูตร</span>
+    </nav>
+  </div>
+
+  <div class="page-head">
+    <div>
+      <h1 id="courseHeading">หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)</h1>
+      <p class="course-sub">สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์ · เล่ม curriculum-comsci-2569.pdf</p>
+    </div>
+    <a class="btn btn-primary" href="07-executive-report-preview.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      Export รายงานสรุป PDF
+    </a>
+  </div>
+
+  <p class="section-subhead"><span class="num">01</span> ผลวิเคราะห์สุขภาพหลักสูตร (Program Health) — 4 มิติ จากเล่ม มคอ.2</p>
+  <div class="dim-grid">
+    <div class="dim-card">
+      <p class="dim-title">(ก) คุณภาพหลักสูตร</p>
+      <span class="level-badge good">ระดับดี</span>
+      <p class="dim-evidence">โครงสร้างหลักสูตรครบตามหมวดวิชา ปรับปรุงล่าสุดปี 2569 มีระบบประกันคุณภาพระบุไว้ชัดเจนในเล่ม</p>
+      <p class="dim-cite">หลักฐาน: หมวดที่ 2 ข้อ 2.1 โครงสร้างหลักสูตร, หมวดที่ 7 ระบบประกันคุณภาพ</p>
+      <p class="dim-completeness">ความครบถ้วนของข้อมูล: 95%</p>
+    </div>
+    <div class="dim-card">
+      <p class="dim-title">(ข) ศักยภาพการจัดการเรียนการสอน</p>
+      <span class="level-badge medium">ระดับปานกลาง</span>
+      <p class="dim-evidence">สัดส่วนอาจารย์วุฒิปริญญาเอก 4 จาก 7 ท่าน คุณวุฒิสอดคล้องกับสาขาเกือบทั้งหมด (พิจารณาจากตารางอาจารย์ในเล่มเท่านั้น ไม่ใช้ข้อมูลผลงานตีพิมพ์จากฐานภายนอก)</p>
+      <p class="dim-cite">หลักฐาน: หมวดที่ 3 ข้อ 3.2 ตารางอาจารย์ผู้รับผิดชอบหลักสูตร/อาจารย์ประจำหลักสูตร</p>
+      <p class="dim-completeness">ความครบถ้วนของข้อมูล: 100%</p>
+    </div>
+    <div class="dim-card">
+      <p class="dim-title">(ค) ความเป็นนานาชาติ</p>
+      <span class="level-badge medium">ระดับปานกลาง</span>
+      <p class="dim-evidence">มีรายวิชาที่สอนเป็นภาษาอังกฤษ 3 รายวิชา และข้อตกลงความร่วมมือกับสถาบันต่างประเทศ 1 ฉบับระบุไว้ในเล่ม</p>
+      <p class="dim-cite">หลักฐาน: หมวดที่ 2 ข้อ 2.4 ภาษาที่ใช้ในการเรียนการสอน, ภาคผนวก ง ข้อตกลงความร่วมมือ</p>
+      <p class="dim-completeness">ความครบถ้วนของข้อมูล: 80%</p>
+    </div>
+    <div class="dim-card">
+      <p class="dim-title">(ง) ความสอดคล้องกับทักษะที่ตลาดต้องการ</p>
+      <span class="level-badge good">ครอบคลุม 4 จาก 6 ทักษะ</span>
+      <p class="dim-evidence">เทียบชื่อรายวิชา + คำอธิบายรายวิชา + CLO กับชุดกรอบทักษะที่อนุมัติแล้ว — ไม่ใช่คะแนนตัวเลข 0-100</p>
+      <p class="dim-cite">อ้างอิงชุดกรอบทักษะ: กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023) เวอร์ชัน 1 · อนุมัติแล้ว 6 จาก 7 ทักษะ ณ เวลาที่แสดงผลนี้</p>
+      <a class="btn btn-secondary btn-small" href="06-executive-skill-coverage.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)">ดูรายละเอียดความครอบคลุมทักษะ →</a>
+    </div>
+  </div>
+
+  <p class="section-subhead"><span class="num">02</span> ผลตรวจสอบความสอดคล้องของเล่ม มคอ.2 (แสดงคู่กับผลวิเคราะห์สุขภาพหลักสูตร)</p>
+  <div class="consistency-panel">
+    <div class="consistency-head">
+      <strong style="font-size:14px;">เล่ม curriculum-comsci-2569.pdf</strong>
+      <span class="status-chip warning">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+        ผ่านการตรวจสอบ — พบข้อสังเกต 2 จุด
+      </span>
+    </div>
+    <ul class="issue-list">
+      <li>หมวดวิชาโครงงาน ระบุหน่วยกิต 3(0-6-3) ซึ่งอาจต่ำกว่าเกณฑ์คุณวุฒิเฉพาะสาขาที่กำหนดไว้ในบางแผนการศึกษา</li>
+      <li>คำอธิบายรายวิชา 04204512 ไม่ได้ระบุ CLO ครบตามจำนวนที่เกณฑ์กำหนด</li>
+    </ul>
+  </div>
+
+  <p class="section-subhead"><span class="num">03</span> สถิติภาพรวมเชิงปริมาณ (ส่วนประกอบย่อย)</p>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <p class="stat-label">จำนวนหลักสูตรในสำนักวิชานี้</p>
+      <p class="stat-value">8<span class="stat-unit">หลักสูตร</span></p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">จำนวนหลักสูตรทุกสำนักวิชารวมกัน</p>
+      <p class="stat-value">62<span class="stat-unit">หลักสูตร</span></p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">หน่วยกิตรวมของหลักสูตรนี้</p>
+      <p class="stat-value">132<span class="stat-unit">หน่วยกิต</span></p>
+    </div>
+  </div>
+  <div class="dim-card" style="margin-bottom:var(--space-8);">
+    <p class="dim-title" style="margin-bottom:var(--space-12);">สัดส่วนหน่วยกิตแยกตามหมวดวิชา</p>
+    <div class="donut-wrap">
+      <div class="donut"></div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--color-primary);"></span>หมวดวิชาศึกษาทั่วไป — 30 นก.</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--color-ai-accent);"></span>หมวดวิชาเฉพาะ — 96 นก.</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--color-success);"></span>หมวดวิชาเลือกเสรี — 6 นก.</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-subhead"><span class="num">04</span> ความน่าเชื่อถือของผลวิเคราะห์</p>
+  <div class="provenance-panel">
+    <p class="provenance-title">Provenance &amp; เวอร์ชันวิธีคำนวณ</p>
+    <dl class="provenance-grid">
+      <div>
+        <dt>ชุดกรอบทักษะที่ใช้เทียบ</dt>
+        <dd>กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023) เวอร์ชัน 1 — อนุมัติแล้ว 6/7 ทักษะ</dd>
+      </div>
+      <div>
+        <dt>วิธีคำนวณ/วิเคราะห์สุขภาพหลักสูตร</dt>
+        <dd>Curmate Program Health Method เวอร์ชัน 1.0 (ออกแบบตัวชี้วัด/เกณฑ์ตัดช่วงเอง ไม่ยืมสูตรจากระบบภูมิทัศน์หลักสูตร มฟล.)</dd>
+      </div>
+      <div>
+        <dt>ระดับความมั่นใจของผลตีความโดย AI</dt>
+        <dd><span class="confidence-badge high">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          มั่นใจสูง
+        </span> สำหรับมิติ (ก)(ข)(ง) · <span class="confidence-badge medium">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          มั่นใจกลาง
+        </span> สำหรับมิติ (ค) เนื่องจากข้อมูลความร่วมมือต่างประเทศระบุไว้ไม่ครบทุกหัวข้อในเล่ม</dd>
+      </div>
+      <div>
+        <dt>จุดที่สกัดข้อมูลไม่ได้</dt>
+        <dd>"—" (ไม่นับเป็น 0) เช่น จำนวนนักศึกษาแลกเปลี่ยนขาเข้า/ขาออก ไม่ได้ระบุในเล่ม — ร้อยละความครบถ้วนของมิติ (ค) จึงอยู่ที่ 80% ตามที่แสดงไว้ด้านบน</dd>
+      </div>
+    </dl>
+    <p class="tone-note">ผลวิเคราะห์ทั้งหมดนี้เป็นข้อสังเกต/หลักฐานประกอบการพิจารณาเท่านั้น ไม่ใช่การฟันธงหรือการอนุมัติ/ไม่อนุมัติหลักสูตรแทนผู้บริหาร</p>
+  </div>
+
+  <div class="readonly-note">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="1.75" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span>หน้าจอนี้เป็นมุมมองสำหรับดูอย่างเดียว ไม่มีปุ่มแก้ไข อัปโหลด อนุมัติ หรือแสดงความคิดเห็นใดๆ</span>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 11 "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตรตามสำนักวิชา/หลักสูตร" (ขยายขอบเขต 2026-09-13) · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 5 (ปรับปรุง), FR ข้อ 8 (ปรับปรุง — วิเคราะห์สุขภาพหลักสูตร 4 มิติ), FR ข้อ 9 (มิติ ง รายละเอียดเต็ม), FR ข้อ 12 (กฎความน่าเชื่อถือของตัวเลข) · user journey "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร" ขั้นตอน "ระบบแสดงผลวิเคราะห์สุขภาพหลักสูตร", "ระบบแสดงผลตรวจสอบความสอดคล้อง...แสดงคู่กัน", "ระบบแสดงสถิติภาพรวมเชิงปริมาณเป็นส่วนประกอบย่อย", "ทุกผลลัพธ์ยึดกฎความน่าเชื่อถือของตัวเลข" · acceptance-criteria.md AC-11-05, AC-11-06, AC-11-07, AC-11-09, AC-11-10, AC-11-11, AC-11-12 — หมายเหตุ: มิติ (ก)/(ข)/(ค) ใช้รูปแบบผลลัพธ์เดียวกับมิติ (ง) (ป้ายระดับข้อความ + หลักฐานอ้างอิง + ร้อยละความครบถ้วน ไม่มีคะแนนตัวเลข 0-100) ตามที่ผู้ใช้ยืนยันในรอบ prototype v3 นี้ — ปิดคำถามเปิดที่ spec ฝากไว้
+</footer>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var courseName = params.get('course');
+  if (courseName) {
+    document.getElementById('courseHeading').textContent = courseName;
+  }
+</script>
+</body>
+</html>

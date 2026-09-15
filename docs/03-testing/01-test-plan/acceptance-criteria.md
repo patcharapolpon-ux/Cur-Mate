@@ -366,7 +366,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้ใช้งานทั่วไปเปิดดูรายการเอกสารและกฎเกณฑ์ของชุดเกณฑ์นั้น
 - **Then** ระบบแสดงรายการที่มีอย่างน้อย ชื่อเอกสาร ประเภทเอกสาร ช่วงหน้า และป้ายกำกับเอกสารที่แปลงจากภาพสแกน (ถ้ามี)
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260823-02-criteria-knowledge-base|criteria-knowledge-base]] FR ข้อ 12 · [[../../01-requirements/01-spec/20260823-03-advisory-chatbot|advisory-chatbot]] FR ข้อ 11 · อ้างอิง journey ของฟีเจอร์ 02 ([[../../02-design/01-prototypes/20260823-01-user-journey-course-coordinator-upload|ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2]]) และฟีเจอร์ 09 ([[../../02-design/01-prototypes/20260823-02-user-journey-course-coordinator-chatbot-advisory|ผู้จัดทำหลักสูตร ขอคำแนะนำระหว่างร่างหลักสูตรผ่านแชทบอท]]) (ยังไม่มี journey/หน้าจอแยกของฟีเจอร์นี้)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260823-02-criteria-knowledge-base|criteria-knowledge-base]] FR ข้อ 12 · [[../../01-requirements/01-spec/20260823-03-advisory-chatbot|advisory-chatbot]] FR ข้อ 11 · อ้างอิง journey ของฟีเจอร์ 02 ([[../../02-design/01-prototypes/20260823-01-user-journey-course-coordinator-upload|ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2]]) และฟีเจอร์ 09 ([[../../02-design/01-prototypes/20260823-02-user-journey-course-coordinator-chatbot-advisory|ผู้จัดทำหลักสูตร ขอคำแนะนำระหว่างร่างหลักสูตรผ่านแชทบอท]]) ~~(ยังไม่มี journey/หน้าจอแยกของฟีเจอร์นี้)~~ **(อัปเดต 2026-09-15: ปัจจุบันมีหน้าจอแยกของฟีเจอร์นี้แล้ว สร้างเมื่อ 2026-09-15 รองรับทั้ง 2 บริบทการเข้าถึงข้างต้น — ดูรายละเอียดที่ manifest [[../../02-design/01-prototypes/20260823-prototype-v1/index|prototype-v1 index]] แถวหน้าจอ 13)** · หน้าจอ: [[../../02-design/01-prototypes/20260823-prototype-v1/13-knowledge-base-view.html|13-knowledge-base-view.html]]
 
 #### AC-15-02: เห็นเฉพาะกฎเกณฑ์สถานะ approved กฎที่ pending/rejected ไม่ปรากฏ
 
@@ -374,7 +374,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้ใช้งานทั่วไปเปิดดูรายการกฎเกณฑ์ของชุดนั้น
 - **Then** ระบบแสดงเฉพาะกฎเกณฑ์สถานะ approved เท่านั้น กฎเกณฑ์ที่ยัง pending หรือถูก reject ไม่ปรากฏต่อผู้ใช้งานทั่วไป
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260823-02-criteria-knowledge-base|criteria-knowledge-base]] FR ข้อ 12
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260823-02-criteria-knowledge-base|criteria-knowledge-base]] FR ข้อ 12 · หน้าจอ (เพิ่ม 2026-09-15): [[../../02-design/01-prototypes/20260823-prototype-v1/13-knowledge-base-view.html|13-knowledge-base-view.html]]
 
 #### AC-15-03: ผู้ใช้งานทั่วไปไม่มีสิทธิ์แก้ไข/เพิ่ม/ลบใดๆ ในมุมมองนี้ (read-only)
 
@@ -382,7 +382,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้ใช้งานทั่วไปมองหาช่องทางแก้ไข เพิ่ม หรือลบเอกสาร/กฎเกณฑ์ใดๆ ในมุมมองนี้
 - **Then** ไม่มี element ใดๆ (ปุ่ม/ฟอร์ม/ลิงก์) ที่อนุญาตให้แก้ไข เพิ่ม หรือลบปรากฏบนหน้าจอเลย ผู้ใช้งานทั่วไปทำได้เพียงดูข้อมูลเท่านั้น
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260823-02-criteria-knowledge-base|criteria-knowledge-base]] FR ข้อ 1, FR ข้อ 12
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260823-02-criteria-knowledge-base|criteria-knowledge-base]] FR ข้อ 1, FR ข้อ 12 · หน้าจอ (เพิ่ม 2026-09-15): [[../../02-design/01-prototypes/20260823-prototype-v1/13-knowledge-base-view.html|13-knowledge-base-view.html]]
 
 ---
 
@@ -542,21 +542,21 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 
 **Feature อ้างอิง**: [[../../01-requirements/02-plan/feature-list|feature-list]] (10. ~~แอดมิน เพิ่ม/จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุมต่อสำนักวิชา~~ แอดมิน เพิ่ม/จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา)
 
-#### AC-10-01: แอดมินเพิ่มหลักสูตรใหม่พร้อมไฟล์แนบสำเร็จ (happy path) (ล้าสมัย — 2026-09-13: บรรยาย flow "แนบไฟล์หลักสูตรที่จะเสนอเข้าที่ประชุม" แยกชุดซึ่งถูกรื้อทิ้งแล้ว ปัจจุบันแอดมินผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบความสอดคล้องแล้วแทน ไม่มีการอัปโหลดไฟล์แยกชุดอีกต่อไป — คงเนื้อหาเดิมไว้ด้านล่างเพื่อรักษาประวัติ AC ชุดใหม่ที่ถูกต้องยังไม่ถูกออกแบบ รอ skill `test-design-builder`)
+#### AC-10-01: แอดมินเพิ่มหลักสูตรใหม่พร้อมไฟล์แนบสำเร็จ (happy path) (ล้าสมัย — 2026-09-13: บรรยาย flow "แนบไฟล์หลักสูตรที่จะเสนอเข้าที่ประชุม" แยกชุดซึ่งถูกรื้อทิ้งแล้ว ปัจจุบันแอดมินผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบความสอดคล้องแล้วแทน ไม่มีการอัปโหลดไฟล์แยกชุดอีกต่อไป — คงเนื้อหาเดิมไว้ด้านล่างเพื่อรักษาประวัติ ~~AC ชุดใหม่ที่ถูกต้องยังไม่ถูกออกแบบ รอ skill `test-design-builder`~~ **(แก้ไข 2026-09-15: AC ชุดใหม่ที่ถูกต้องถูกออกแบบเสร็จสมบูรณ์แล้วตั้งแต่ 2026-09-13 — ดู AC-10-03 ถึง AC-10-07)**)
 
 - **Given** ~~แอดมินอยู่ในหน้าจัดการหลักสูตรสำหรับแดชบอร์ดผู้บริหาร เลือกสำนักวิชาหนึ่งจาก 15 สำนักวิชาแบบคงที่แล้ว และมีไฟล์หลักสูตรที่จะเสนอเข้าที่ประชุม (PDF หรือ .docx) พร้อมแนบ~~ **(อัปเดต 2026-09-13: "ไฟล์หลักสูตรที่จะเสนอเข้าที่ประชุม" แยกชุดถูกรื้อทิ้งแล้ว ดู FR ข้อ 5 ที่ปรับปรุงของ [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]])**
 - **When** ~~แอดมินกรอกชื่อหลักสูตรใหม่และแนบไฟล์ แล้วกดบันทึก~~ **(ล้าสมัย — ปัจจุบันแอดมินกรอกชื่อหลักสูตรแล้วผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบความสอดคล้องแล้วแทนการแนบไฟล์)**
 - **Then** ~~ระบบบันทึกหลักสูตรใหม่พร้อมไฟล์แนบเข้าที่เก็บข้อมูลแยกชุด (แยกจากฐานความรู้เกณฑ์มาตรฐาน) และแสดงหลักสูตรนั้นในรายชื่อภายใต้สำนักวิชาที่เลือกทันที~~ **(ล้าสมัย — ที่เก็บข้อมูลยังคงแยกจากฐานความรู้เกณฑ์มาตรฐานเหมือนเดิม แต่ไม่มีการบันทึก "ไฟล์แนบ" แยกชุดอีกต่อไป ระบบบันทึกการผูกเล่ม มคอ.2 เข้ากับรายการหลักสูตรแทน)**
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 3, 4 · ~~FR ข้อ 5~~ **(อัปเดต 2026-09-13: ซ่อมอ้างอิง — FR ข้อ 5 ถูกรื้อและแทนที่ด้วยเนื้อหาใหม่แล้ว ปัจจุบันชี้ไปยัง)** FR ข้อ 5 (ปรับปรุง — ผูกเล่ม มคอ.2) · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] · หน้าจอ [[../../02-design/01-prototypes/20260904-prototype-v2/01-admin-select-school-courses.html|01-admin-select-school-courses.html]], [[../../02-design/01-prototypes/20260904-prototype-v2/02-admin-add-course-modal.html|02-admin-add-course-modal.html]] (หมายเหตุ: หน้าจอเหล่านี้ยังสะท้อน flow เดิม รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 3, 4 · ~~FR ข้อ 5~~ **(อัปเดต 2026-09-13: ซ่อมอ้างอิง — FR ข้อ 5 ถูกรื้อและแทนที่ด้วยเนื้อหาใหม่แล้ว ปัจจุบันชี้ไปยัง)** FR ข้อ 5 (ปรับปรุง — ผูกเล่ม มคอ.2) · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] · หน้าจอ (เดิม v2 — เก็บไว้เพื่อประวัติ): [[../../02-design/01-prototypes/20260904-prototype-v2/01-admin-select-school-courses.html|01-admin-select-school-courses.html]], [[../../02-design/01-prototypes/20260904-prototype-v2/02-admin-add-course-modal.html|02-admin-add-course-modal.html]] (อัปเดต 2026-09-15: การรอ skill `prototype-builder` จบแล้ว — flow ปัจจุบันของฟีเจอร์นี้มีหน้าจอ v3 รองรับแล้วที่ [[../../02-design/01-prototypes/20260915-prototype-v3/01-admin-manage-courses.html|01-admin-manage-courses.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/02-admin-link-tqf2-modal.html|02-admin-link-tqf2-modal.html]] ดู AC-10-03 ถึง AC-10-07 สำหรับสถานการณ์ที่ตรงกับ flow ปัจจุบัน)
 
-#### AC-10-02: แอดมินแนบไฟล์ผิดประเภท (ไม่ใช่ PDF/Word) → ระบบแจ้งเตือนและไม่บันทึก (negative) (ล้าสมัย — 2026-09-13: ฟีเจอร์นี้ไม่มีขั้นตอนอัปโหลดไฟล์โดยตรงอีกต่อไป แอดมินเลือก/ผูกเล่ม มคอ.2 ที่มีอยู่แล้วในระบบแทน — คงเนื้อหาเดิมไว้ด้านล่างเพื่อรักษาประวัติ)
+#### AC-10-02: แอดมินแนบไฟล์ผิดประเภท (ไม่ใช่ PDF/Word) → ระบบแจ้งเตือนและไม่บันทึก (negative) (ล้าสมัย — 2026-09-13: ฟีเจอร์นี้ไม่มีขั้นตอนอัปโหลดไฟล์โดยตรงอีกต่อไป แอดมินเลือก/ผูกเล่ม มคอ.2 ที่มีอยู่แล้วในระบบแทน — คงเนื้อหาเดิมไว้ด้านล่างเพื่อรักษาประวัติ **(แก้ไข 2026-09-15: ดู AC-10-03 ถึง AC-10-07 สำหรับ AC ชุดใหม่ที่ถูกต้องของ flow ปัจจุบัน ออกแบบเสร็จสมบูรณ์แล้วตั้งแต่ 2026-09-13)**)
 
 - **Given** ~~แอดมินกรอกชื่อหลักสูตรใหม่แล้ว และเลือกไฟล์แนบที่ไม่ใช่ PDF หรือ .docx (เช่น .jpg)~~ **(ล้าสมัย — ไม่มีขั้นตอนเลือก/แนบไฟล์ในฟีเจอร์นี้อีกต่อไป)**
 - **When** ~~แอดมินพยายามแนบไฟล์นั้นแล้วกดบันทึก~~ **(ล้าสมัย — ดูเหตุผลด้านบน)**
 - **Then** ~~ระบบแจ้งเตือนว่าไฟล์ไม่ใช่รูปแบบที่รองรับ (PDF/.docx) ไม่บันทึกหลักสูตรใหม่ และให้แอดมินแนบไฟล์ใหม่ที่ถูกต้องแทน~~ **(ล้าสมัย — การตรวจสอบรูปแบบไฟล์ PDF/.docx ตาม FR ข้อ 6 ยังคงมีอยู่ในระบบ แต่เกิดขึ้นที่ขั้นตอนอัปโหลดเล่ม มคอ.2 ของฟีเจอร์ 01 (ดู [[../../01-requirements/01-spec/20260812-01-tqf2-consistency-check|tqf2-consistency-check]] FR ข้อ 1 และ AC-01-03 ของฟีเจอร์นั้น) ไม่ใช่ภายใน flow ของฟีเจอร์ 10 อีกต่อไป เพราะฟีเจอร์นี้ไม่มีการอัปโหลดไฟล์โดยตรง)**
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] ~~FR ข้อ 6~~ **(อัปเดต 2026-09-13: FR ข้อ 6 ยังคงมีอยู่จริงและไม่ถูกรื้อ แต่ไม่ตรงกับ flow ของฟีเจอร์ 10 อีกต่อไปตามเหตุผลข้างต้น — สถานการณ์นี้ล้าสมัยทั้งหมด ไม่มี FR ปัจจุบันของฟีเจอร์ 10 ที่ตรงกับสถานการณ์ "แนบไฟล์ผิดประเภท" อีกแล้ว)** · หน้าจอ [[../../02-design/01-prototypes/20260904-prototype-v2/02-admin-add-course-modal.html|02-admin-add-course-modal.html]] (หมายเหตุ: หน้าจอนี้ยังสะท้อน flow เดิม รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] ~~FR ข้อ 6~~ **(อัปเดต 2026-09-13: FR ข้อ 6 ยังคงมีอยู่จริงและไม่ถูกรื้อ แต่ไม่ตรงกับ flow ของฟีเจอร์ 10 อีกต่อไปตามเหตุผลข้างต้น — สถานการณ์นี้ล้าสมัยทั้งหมด ไม่มี FR ปัจจุบันของฟีเจอร์ 10 ที่ตรงกับสถานการณ์ "แนบไฟล์ผิดประเภท" อีกแล้ว)** · หน้าจอ (เดิม v2 — เก็บไว้เพื่อประวัติ): [[../../02-design/01-prototypes/20260904-prototype-v2/02-admin-add-course-modal.html|02-admin-add-course-modal.html]] (อัปเดต 2026-09-15: การรอ skill `prototype-builder` จบแล้ว — ฟีเจอร์นี้ไม่มีขั้นตอนอัปโหลด/แนบไฟล์ในหน้าจอ v3 เลย เพราะ flow ถูกแทนที่ด้วยการผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบแล้ว ดูหน้าจอ v3 ที่ [[../../02-design/01-prototypes/20260915-prototype-v3/02-admin-link-tqf2-modal.html|02-admin-link-tqf2-modal.html]] และดู AC-01-03 ของฟีเจอร์ 01 สำหรับสถานการณ์ตรวจสอบรูปแบบไฟล์ที่ยังใช้งานจริงในปัจจุบัน)
 
 #### AC-10-03: แอดมินเลือกสำนักวิชา → เพิ่มหลักสูตร → ผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบความสอดคล้องแล้วสำเร็จ (เพิ่ม 2026-09-13)
 
@@ -564,7 +564,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินเพิ่มรายการหลักสูตรใหม่ แล้วเลือกเล่ม มคอ.2 ที่ผ่านการตรวจสอบความสอดคล้องแล้วมาผูกกับหลักสูตรนั้น
 - **Then** ระบบบันทึกการผูกเล่มสำเร็จ และหลักสูตรนั้นปรากฏในรายชื่อภายใต้สำนักวิชาที่เลือกพร้อมเล่ม มคอ.2 ที่ผูกไว้
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 4, FR ข้อ 5 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] · หน้าจอ [[../../02-design/01-prototypes/20260904-prototype-v2/01-admin-select-school-courses.html|01-admin-select-school-courses.html]] (หมายเหตุ: หน้าจอ v2 ยังสะท้อน flow เดิม รอ skill `prototype-builder` ปรับปรุงให้ตรงกับการผูกเล่ม มคอ.2)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 4, FR ข้อ 5 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/01-admin-manage-courses.html|01-admin-manage-courses.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/02-admin-link-tqf2-modal.html|02-admin-link-tqf2-modal.html]] · (เดิม v2 — เก็บไว้เพื่อประวัติ): [[../../02-design/01-prototypes/20260904-prototype-v2/01-admin-select-school-courses.html|01-admin-select-school-courses.html]]
 
 #### AC-10-04: รายการเล่มที่เลือกผูกได้แสดงเฉพาะเล่มที่ผ่านการตรวจสอบความสอดคล้องแล้ว และแจ้งเตือนเมื่อไม่มีเล่มให้เลือก (เพิ่ม 2026-09-13)
 
@@ -574,7 +574,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 
 > หมายเหตุ: ~~spec ต้นทางยังเปิดคำถามไว้ว่ากรณีหลักสูตรที่ยังไม่เคยผ่านฝั่งตรวจสอบความสอดคล้องเลย (แอดมินอัปโหลดเล่มเข้ามาตรงๆ เพื่อทำแดชบอร์ดอย่างเดียว) ระบบควรอนุญาตหรือไม่ และถ้าอนุญาต ช่องสถานะความสอดคล้องบนแดชบอร์ดควรแสดงอย่างไร — ยังไม่ตัดสินใจแทนผู้ใช้ในสถานการณ์นี้ (ดูหัวข้อสมมติฐานท้ายเอกสาร)~~ **(อัปเดต 2026-09-13: ได้รับคำตอบแล้ว — ดู FR ข้อ 5.1 และ AC-10-06/AC-10-07)**
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/02-admin-link-tqf2-modal.html|02-admin-link-tqf2-modal.html]]
 
 #### AC-10-05: ผลตรวจสอบความสอดคล้องของเล่มที่ผูกไว้ไหลไปแสดงบนแดชบอร์ดผู้บริหาร (เพิ่ม 2026-09-13)
 
@@ -582,7 +582,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบเชื่อมข้อมูลของเล่มนั้นเข้ากับรายการหลักสูตรที่ผูกไว้
 - **Then** ผลตรวจสอบความสอดคล้องของเล่มนั้นไหลไปแสดงบนแดชบอร์ดผู้บริหารคู่กับผลวิเคราะห์สุขภาพหลักสูตรของหลักสูตรเดียวกัน
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5 (ปรับปรุง) (ดูฟีเจอร์ 11 — AC-11-07 ฝั่งแดชบอร์ดที่แสดงผลลัพธ์นี้)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5 (ปรับปรุง) (ดูฟีเจอร์ 11 — AC-11-07 ฝั่งแดชบอร์ดที่แสดงผลลัพธ์นี้) · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/01-admin-manage-courses.html|01-admin-manage-courses.html]] (ฝั่งแอดมิน), [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]] (ฝั่งแดชบอร์ดที่ผลลัพธ์นี้ไหลไปแสดง)
 
 #### AC-10-06: แอดมินผูกเล่ม มคอ.2 ที่ยังไม่เคยผ่านการตรวจสอบความสอดคล้อง → ผูกสำเร็จ และแดชบอร์ดแสดงสถานะ "ยังไม่ผ่านการตรวจสอบ" อย่างชัดเจน (เพิ่ม 2026-09-13)
 
@@ -590,7 +590,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินเพิ่มรายการหลักสูตรใหม่ แล้วเลือกเล่ม มคอ.2 ที่ยังไม่เคยผ่านการตรวจสอบนี้มาผูกกับหลักสูตรนั้น
 - **Then** ระบบอนุญาตให้ผูกเล่มสำเร็จ (ไม่ปฏิเสธ) และแดชบอร์ดผู้บริหารของหลักสูตรนั้นแสดงสถานะความสอดคล้องเป็น "ยังไม่ผ่านการตรวจสอบ" อย่างชัดเจน โดยไม่เว้นว่างและไม่แสดงในลักษณะที่ทำให้เข้าใจว่าผ่านการตรวจสอบแล้ว
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5.1 · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] ขั้นตอน 5-6 (เส้นทาง "ยังไม่เคยผ่าน") (หมายเหตุ: หน้าจอ prototype v2 ยังไม่มี UI สะท้อน flow นี้ รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5.1 · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] ขั้นตอน 5-6 (เส้นทาง "ยังไม่เคยผ่าน") (อัปเดต 2026-09-15: prototype v3 มีหน้าจอรองรับ flow นี้แล้วที่ [[../../02-design/01-prototypes/20260915-prototype-v3/01-admin-manage-courses.html|01-admin-manage-courses.html]])
 
 #### AC-10-07: แอดมินสั่งตรวจสอบความสอดคล้องของเล่มที่ผูกไว้ได้จากหน้าจัดการหลักสูตรโดยตรง สถานะบนแดชบอร์ดอัปเดตเมื่อตรวจเสร็จ (เพิ่ม 2026-09-13)
 
@@ -598,7 +598,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินกดสั่งตรวจสอบความสอดคล้องของเล่มนั้นจากหน้าจัดการหลักสูตรโดยตรง โดยไม่ต้องออกไปเริ่มใหม่ที่ฟีเจอร์ตรวจสอบเอกสาร มคอ.2
 - **Then** ระบบเริ่มกระบวนการตรวจสอบความสอดคล้อง (ตามฟีเจอร์ 03-05) ให้กับเล่มนั้น และเมื่อตรวจสอบเสร็จสิ้น สถานะความสอดคล้องบนแดชบอร์ดผู้บริหารของหลักสูตรนั้นอัปเดตจาก "ยังไม่ผ่านการตรวจสอบ" เป็นผลตรวจสอบจริงตามที่พบ
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5.1 · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] ขั้นตอนที่เกี่ยวกับ "แอดมินสั่งตรวจสอบความสอดคล้องของเล่มนี้ได้ทันทีจากหน้าจัดการหลักสูตรนี้เอง" (หมายเหตุ: หน้าจอ prototype v2 ยังไม่มี UI สะท้อน flow นี้ รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5.1 · [[../../02-design/01-prototypes/20260904-04-user-journey-admin-manage-executive-courses|user journey แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] ขั้นตอนที่เกี่ยวกับ "แอดมินสั่งตรวจสอบความสอดคล้องของเล่มนี้ได้ทันทีจากหน้าจัดการหลักสูตรนี้เอง" (อัปเดต 2026-09-15: prototype v3 มีหน้าจอรองรับ flow นี้แล้วที่ [[../../02-design/01-prototypes/20260915-prototype-v3/01-admin-manage-courses.html|01-admin-manage-courses.html]])
 
 ---
 
@@ -610,9 +610,9 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 
 - **Given** มีอย่างน้อย 1 หลักสูตรถูกแอดมินเพิ่มไว้แล้วภายใต้สำนักวิชาหนึ่ง ~~(พร้อมไฟล์แนบ)~~ **(อัปเดต 2026-09-13: เปลี่ยนจาก "ไฟล์แนบ" แยกชุด เป็นการผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบความสอดคล้องแล้ว ตาม FR ข้อ 5 ที่ปรับปรุง — ดูรายละเอียดที่ฟีเจอร์ 10)** ผู้บริหารอยู่ในหน้าแดชบอร์ด
 - **When** ผู้บริหารเลือกสำนักวิชานั้น แล้วเลือกหลักสูตรที่ต้องการดูจากรายชื่อ
-- **Then** ~~ระบบดึงข้อมูลโครงสร้างหลักสูตรจากไฟล์ที่แอดมินอัปโหลดไว้ และแสดงสถิติภาพรวมเชิงปริมาณของหลักสูตรนั้น ได้แก่ จำนวนหลักสูตรทั้งหมดต่อสำนักวิชา หน่วยกิตรวม และสัดส่วนหน่วยกิตตามหมวดวิชา~~ **(อัปเดต 2026-09-13: ข้อความเดิมสื่อว่าเวอร์ชันแรกแสดง "เฉพาะ" สถิติเชิงปริมาณ ซึ่งไม่จริงอีกต่อไป — ปัจจุบันระบบดึงข้อมูลจากเล่ม มคอ.2 ที่แอดมินผูกไว้ (ไม่ใช่ไฟล์อัปโหลดแยกชุด) แล้วแสดงผลวิเคราะห์สุขภาพหลักสูตร (Program Health) 4 มิติ เป็นเนื้อหาหลักตาม FR ข้อ 8 ที่ปรับปรุงและ FR ข้อ 9 ใหม่ — ยังไม่มี AC ครอบคลุมส่วนนี้ รอ skill `test-design-builder`)** ระบบดึงข้อมูลโครงสร้างหลักสูตรจากเล่ม มคอ.2 ที่แอดมินผูกไว้ และยังคงแสดงสถิติภาพรวมเชิงปริมาณของหลักสูตรนั้นอยู่จริงเป็นส่วนประกอบย่อยของแดชบอร์ด (ไม่ได้ถูกตัดทิ้ง) ได้แก่ จำนวนหลักสูตรทั้งหมดต่อสำนักวิชา หน่วยกิตรวม และสัดส่วนหน่วยกิตตามหมวดวิชา
+- **Then** ~~ระบบดึงข้อมูลโครงสร้างหลักสูตรจากไฟล์ที่แอดมินอัปโหลดไว้ และแสดงสถิติภาพรวมเชิงปริมาณของหลักสูตรนั้น ได้แก่ จำนวนหลักสูตรทั้งหมดต่อสำนักวิชา หน่วยกิตรวม และสัดส่วนหน่วยกิตตามหมวดวิชา~~ **(อัปเดต 2026-09-13: ข้อความเดิมสื่อว่าเวอร์ชันแรกแสดง "เฉพาะ" สถิติเชิงปริมาณ ซึ่งไม่จริงอีกต่อไป — ปัจจุบันระบบดึงข้อมูลจากเล่ม มคอ.2 ที่แอดมินผูกไว้ (ไม่ใช่ไฟล์อัปโหลดแยกชุด) แล้วแสดงผลวิเคราะห์สุขภาพหลักสูตร (Program Health) 4 มิติ เป็นเนื้อหาหลักตาม FR ข้อ 8 ที่ปรับปรุงและ FR ข้อ 9 ใหม่)** ~~ยังไม่มี AC ครอบคลุมส่วนนี้ รอ skill `test-design-builder`~~ **(แก้ไข 2026-09-15: เนื้อหาผลวิเคราะห์สุขภาพหลักสูตร 4 มิติ ถูกแยกไปครอบคลุมที่ AC-11-05 และ AC-11-06 แล้วตั้งแต่ 2026-09-13)** ระบบดึงข้อมูลโครงสร้างหลักสูตรจากเล่ม มคอ.2 ที่แอดมินผูกไว้ และยังคงแสดงสถิติภาพรวมเชิงปริมาณของหลักสูตรนั้นอยู่จริงเป็นส่วนประกอบย่อยของแดชบอร์ด (ไม่ได้ถูกตัดทิ้ง) ได้แก่ จำนวนหลักสูตรทั้งหมดต่อสำนักวิชา หน่วยกิตรวม และสัดส่วนหน่วยกิตตามหมวดวิชา
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 2, 3, 7, ~~8~~ **(อัปเดต 2026-09-13: FR ข้อ 8 เดิมถูกรื้อและแทนที่ด้วยการวิเคราะห์สุขภาพหลักสูตร 4 มิติ — สถิติเชิงปริมาณที่ AC นี้ยังกล่าวถึงอยู่ในขอบเขตของ FR ข้อ 8 ฉบับปรับปรุงในฐานะส่วนประกอบย่อย)** FR ข้อ 8 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-05-user-journey-executive-view-dashboard|user journey ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]] · หน้าจอ [[../../02-design/01-prototypes/20260904-prototype-v2/03-executive-select-school.html|03-executive-select-school.html]], [[../../02-design/01-prototypes/20260904-prototype-v2/04-executive-select-course.html|04-executive-select-course.html]], [[../../02-design/01-prototypes/20260904-prototype-v2/05-executive-dashboard-stats.html|05-executive-dashboard-stats.html]] (หมายเหตุ: หน้าจอเหล่านี้ยังไม่มี UI วิเคราะห์สุขภาพหลักสูตร/หน้าสรุประดับสำนักวิชา/ผลตรวจสอบความสอดคล้อง/export PDF รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 2, 3, 7, ~~8~~ **(อัปเดต 2026-09-13: FR ข้อ 8 เดิมถูกรื้อและแทนที่ด้วยการวิเคราะห์สุขภาพหลักสูตร 4 มิติ — สถิติเชิงปริมาณที่ AC นี้ยังกล่าวถึงอยู่ในขอบเขตของ FR ข้อ 8 ฉบับปรับปรุงในฐานะส่วนประกอบย่อย)** FR ข้อ 8 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-05-user-journey-executive-view-dashboard|user journey ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/03-executive-select-school.html|03-executive-select-school.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/04-executive-school-summary.html|04-executive-school-summary.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]] · (เดิม v2 — เก็บไว้เพื่อประวัติ): [[../../02-design/01-prototypes/20260904-prototype-v2/03-executive-select-school.html|03-executive-select-school.html]], [[../../02-design/01-prototypes/20260904-prototype-v2/04-executive-select-course.html|04-executive-select-course.html]], [[../../02-design/01-prototypes/20260904-prototype-v2/05-executive-dashboard-stats.html|05-executive-dashboard-stats.html]] (อัปเดต 2026-09-15: การรอ skill `prototype-builder` จบแล้ว — prototype v3 มีหน้าจอรองรับ flow วิเคราะห์สุขภาพหลักสูตร/หน้าสรุประดับสำนักวิชา/ผลตรวจสอบความสอดคล้อง/export PDF ครบแล้ว)
 
 #### AC-11-02: สำนักวิชาที่เลือกยังไม่มีหลักสูตรใดถูกเพิ่มไว้เลย → ระบบแสดงสถานะว่างเปล่า (edge case)
 
@@ -620,7 +620,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้บริหารเลือกสำนักวิชานั้น
 - **Then** ระบบแสดงสถานะว่างเปล่าแทนรายชื่อหลักสูตร แจ้งว่ายังไม่มีหลักสูตรในสำนักวิชานี้ และผู้บริหารสามารถกลับไปเลือกสำนักวิชาอื่นได้
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 2 · หน้าจอ [[../../02-design/01-prototypes/20260904-prototype-v2/03-executive-select-school.html|03-executive-select-school.html]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 2 · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/03-executive-select-school.html|03-executive-select-school.html]] · (เดิม v2 — เก็บไว้เพื่อประวัติ): [[../../02-design/01-prototypes/20260904-prototype-v2/03-executive-select-school.html|03-executive-select-school.html]]
 
 #### AC-11-03: ผู้บริหารไม่มีสิทธิ์แก้ไข/อัปโหลด/อนุมัติ/comment ใดๆ บนหน้าแดชบอร์ด (ยืนยัน read-only)
 
@@ -628,7 +628,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้บริหารมองหาช่องทางแก้ไข อัปโหลด อนุมัติ หรือแสดงความเห็นบนหน้าจอนี้
 - **Then** ไม่มี element ใดๆ (ปุ่ม/ฟอร์ม/ลิงก์) ที่อนุญาตให้แก้ไข อัปโหลด อนุมัติ หรือ comment ปรากฏบนหน้าจอเลย ผู้บริหารทำได้เพียงดูข้อมูลเท่านั้น
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 1 · หน้าจอ [[../../02-design/01-prototypes/20260904-prototype-v2/05-executive-dashboard-stats.html|05-executive-dashboard-stats.html]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 1 · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]] · (เดิม v2 — เก็บไว้เพื่อประวัติ): [[../../02-design/01-prototypes/20260904-prototype-v2/05-executive-dashboard-stats.html|05-executive-dashboard-stats.html]]
 
 #### AC-11-04: ผู้บริหารเลือกสำนักวิชา → เห็นหน้าสรุประดับสำนักวิชาเปรียบเทียบทุกหลักสูตรก่อนเจาะเข้ารายหลักสูตร (เพิ่ม 2026-09-13)
 
@@ -636,7 +636,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบแสดงผลหลังผู้บริหารเลือกสำนักวิชานั้น
 - **Then** ระบบแสดงหน้าสรุประดับสำนักวิชาที่เห็นหลักสูตรทั้งหมดภายใต้สำนักวิชานั้นเรียงเทียบกันได้ในหน้าเดียว ก่อนที่ผู้บริหารจะเจาะเข้าไปดูรายหลักสูตร
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 10 · [[../../02-design/01-prototypes/20260904-05-user-journey-executive-view-dashboard|user journey ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]] (หมายเหตุ: หน้าจอ v2 ปัจจุบันยังไม่มี UI หน้าสรุประดับสำนักวิชา รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 10 · [[../../02-design/01-prototypes/20260904-05-user-journey-executive-view-dashboard|user journey ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/04-executive-school-summary.html|04-executive-school-summary.html]] (อัปเดต 2026-09-15: การรอ skill `prototype-builder` จบแล้ว — prototype v3 มีหน้าจอรองรับ flow นี้แล้ว)
 
 #### AC-11-05: หน้ารายหลักสูตรแสดงผลวิเคราะห์สุขภาพหลักสูตรครบ 4 มิติ สถิติเชิงปริมาณเดิมยังคงแสดงเป็นส่วนประกอบย่อย (เพิ่ม 2026-09-13)
 
@@ -644,7 +644,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบแสดงหน้ารายหลักสูตรของหลักสูตรนั้น
 - **Then** หน้าจอแสดงผลวิเคราะห์สุขภาพหลักสูตรครบ 4 มิติ (คุณภาพหลักสูตร / ศักยภาพการจัดการเรียนการสอน / ความเป็นนานาชาติ / ความสอดคล้องกับทักษะที่ตลาดต้องการ) โดยสถิติเชิงปริมาณเดิม (จำนวนหลักสูตร/หน่วยกิตรวม/สัดส่วนหมวดวิชา) ยังคงแสดงอยู่เป็นส่วนประกอบย่อย ไม่ได้ถูกตัดทิ้ง
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 8 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-05-user-journey-executive-view-dashboard|user journey ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]] (หมายเหตุ: หน้าจอ v2 ปัจจุบันยังไม่มี UI วิเคราะห์สุขภาพหลักสูตร รอ skill `prototype-builder` ปรับปรุง)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 8 (ปรับปรุง) · [[../../02-design/01-prototypes/20260904-05-user-journey-executive-view-dashboard|user journey ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]] (อัปเดต 2026-09-15: การรอ skill `prototype-builder` จบแล้ว — prototype v3 มีหน้าจอรองรับ flow วิเคราะห์สุขภาพหลักสูตรแล้ว)
 
 #### AC-11-06: มิติความสอดคล้องกับทักษะแสดง "ครอบคลุม X จาก Y ทักษะ" พร้อมระดับความครอบคลุมและหลักฐานอ้างอิงรายวิชา/CLO ไม่ใช้คะแนนตัวเลข (เพิ่ม 2026-09-13)
 
@@ -652,7 +652,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบแสดงมิติ "ความสอดคล้องกับทักษะที่ตลาดต้องการ" บนหน้ารายหลักสูตร
 - **Then** ระบบแสดงผลเป็น "ครอบคลุม X จาก Y ทักษะ" พร้อมระดับความครอบคลุมต่อทักษะ (ครอบคลุมชัดเจน/ครอบคลุมบางส่วน/ไม่พบ) และทุกทักษะที่ระบุว่าครอบคลุมแสดงหลักฐานอ้างอิงกลับไปยังรหัส/ชื่อรายวิชาและจุดที่อ้างอิง (คำอธิบายรายวิชาหรือ CLO ข้อใด) เสมอ โดยไม่ใช้คะแนนตัวเลข 0-100
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 8(ง), FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 8(ง), FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/06-executive-skill-coverage.html|06-executive-skill-coverage.html]]
 
 > หมายเหตุ **(เพิ่ม 2026-09-13)**: ชี้แจงเพื่อความชัดเจน — "Y" ใน "ครอบคลุม X จาก Y ทักษะ" หมายถึง**จำนวนทักษะที่อนุมัติแล้ว ณ เวลาที่แสดงผล** ของชุดกรอบทักษะเวอร์ชันนั้น (ตามฟีเจอร์ 14, ดู AC-14-07) ไม่ใช่จำนวนทักษะทั้งหมดที่ปรากฏในเอกสารต้นฉบับที่แอดมินอัปโหลด เนื่องจากชุดกรอบทักษะไม่มีสถานะ active/pending ระดับทั้งชุด ทักษะที่ยัง pending อยู่จึงไม่ถูกนับรวมใน Y จนกว่าจะได้รับการอนุมัติ (ดู FR ข้อ 9)
 
@@ -662,7 +662,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้บริหารดูหน้ารายหลักสูตรของหลักสูตรนั้น
 - **Then** หน้าจอแสดงผลตรวจสอบความสอดคล้องของเล่ม มคอ.2 คู่กับผลวิเคราะห์สุขภาพหลักสูตรในหน้าเดียวกัน
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5 (ปรับปรุง) (ดูฟีเจอร์ 10 — AC-10-05 ฝั่งที่ผลลัพธ์นี้ไหลมาจาก)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 5 (ปรับปรุง) (ดูฟีเจอร์ 10 — AC-10-05 ฝั่งที่ผลลัพธ์นี้ไหลมาจาก) · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]]
 
 #### AC-11-08: ผู้บริหาร export รายงานสรุปต่อหลักสูตรเป็น PDF พร้อมข้อมูลกำกับความน่าเชื่อถือเช่นเดียวกับบนหน้าจอ (เพิ่ม 2026-09-13)
 
@@ -670,7 +670,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้บริหารกดปุ่ม export รายงานสรุปเป็นไฟล์ PDF
 - **Then** ระบบสร้างไฟล์ PDF รายงานสรุปของหลักสูตรนั้นสำเร็จ และเนื้อหาใน PDF มีข้อมูลกำกับความน่าเชื่อถือ (เช่น provenance และเวอร์ชันของวิธีคำนวณ) เช่นเดียวกับที่แสดงบนหน้าจอ
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 11, FR ข้อ 12
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 11, FR ข้อ 12 · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/07-executive-report-preview.html|07-executive-report-preview.html]]
 
 #### AC-11-09: จุดที่สกัดข้อมูลจากเล่มไม่ได้ แสดงเป็น "—" พร้อมร้อยละความครบถ้วน ไม่นับเป็นศูนย์ (เพิ่ม 2026-09-13)
 
@@ -678,7 +678,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบแสดงผลวิเคราะห์ในจุดนั้นบนแดชบอร์ด
 - **Then** ระบบแสดงจุดนั้นเป็น "—" พร้อมระบุร้อยละความครบถ้วนของข้อมูล และไม่นับจุดนั้นเป็น 0 หรือค่ากลางแล้วนำไปเฉลี่ยรวมเข้ากับผลลัพธ์อื่น
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12 · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]]
 
 #### AC-11-10: ทุกผลลัพธ์แสดง provenance อ้างอิงกลับไปยังจุดในเล่ม มคอ.2 และระบุเวอร์ชันชุดกรอบทักษะ/ชุดเกณฑ์ที่ใช้ (เพิ่ม 2026-09-13)
 
@@ -686,7 +686,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ผู้บริหารดูผลลัพธ์นั้น
 - **Then** ทุกผลลัพธ์แสดงที่มา (provenance) อ้างอิงกลับไปยังจุดในเล่ม มคอ.2 ที่เป็นที่มา และระบุว่าใช้ชุดกรอบทักษะ/ชุดเกณฑ์เวอร์ชันใด
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12 · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]]
 
 #### AC-11-11: ทุกวิธีคำนวณมีเวอร์ชันกำกับ ผลวิเคราะห์เดิมยังตีความย้อนหลังได้เมื่อปรับวิธีคำนวณ (เพิ่ม 2026-09-13)
 
@@ -694,7 +694,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบแสดงผลวิเคราะห์แต่ละมิติ
 - **Then** ทุกวิธีคำนวณมีเวอร์ชันกำกับไว้เสมอ ทำให้ผลวิเคราะห์ที่ทำไว้ก่อนหน้ายังตีความย้อนหลังได้เมื่อมีการปรับวิธีคำนวณในภายหลัง
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12 · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]]
 
 #### AC-11-12: ผลลัพธ์ที่ AI ตีความมีตัวบ่งชี้ความมั่นใจและแหล่งอ้างอิงกำกับ น้ำเสียงเป็น "ข้อสังเกต" ไม่ใช่การฟันธง (เพิ่ม 2026-09-13)
 
@@ -702,7 +702,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบแสดงผลลัพธ์นั้นให้ผู้บริหารดู
 - **Then** ผลลัพธ์มีตัวบ่งชี้ระดับความมั่นใจและแหล่งอ้างอิงกำกับ และน้ำเสียงของผลวิเคราะห์เป็น "ข้อสังเกต/หลักฐานประกอบการพิจารณา" ไม่ใช่การฟันธงหรือการอนุมัติ/ไม่อนุมัติหลักสูตรแทนผู้บริหาร
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12 · [[../../01-requirements/01-spec/20260823-03-advisory-chatbot|advisory-chatbot]] FR ข้อ 5, FR ข้อ 6 (หลักการเดียวกัน)
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 12 · [[../../01-requirements/01-spec/20260823-03-advisory-chatbot|advisory-chatbot]] FR ข้อ 5, FR ข้อ 6 (หลักการเดียวกัน) · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/05-executive-program-health.html|05-executive-program-health.html]]
 
 > หมายเหตุ: ยังไม่มีข้อมูลจาก spec ต้นทางเพียงพอที่จะระบุ negative/edge case เพิ่มเติมของฟีเจอร์ 10-11 นอกเหนือจากที่ระบุไว้ข้างต้น (เช่น flow แก้ไข/ลบหลักสูตรที่เพิ่มไว้แล้ว หรือกลไกดึงข้อมูล/คำนวณสถิติแบบอัตโนมัติเต็มรูปแบบหรือกึ่งอัตโนมัติ) — บันทึกไว้ในหัวข้อ "สมมติฐาน/คำถามที่เปิดไว้" ท้ายเอกสาร
 
@@ -718,7 +718,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินสร้างชุดกรอบทักษะใหม่ ตั้งชื่อ และกรอก metadata (ปี / แหล่งที่มา / ขอบเขตที่เกี่ยวข้อง)
 - **Then** ระบบบันทึกชุดกรอบทักษะใหม่พร้อม metadata ที่กรอกไว้สำเร็จ
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/08-admin-skill-framework-sets.html|08-admin-skill-framework-sets.html]]
 
 #### AC-14-02: แอดมินอัปโหลดเอกสารกรอบทักษะ (PDF/Word) เข้าชุดสำเร็จ
 
@@ -726,7 +726,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินอัปโหลดเอกสารกรอบทักษะ (PDF หรือ Word) เข้าชุดนั้น
 - **Then** ระบบรับเอกสารเข้าชุดกรอบทักษะสำเร็จ
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/09-admin-skill-framework-upload.html|09-admin-skill-framework-upload.html]]
 
 #### AC-14-03: AI สกัดเอกสารออกมาเป็นรายการทักษะรายข้อให้แอดมินตรวจสอบ
 
@@ -734,7 +734,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบ (AI) ประมวลผลเอกสารที่อัปโหลด
 - **Then** ระบบสกัดเนื้อหาออกมาเป็นรายการทักษะรายข้อ เข้าสถานะรอตรวจสอบ ให้แอดมินตรวจสอบก่อนนำไปใช้งานจริง
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/09-admin-skill-framework-upload.html|09-admin-skill-framework-upload.html]]
 
 #### AC-14-04: แอดมินอนุมัติ (approve) ทักษะรายข้อสำเร็จ
 
@@ -742,7 +742,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินตรวจสอบและกดอนุมัติ (Approve) ทักษะข้อหนึ่ง
 - **Then** ทักษะข้อนั้นเปลี่ยนสถานะเป็นอนุมัติแล้ว
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/10-admin-skill-review.html|10-admin-skill-review.html]]
 
 #### AC-14-05: แอดมินอนุมัติแบบ bulk ทั้งชุดพร้อมกันสำเร็จ
 
@@ -750,7 +750,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินกดอนุมัติรวดเดียวทั้งชุด (bulk approve)
 - **Then** ทักษะทุกข้อในชุดนั้นเปลี่ยนสถานะเป็นอนุมัติแล้วพร้อมกันในครั้งเดียว
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/10-admin-skill-review.html|10-admin-skill-review.html]]
 
 #### AC-14-06: แอดมินปฏิเสธ (reject) ทักษะข้อหนึ่ง — เฉพาะทักษะที่อนุมัติแล้วเท่านั้นที่ถูกใช้เป็นไม้บรรทัดวิเคราะห์มิติทักษะ
 
@@ -758,7 +758,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** แอดมินกดปฏิเสธ (Reject) ทักษะข้อนั้น
 - **Then** ทักษะข้อนั้นไม่ถูกนำไปใช้เป็นไม้บรรทัดในการวิเคราะห์มิติ "ความสอดคล้องกับทักษะที่ตลาดต้องการ" มีเพียงทักษะที่อนุมัติแล้วเท่านั้นที่ถูกใช้เป็นไม้บรรทัดจริง
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 (ดูฟีเจอร์ 11 — AC-11-06 ฝั่งที่ผลลัพธ์นี้ถูกนำไปใช้) · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 (ดูฟีเจอร์ 11 — AC-11-06 ฝั่งที่ผลลัพธ์นี้ถูกนำไปใช้) · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/10-admin-skill-review.html|10-admin-skill-review.html]]
 
 > หมายเหตุ: ~~spec ต้นทางยังเปิดคำถามไว้ว่าชุดกรอบทักษะทั้งชุดต้องมีสถานะ active/pending และเงื่อนไขการเปิดใช้งานแบบเดียวกับชุดเกณฑ์มาตรฐาน (ฟีเจอร์ 06/07) หรือไม่ — journey ต้นทางตีความเพียงว่าทักษะที่อนุมัติแล้วรายข้อถูกใช้เป็นไม้บรรทัดได้ทันที (ตาม AC-14-04/AC-14-05/AC-14-06) แต่ไม่ฟันธงเรื่องเงื่อนไขระดับทั้งชุด จึงยังไม่เขียน AC ที่สมมติพฤติกรรมสถานะระดับชุดในสถานการณ์นี้ (ดูหัวข้อสมมติฐานท้ายเอกสาร)~~ **(อัปเดต 2026-09-13: ได้รับคำตอบแล้ว — ดู FR ข้อ 9 และ AC-14-07)**
 
@@ -768,7 +768,7 @@ ID ของแต่ละสถานการณ์ใช้รูปแบ�
 - **When** ระบบวิเคราะห์มิติ "ความสอดคล้องกับทักษะที่ตลาดต้องการ" ของหลักสูตรหนึ่ง และแสดงผลบนแดชบอร์ดผู้บริหาร
 - **Then** ระบบนำเฉพาะทักษะที่อนุมัติแล้วไปใช้เป็นไม้บรรทัดวิเคราะห์ได้ทันที โดยไม่ต้องรอให้ทักษะทั้งชุดได้รับการอนุมัติครบก่อน (ต่างจากชุดเกณฑ์มาตรฐานตามฟีเจอร์ 06/07 ที่ต้องอนุมัติครบทั้งชุดก่อนใช้งานได้) และแดชบอร์ดแสดงกำกับไว้ชัดเจนว่าเทียบกับชุดกรอบทักษะเวอร์ชันใด และมีทักษะที่อนุมัติแล้วกี่ข้อ ณ เวลาที่แสดงผลนั้น
 
-อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 (ส่วนสถานะระดับชุด) (ดูฟีเจอร์ 11 — AC-11-06 ฝั่งที่แสดงผล "ครอบคลุม X จาก Y ทักษะ" ซึ่ง Y อ้างอิงจำนวนที่อนุมัติแล้วตามสถานการณ์นี้) · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]]
+อ้างอิงเพิ่มเติม: [[../../01-requirements/01-spec/20260904-04-executive-curriculum-dashboard|executive-curriculum-dashboard]] FR ข้อ 9 (ส่วนสถานะระดับชุด) (ดูฟีเจอร์ 11 — AC-11-06 ฝั่งที่แสดงผล "ครอบคลุม X จาก Y ทักษะ" ซึ่ง Y อ้างอิงจำนวนที่อนุมัติแล้วตามสถานการณ์นี้) · [[../../02-design/01-prototypes/20260913-08-user-journey-admin-manage-skill-framework|user journey แอดมิน จัดการชุดกรอบทักษะอ้างอิง]] · หน้าจอ (ปัจจุบัน v3): [[../../02-design/01-prototypes/20260915-prototype-v3/06-executive-skill-coverage.html|06-executive-skill-coverage.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/08-admin-skill-framework-sets.html|08-admin-skill-framework-sets.html]], [[../../02-design/01-prototypes/20260915-prototype-v3/10-admin-skill-review.html|10-admin-skill-review.html]]
 
 ---
 

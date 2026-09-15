@@ -17,7 +17,7 @@
 - [[20260823-01-user-journey-course-coordinator-upload|ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2]]
 - [[20260823-02-user-journey-course-coordinator-chatbot-advisory|ผู้จัดทำหลักสูตร ขอคำแนะนำระหว่างร่างหลักสูตรผ่านแชทบอท]]
 - [[20260823-03-user-journey-admin-manage-criteria-knowledge-base|แอดมิน จัดการฐานความรู้เกณฑ์มาตรฐานหลักสูตร]]
-- [[20260904-04-user-journey-admin-manage-executive-courses|แอดมิน จัดการรายชื่อหลักสูตรและไฟล์ที่จะเสนอเข้าที่ประชุม]]
+- [[20260904-04-user-journey-admin-manage-executive-courses|แอดมิน จัดการรายชื่อหลักสูตรและผูกเล่ม มคอ.2 ต่อสำนักวิชา]] **(แก้ label ให้ตรงกับชื่อ journey ที่ปรับปรุงแล้ว 2026-09-15)**
 - [[20260904-05-user-journey-executive-view-dashboard|ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร]]
 - [[20260912-06-user-journey-signup-login|ผู้ใช้สมัครสมาชิกและเข้าสู่ระบบ]]
 - [[20260912-07-user-journey-admin-manage-user-roles|แอดมิน จัดการบทบาทผู้ใช้]]
@@ -27,3 +27,4 @@
 
 - [[20260823-prototype-v1/index|Prototype v1 — 2026-08-23]]
 - [[20260904-prototype-v2/index|Prototype v2 — 2026-09-04]]
+- [[20260915-prototype-v3/index|Prototype v3 — 2026-09-15]]

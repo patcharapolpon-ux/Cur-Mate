@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ภาพรวมสำนักวิชา — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-warning: #D97706; --color-warning-bg: #FEF3C7; --color-warning-text: #92400E;
+    --color-error: #DC2626; --color-error-bg: #FEE2E2; --color-error-text: #991B1B;
+    --color-info: #0284C7; --color-info-bg: #EFF6FF;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-text-primary); font-size: 16px; line-height: 1.6; }
+  .page { max-width: 960px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+  .exec-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-32); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); }
+  .exec-zone-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); background: var(--color-info-bg); border: 1px solid var(--color-info); color: var(--color-info); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  h1 { font-size: 28px; font-weight: 600; margin: 0 0 4px; }
+  p.lead { font-size: 16px; color: var(--color-text-secondary); margin: 0 0 var(--space-24); max-width: 720px; }
+  .note { display: flex; gap: var(--space-12); background: var(--color-info-bg); border-radius: var(--radius-medium); padding: var(--space-12) var(--space-16); margin-bottom: var(--space-24); color: var(--color-text-secondary); font-size: 13px; }
+
+  .table-wrap { overflow-x: auto; margin-bottom: var(--space-24); }
+  table.summary-table { width: 100%; border-collapse: collapse; background: var(--color-surface); border-radius: var(--radius-large); overflow: hidden; box-shadow: var(--shadow-subtle); min-width: 760px; }
+  table.summary-table th, table.summary-table td { padding: var(--space-12) var(--space-16); text-align: left; border-bottom: 1px solid var(--color-border); font-size: 13px; vertical-align: top; }
+  table.summary-table th { background: var(--color-bg); font-size: 12px; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+  table.summary-table tbody tr:last-child td { border-bottom: none; }
+  table.summary-table tbody tr:hover { background: #F8FAFC; cursor: pointer; }
+  .course-name-cell { font-size: 14px; font-weight: 600; color: var(--color-text-primary); }
+  .course-name-cell a { color: inherit; text-decoration: none; }
+  .course-name-cell a:hover { color: var(--color-primary); text-decoration: underline; }
+
+  .level-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: var(--radius-small); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .level-badge.good { background: var(--color-success-bg); color: var(--color-success-text); }
+  .level-badge.medium { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .level-badge.na { background: var(--color-bg); color: var(--color-text-disabled); border: 1px dashed var(--color-border-strong); }
+
+  .status-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-small); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .status-chip.warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .status-chip.error { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  .completeness { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-secondary); }
+
+  .empty-state { display: none; text-align: center; padding: var(--space-48) var(--space-24); border: 1.5px dashed var(--color-border-strong); border-radius: var(--radius-large); color: var(--color-text-secondary); margin-bottom: var(--space-24); }
+  .empty-state.show { display: block; }
+  .empty-state-title { font-size: 16px; font-weight: 600; color: var(--color-text-primary); margin: var(--space-12) 0 4px; }
+  .empty-state-body { font-size: 14px; margin: 0; }
+
+  .test-link { display: inline-block; margin-bottom: var(--space-24); font-size: 13px; color: var(--color-text-secondary); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: var(--font-body); padding: 0; }
+  .test-link:hover { color: var(--color-primary); }
+
+  footer.dev-note { margin-top: var(--space-64); padding-top: var(--space-16); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-disabled); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="exec-topbar">
+    <span class="exec-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      มุมมองผู้บริหาร (ดูอย่างเดียว)
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="03-executive-select-school.html">เลือกสำนักวิชา</a>
+      <span> / </span>
+      <span class="current" id="schoolNameCrumb">สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์</span>
+    </nav>
+  </div>
+
+  <h1 id="schoolNameHeading">ภาพรวมหลักสูตรใน สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์</h1>
+  <p class="lead">เห็นหลักสูตรทั้งหมดในสำนักวิชานี้เรียงเทียบกันได้ในหน้าเดียว ก่อนเจาะเข้าไปดูผลวิเคราะห์สุขภาพหลักสูตรรายหลักสูตร (เวอร์ชันนี้ยังไม่ทำภาพรวมข้ามทั้ง 15 สำนักวิชา)</p>
+  <div class="note">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.75" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span>จุดที่ระบบสกัดข้อมูลจากเล่ม มคอ.2 ไม่ได้ แสดงเป็น "—" พร้อมร้อยละความครบถ้วนของข้อมูล ไม่นับเป็นศูนย์ — คลิกแถวเพื่อดูรายละเอียดพร้อมหลักฐานอ้างอิง</span>
+  </div>
+
+  <div class="table-wrap">
+    <table class="summary-table" id="summaryTable">
+      <thead>
+        <tr>
+          <th>หลักสูตร</th>
+          <th>(ก) คุณภาพหลักสูตร</th>
+          <th>(ข) ศักยภาพการสอน</th>
+          <th>(ค) นานาชาติ</th>
+          <th>(ง) ทักษะตลาด</th>
+          <th>ความสอดคล้อง มคอ.2</th>
+          <th>ความครบถ้วนข้อมูล</th>
+        </tr>
+      </thead>
+      <tbody id="summaryBody"></tbody>
+    </table>
+  </div>
+
+  <div id="emptyState" class="empty-state">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-4"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>
+    <p class="empty-state-title">ยังไม่มีหลักสูตรในสำนักวิชานี้</p>
+    <p class="empty-state-body">แอดมินยังไม่ได้เพิ่มหลักสูตรใดไว้ในสำนักวิชานี้ กรุณาเลือกสำนักวิชาอื่น หรือกลับมาตรวจสอบใหม่ภายหลัง</p>
+  </div>
+
+  <button type="button" class="test-link" id="toggleEmptyBtn">ทดสอบสถานะว่างเปล่า (ยังไม่มีหลักสูตรในสำนักวิชานี้)</button>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 11 "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตรตามสำนักวิชา/หลักสูตร" (ขยายขอบเขต 2026-09-13) · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 10 (เพิ่ม 2026-09-13 — หน้าสรุประดับสำนักวิชา ไม่ทำภาพรวมข้าม 15 สำนักวิชา) · user journey "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร" ขั้นตอน "ระบบแสดงหน้าสรุประดับสำนักวิชา - เห็นหลักสูตรทั้งหมดเรียงเทียบกัน" · acceptance-criteria.md AC-11-04 — หน้าจอนี้เป็นชั้นกลางใหม่แทนที่ `20260904-prototype-v2/04-executive-select-course.html` ซึ่งเคยแสดงเพียงรายชื่อหลักสูตรแบบเรียบง่าย
+</footer>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var schoolName = params.get('school') || 'สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์';
+  document.getElementById('schoolNameCrumb').textContent = schoolName;
+  document.getElementById('schoolNameHeading').textContent = 'ภาพรวมหลักสูตรใน ' + schoolName;
+
+  var courses = [
+    {
+      name: "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)",
+      link: "05-executive-program-health.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)",
+      quality: { level: "good", label: "ระดับดี" },
+      teaching: { level: "good", label: "ระดับดี" },
+      intl: { level: "medium", label: "ระดับปานกลาง" },
+      skill: "ครอบคลุม 4 จาก 6",
+      consistency: { chip: "warning", label: "ผ่านแต่พบข้อสังเกต" },
+      completeness: "92% ของจุดที่ต้องสกัด"
+    },
+    {
+      name: "หลักสูตรวิทยาศาสตรบัณฑิต สาขาเทคโนโลยีสารสนเทศ (ปรับปรุง พ.ศ. 2568)",
+      link: "05-executive-program-health.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาเทคโนโลยีสารสนเทศ (ปรับปรุง พ.ศ. 2568)",
+      quality: { level: "medium", label: "ระดับปานกลาง" },
+      teaching: { level: "na", label: "—" },
+      intl: { level: "medium", label: "ระดับควรพัฒนา" },
+      skill: "ครอบคลุม 1 จาก 6",
+      consistency: { chip: "error", label: "ยังไม่ผ่านการตรวจสอบ" },
+      completeness: "58% ของจุดที่ต้องสกัด"
+    }
+  ];
+
+  function levelBadge(item) {
+    return '<span class="level-badge ' + item.level + '">' + item.label + '</span>';
+  }
+
+  function render() {
+    var tbody = document.getElementById('summaryBody');
+    tbody.innerHTML = courses.map(function (c) {
+      return '<tr data-link="' + c.link + '">' +
+        '<td class="course-name-cell"><a href="' + c.link + '">' + c.name + '</a></td>' +
+        '<td>' + levelBadge(c.quality) + '</td>' +
+        '<td>' + levelBadge(c.teaching) + '</td>' +
+        '<td>' + levelBadge(c.intl) + '</td>' +
+        '<td style="font-weight:600;">' + c.skill + ' ทักษะ</td>' +
+        '<td><span class="status-chip ' + c.consistency.chip + '">' + c.consistency.label + '</span></td>' +
+        '<td class="completeness">' + c.completeness + '</td>' +
+        '</tr>';
+    }).join('');
+
+    tbody.querySelectorAll('tr').forEach(function (row) {
+      row.addEventListener('click', function () {
+        window.location.href = row.getAttribute('data-link');
+      });
+    });
+  }
+  render();
+
+  var toggleEmptyBtn = document.getElementById('toggleEmptyBtn');
+  var tableWrap = document.querySelector('.table-wrap');
+  var emptyState = document.getElementById('emptyState');
+  var showingEmpty = false;
+  toggleEmptyBtn.addEventListener('click', function () {
+    showingEmpty = !showingEmpty;
+    tableWrap.style.display = showingEmpty ? 'none' : '';
+    emptyState.classList.toggle('show', showingEmpty);
+    toggleEmptyBtn.textContent = showingEmpty ? 'กลับไปดูรายการหลักสูตรตัวอย่าง' : 'ทดสอบสถานะว่างเปล่า (ยังไม่มีหลักสูตรในสำนักวิชานี้)';
+  });
+</script>
+</body>
+</html>

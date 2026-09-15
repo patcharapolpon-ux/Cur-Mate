@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>จัดการชุดกรอบทักษะอ้างอิง — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8; --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-warning: #D97706; --color-warning-bg: #FEF3C7; --color-warning-text: #92400E;
+    --color-error: #DC2626; --color-error-bg: #FEE2E2; --color-error-text: #991B1B;
+    --color-info: #0284C7; --color-info-bg: #EFF6FF;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-overlay: 0 16px 40px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-text-primary); font-size: 16px; line-height: 1.6; }
+  .page { max-width: 880px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+  .admin-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-32); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); }
+  .admin-zone-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); background: var(--color-bg); border: 1px solid var(--color-border-strong); color: var(--color-text-secondary); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+  .btn-logout { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); color: var(--color-text-secondary); font-size: 12px; font-weight: 600; text-decoration: none; }
+  .btn-logout:hover { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-16); margin-bottom: var(--space-8); flex-wrap: wrap; }
+  h1 { font-size: 28px; font-weight: 600; margin: 0 0 var(--space-8); }
+  p.lead { font-size: 16px; color: var(--color-text-secondary); margin: 0 0 var(--space-16); max-width: 720px; }
+
+  .clarify-note { display: flex; gap: var(--space-12); background: var(--color-info-bg); border-radius: var(--radius-medium); padding: var(--space-16); margin-bottom: var(--space-32); color: var(--color-text-secondary); font-size: 13px; }
+
+  .set-list { display: flex; flex-direction: column; gap: var(--space-16); margin-bottom: var(--space-32); }
+  .set-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-large); padding: var(--space-16); box-shadow: var(--shadow-subtle); }
+  .set-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-16); flex-wrap: wrap; }
+  .set-name { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .set-meta { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 4px; }
+  .set-meta-row { display: flex; flex-wrap: wrap; gap: var(--space-16); font-size: 12px; color: var(--color-text-secondary); margin: var(--space-8) 0; }
+  .set-meta-row span strong { color: var(--color-text-primary); }
+  .approved-count { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--color-success-text); background: var(--color-success-bg); padding: 3px 10px; border-radius: var(--radius-small); }
+  .approved-count.zero { color: var(--color-text-secondary); background: var(--color-bg); border: 1px dashed var(--color-border-strong); }
+
+  .set-actions { display: flex; gap: var(--space-12); margin-top: var(--space-12); flex-wrap: wrap; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-body); font-size: 15px; font-weight: 600; height: 40px; padding: 10px 20px; border-radius: var(--radius-medium); border: none; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 150ms ease-out; }
+  .btn-primary { background: var(--color-primary); color: #FFFFFF; }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-secondary { background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary); }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-destructive { background: transparent; color: var(--color-error); border: 1.5px solid var(--color-error); }
+  .btn-destructive:hover { background: var(--color-error-bg); }
+  .btn-small { font-size: 13px; height: 34px; padding: 6px 14px; }
+
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.45); align-items: center; justify-content: center; padding: var(--space-24); z-index: 40; }
+  .overlay.show { display: flex; }
+  .modal { width: 100%; max-width: 520px; background: var(--color-surface); border-radius: var(--radius-large); box-shadow: var(--shadow-overlay); padding: var(--space-24); }
+  .modal-title { font-size: 18px; font-weight: 700; margin: 0 0 var(--space-8); }
+  .modal-body { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 var(--space-16); }
+  label.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--color-text-primary); margin-bottom: var(--space-8); }
+  .text-input { width: 100%; height: 40px; padding: 0 12px; font-family: var(--font-body); font-size: 15px; border: 1.5px solid var(--color-border-strong); border-radius: var(--radius-medium); margin-bottom: var(--space-16); }
+  .text-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+  .modal-actions { display: flex; justify-content: flex-end; gap: var(--space-12); margin-top: var(--space-8); }
+
+  footer.dev-note { margin-top: var(--space-64); padding-top: var(--space-16); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-disabled); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน"><span class="current">จัดการชุดกรอบทักษะอ้างอิง</span></nav>
+    <a class="btn-logout" href="#" onclick="return false;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      ออกจากระบบ
+    </a>
+  </div>
+
+  <div class="page-head">
+    <div><h1>จัดการชุดกรอบทักษะอ้างอิง</h1></div>
+    <button type="button" class="btn btn-primary" id="createSetBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      สร้างชุดใหม่
+    </button>
+  </div>
+  <p class="lead">ชุดกรอบทักษะเป็นไม้บรรทัดของมิติ "ความสอดคล้องกับทักษะที่ตลาดต้องการ" บนแดชบอร์ดผู้บริหาร ใช้กลไกจัดการเดียวกับฐานความรู้เกณฑ์มาตรฐาน (อัปโหลด → AI สกัด → ตรวจสอบ/อนุมัติ) แต่เป็นคนละไม้บรรทัด</p>
+
+  <div class="clarify-note">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.75" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span><strong>"ชุดกรอบทักษะ" เป็นคนละไม้บรรทัดกับ "ชุดเกณฑ์มาตรฐาน"</strong> — ชุดเกณฑ์มาตรฐานตอบว่า "หลักสูตรต้องมีอะไรตามกฎ" ส่วนชุดกรอบทักษะตอบว่า "ตลาดต้องการทักษะอะไร" นอกจากนี้ ชุดกรอบทักษะ<strong>ไม่มีสถานะ active/pending ระดับทั้งชุด</strong> (ต่างจากชุดเกณฑ์มาตรฐานที่ต้องอนุมัติครบทุกข้อก่อนทั้งชุดจะใช้งานได้) — ทักษะข้อใดที่อนุมัติแล้วถูกใช้เป็นไม้บรรทัดได้ทันทีทีละข้อ</span>
+  </div>
+
+  <div class="set-list" id="setList">
+
+    <div class="set-card" data-set="1">
+      <div class="set-top">
+        <div>
+          <p class="set-name">กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023)</p>
+          <p class="set-meta">เวอร์ชัน 1 · เอกสารต้นฉบับมี 7 ทักษะ</p>
+        </div>
+        <span class="approved-count">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          อนุมัติแล้ว 6 ข้อ
+        </span>
+      </div>
+      <div class="set-meta-row">
+        <span>ปี: <strong>2566</strong></span>
+        <span>แหล่งที่มา: <strong>World Economic Forum — Future of Jobs Report 2023</strong></span>
+        <span>ขอบเขต: <strong>เทคโนโลยีดิจิทัล / วิทยาการคอมพิวเตอร์</strong></span>
+      </div>
+      <div class="set-actions">
+        <a class="btn btn-secondary btn-small" href="10-admin-skill-review.html?set=กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023)">ตรวจสอบ/อนุมัติทักษะ</a>
+        <a class="btn btn-secondary btn-small" href="09-admin-skill-framework-upload.html?set=กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023)">อัปโหลดเอกสารเพิ่ม</a>
+        <button type="button" class="btn btn-destructive btn-small" data-delete-set="1">ลบชุดนี้</button>
+      </div>
+    </div>
+
+    <div class="set-card" data-set="2">
+      <div class="set-top">
+        <div>
+          <p class="set-name">กรอบทักษะที่ตลาดต้องการ (ไทยมีงานทำ 2568)</p>
+          <p class="set-meta">เวอร์ชัน 1 · เอกสารต้นฉบับมี 5 ทักษะ</p>
+        </div>
+        <span class="approved-count zero">ยังไม่มีทักษะที่อนุมัติ</span>
+      </div>
+      <div class="set-meta-row">
+        <span>ปี: <strong>2568</strong></span>
+        <span>แหล่งที่มา: <strong>กรมการจัดหางาน — ไทยมีงานทำ</strong></span>
+        <span>ขอบเขต: <strong>ทั่วไปทุกสาขา</strong></span>
+      </div>
+      <div class="set-actions">
+        <a class="btn btn-secondary btn-small" href="10-admin-skill-review.html?set=กรอบทักษะที่ตลาดต้องการ (ไทยมีงานทำ 2568)">ตรวจสอบ/อนุมัติทักษะ</a>
+        <a class="btn btn-secondary btn-small" href="09-admin-skill-framework-upload.html?set=กรอบทักษะที่ตลาดต้องการ (ไทยมีงานทำ 2568)">อัปโหลดเอกสารเพิ่ม</a>
+        <button type="button" class="btn btn-destructive btn-small" data-delete-set="2">ลบชุดนี้</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="overlay" id="createOverlay">
+  <div class="modal">
+    <p class="modal-title">สร้างชุดกรอบทักษะใหม่</p>
+    <p class="modal-body">กรอกชื่อและ metadata กำกับ (ปี/แหล่งที่มา/ขอบเขต) หลังบันทึกจะไปยังหน้าอัปโหลดเอกสารกรอบทักษะเข้าชุดนี้ต่อทันที</p>
+    <label class="field-label" for="setNameInput">ชื่อชุดกรอบทักษะ</label>
+    <input id="setNameInput" class="text-input" type="text" placeholder="เช่น กรอบทักษะดิจิทัลสำหรับอุตสาหกรรม 5.0">
+    <label class="field-label" for="setYearInput">ปีที่เผยแพร่/บังคับใช้</label>
+    <input id="setYearInput" class="text-input" type="text" placeholder="เช่น 2568">
+    <label class="field-label" for="setSourceInput">แหล่งที่มา</label>
+    <input id="setSourceInput" class="text-input" type="text" placeholder="เช่น World Economic Forum">
+    <label class="field-label" for="setScopeInput">ขอบเขต/สาขาที่เกี่ยวข้อง</label>
+    <input id="setScopeInput" class="text-input" type="text" placeholder="เช่น วิศวกรรมและเทคโนโลยี">
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary btn-small" id="cancelCreateBtn">ยกเลิก</button>
+      <button type="button" class="btn btn-primary btn-small" id="confirmCreateBtn" disabled>บันทึกและไปอัปโหลดเอกสาร</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="deleteOverlay">
+  <div class="modal">
+    <p class="modal-title">ยืนยันการลบชุดกรอบทักษะทั้งชุด</p>
+    <p class="modal-body" id="deleteBody">การลบจะเป็นแบบ cascade คือลบทักษะย่อยทั้งหมดและประวัติการตรวจสอบ/อนุมัติของชุดนี้ไปด้วย ไม่สามารถกู้คืนได้</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary btn-small" id="cancelDeleteBtn">ยกเลิก</button>
+      <button type="button" class="btn btn-destructive btn-small" id="confirmDeleteBtn">ลบชุดนี้ถาวร</button>
+    </div>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 14 "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 9 (metadata ปี/แหล่งที่มา/ขอบเขต, ไม่มีสถานะ active/pending ระดับทั้งชุด, ลบแบบ cascade) · user journey "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" ขั้นตอน "สร้างและตั้งชื่อชุดกรอบทักษะใหม่", "ยืนยันการลบชุดกรอบทักษะทั้งชุดหรือไม่", "ลบชุดกรอบทักษะแบบ cascade" · acceptance-criteria.md AC-14-01, AC-14-07
+</footer>
+
+<script>
+  var createOverlay = document.getElementById('createOverlay');
+  var createSetBtn = document.getElementById('createSetBtn');
+  var cancelCreateBtn = document.getElementById('cancelCreateBtn');
+  var confirmCreateBtn = document.getElementById('confirmCreateBtn');
+  var setNameInput = document.getElementById('setNameInput');
+
+  createSetBtn.addEventListener('click', function () { createOverlay.classList.add('show'); });
+  cancelCreateBtn.addEventListener('click', function () { createOverlay.classList.remove('show'); });
+  setNameInput.addEventListener('input', function () {
+    confirmCreateBtn.disabled = setNameInput.value.trim().length === 0;
+  });
+  confirmCreateBtn.addEventListener('click', function () {
+    if (!confirmCreateBtn.disabled) {
+      window.location.href = '09-admin-skill-framework-upload.html?set=' + encodeURIComponent(setNameInput.value.trim());
+    }
+  });
+
+  var deleteOverlay = document.getElementById('deleteOverlay');
+  var deleteBody = document.getElementById('deleteBody');
+  var cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  var pendingDeleteCard = null;
+
+  document.getElementById('setList').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-delete-set]');
+    if (!btn) { return; }
+    pendingDeleteCard = btn.closest('.set-card');
+    var name = pendingDeleteCard.querySelector('.set-name').textContent;
+    deleteBody.textContent = 'จะลบชุดกรอบทักษะ "' + name + '" ทั้งชุดแบบ cascade (ลบทักษะย่อย + ประวัติการตรวจสอบ/อนุมัติทั้งหมด) ไม่สามารถกู้คืนได้';
+    deleteOverlay.classList.add('show');
+  });
+  cancelDeleteBtn.addEventListener('click', function () { deleteOverlay.classList.remove('show'); pendingDeleteCard = null; });
+  confirmDeleteBtn.addEventListener('click', function () {
+    if (pendingDeleteCard) { pendingDeleteCard.remove(); }
+    deleteOverlay.classList.remove('show');
+  });
+</script>
+</body>
+</html>

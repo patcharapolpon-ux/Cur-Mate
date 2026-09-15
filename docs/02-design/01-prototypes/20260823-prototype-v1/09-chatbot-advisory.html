@@ -53,6 +53,7 @@
     --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
     --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
     --shadow-large: 0 8px 24px rgba(0,0,0,0.10);
+    --shadow-overlay: 0 16px 40px rgba(0,0,0,0.12);
   }
 
   * { box-sizing: border-box; }
@@ -136,6 +137,148 @@
     font-size: 12px;
     font-weight: 600;
   }
+  .view-kb-scope-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    background: #FFFFFF;
+    border: 1px solid var(--color-ai-accent);
+    color: var(--color-ai-accent);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 150ms ease-out;
+  }
+  .view-kb-scope-btn:hover { background: var(--color-ai-accent-bg); }
+
+  /* มุมมองดูฐานความรู้แบบอ่านอย่างเดียว (ฟีเจอร์ 15) — ซ้อนทับเป็นโมดัลในหน้าเดิม เพื่อคงข้อความสนทนาไว้เมื่อปิด */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-24);
+    z-index: 50;
+  }
+  .modal-backdrop.show { display: flex; }
+  .kb-dialog {
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-overlay);
+    padding: var(--space-24);
+    text-align: left;
+  }
+  .kb-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-12);
+    margin-bottom: var(--space-8);
+  }
+  .kb-dialog-header h2 { font-size: 20px; font-weight: 600; margin: 0; color: var(--color-text-primary); }
+  .modal-close-x {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .modal-close-x:hover { color: var(--color-text-primary); }
+  .kb-readonly-note {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    background: var(--color-info-bg);
+    border-radius: var(--radius-medium);
+    padding: var(--space-12) var(--space-16);
+    margin: 0 0 20px;
+  }
+  .kb-group { margin-bottom: var(--space-24); }
+  .kb-group:last-child { margin-bottom: 0; }
+  .kb-group-header { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-8); margin-bottom: 4px; }
+  .kb-group-title { font-size: 18px; font-weight: 600; margin: 0; color: var(--color-text-primary); }
+  .kb-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: var(--space-16) 0 var(--space-8);
+  }
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .kb-doc-card {
+    position: relative;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+  .kb-doc-name { font-size: 15px; font-weight: 600; color: var(--color-text-primary); margin: 0 0 4px; padding-right: 140px; }
+  .kb-doc-meta { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .kb-ocr-badge {
+    position: absolute;
+    top: var(--space-12);
+    right: var(--space-12);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--radius-small);
+    background: var(--color-info-bg);
+    color: var(--color-info);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .kb-rule-card {
+    background: #F7FEF9;
+    border: 1px solid var(--color-success);
+    border-left: 3px solid var(--color-success);
+    border-radius: var(--radius-large);
+    padding: var(--space-12) var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+  .kb-rule-top { display: flex; align-items: center; gap: var(--space-8); margin-bottom: 6px; }
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--radius-small);
+    background: var(--color-ai-accent-bg);
+    color: var(--color-ai-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .approved-label { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--color-success-text); }
+  .kb-rule-text { font-size: 14px; color: var(--color-text-secondary); margin: 0; }
+  .kb-empty-note { font-size: 13px; color: var(--color-text-disabled); font-style: italic; margin: 0 0 var(--space-8); }
+  .kb-dialog .modal-actions { display: flex; justify-content: flex-end; margin-top: var(--space-16); }
 
   .chat-window {
     flex: 1;
@@ -342,6 +485,10 @@
     <span class="pinned-label">กำลังอ้างอิง</span>
     <span class="pinned-chip">เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565</span>
     <span class="pinned-chip">เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565</span>
+    <button type="button" class="view-kb-scope-btn" id="viewKbScopeBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      ดูขอบเขต/รายการเอกสารของชุดเกณฑ์ที่เลือกไว้
+    </button>
   </div>
 
   <div class="chat-window" id="chatWindow">
@@ -398,11 +545,93 @@
   </form>
 </div>
 
+<div class="modal-backdrop" id="kbBackdrop">
+  <div class="kb-dialog" role="dialog" aria-modal="true" aria-labelledby="kbTitle">
+    <div class="kb-dialog-header">
+      <h2 id="kbTitle">ดูขอบเขต/รายการเอกสารของชุดเกณฑ์ที่เลือกไว้ (อ่านอย่างเดียว)</h2>
+      <button type="button" class="modal-close-x" id="kbCloseX" aria-label="ปิด">×</button>
+    </div>
+    <p class="kb-readonly-note">มุมมองนี้เป็นการแสดงผลแบบอ่านอย่างเดียว ไม่มีสิทธิ์แก้ไข เพิ่ม หรือลบเอกสาร/กฎเกณฑ์ใดๆ</p>
+    <div id="kbBody" class="kb-body"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" id="kbCloseBtn">ปิด</button>
+    </div>
+  </div>
+</div>
+
 <footer class="dev-note">
-  ที่มา: feature-list.md ฟีเจอร์ 09 "แชทบอทให้คำแนะนำระหว่างจัดทำหลักสูตร (รวม Q&A เกณฑ์มาตรฐาน)" · spec docs/01-requirements/01-spec/20260823-03-advisory-chatbot.md FR ข้อ 1, 3, 5, 6, 7, 8 · user journey "ผู้จัดทำหลักสูตร ขอคำแนะนำระหว่างร่างหลักสูตรผ่านแชทบอท" ทุกโหนดตั้งแต่ "ต้องการถามคำถามทั่วไปหรือส่งเนื้อหาร่างขอคำแนะนำ" ถึง "นำคำแนะนำไปปรับปรุงร่างหลักสูตรต่อ"
+  ที่มา: feature-list.md ฟีเจอร์ 09 "แชทบอทให้คำแนะนำระหว่างจัดทำหลักสูตร (รวม Q&A เกณฑ์มาตรฐาน)" · spec docs/01-requirements/01-spec/20260823-03-advisory-chatbot.md FR ข้อ 1, 3, 5, 6, 7, 8 · user journey "ผู้จัดทำหลักสูตร ขอคำแนะนำระหว่างร่างหลักสูตรผ่านแชทบอท" ทุกโหนดตั้งแต่ "ต้องการถามคำถามทั่วไปหรือส่งเนื้อหาร่างขอคำแนะนำ" ถึง "นำคำแนะนำไปปรับปรุงร่างหลักสูตรต่อ" — (อัปเดต 2026-09-15) เพิ่มปุ่ม "ดูขอบเขต/รายการเอกสารของชุดเกณฑ์ที่เลือกไว้" ในแถบ "กำลังอ้างอิง" ที่ปักหมุดอยู่ด้านบนตลอดเวลา เข้าถึงได้ทุกเมื่อระหว่างสนทนา (โหนด B1 ของ journey) เปิดมุมมองฐานความรู้แบบอ่านอย่างเดียวซ้อนทับในหน้าเดิม (modal overlay) แยกกลุ่มตามชุดเกณฑ์ที่ปักหมุดไว้ทั้ง 2 ชุด ตามฟีเจอร์ 15 "ผู้ใช้งานทั่วไป ดูฐานความรู้แบบอ่านอย่างเดียว" spec docs/01-requirements/01-spec/20260823-03-advisory-chatbot.md FR ข้อ 11 · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 12 · acceptance-criteria.md AC-15-01, AC-15-02, AC-15-03 · test-cases/15-user-view-knowledge-base.md TC-15-002, TC-15-003, TC-15-004 — ปิดมุมมองนี้แล้วข้อความสนทนาเดิมไม่หายไปเพราะเป็นการซ้อนทับในหน้าเดิม ไม่ใช่การนำทางออกจากหน้า ดูเวอร์ชันสาธิตแบบเต็มหน้าของมุมมองเดียวกันนี้ได้ที่ `13-knowledge-base-view.html`
 </footer>
 
 <script>
+  // ข้อมูลฐานความรู้จำลอง (mock) สำหรับมุมมองดูขอบเขต/รายการเอกสาร/กฎเกณฑ์แบบอ่านอย่างเดียว (ฟีเจอร์ 15)
+  var kbData = {
+    "เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565": {
+      status: "เปิดใช้งาน (active)",
+      documents: [
+        { name: "ประกาศกระทรวงการอุดมศึกษาฯ เรื่อง เกณฑ์มาตรฐานหลักสูตรระดับปริญญาตรี พ.ศ. 2565", type: "ประกาศกระทรวง", pages: "1-15", scanned: false },
+        { name: "ภาคผนวก ก มาตรฐานผลการเรียนรู้ระดับปริญญาตรี", type: "ภาคผนวก", pages: "16-22", scanned: true }
+      ],
+      rules: ["หลักสูตรปริญญาตรีต้องมีหน่วยกิตรวมไม่น้อยกว่า 120 หน่วยกิต"]
+    },
+    "เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565": {
+      status: "เปิดใช้งาน (active)",
+      documents: [
+        { name: "เกณฑ์คุณวุฒิระดับปริญญาตรี สาขาวิศวกรรมคอมพิวเตอร์ พ.ศ. 2565", type: "เกณฑ์คุณวุฒิ", pages: "1-30", scanned: false }
+      ],
+      rules: ["หลักสูตรต้องมีรายวิชาโครงงานทางวิศวกรรมคอมพิวเตอร์ไม่น้อยกว่า 3 หน่วยกิต"]
+    }
+  };
+
+  var kbSuccessIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+  var kbScanIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a2 2 0 012-2h2M4 17v2a2 2 0 002 2h2M20 7V5a2 2 0 00-2-2h-2M20 17v2a2 2 0 01-2 2h-2M7 12h10"/></svg>';
+
+  function renderKbGroup(name) {
+    var d = kbData[name];
+    if (!d) { return '<div class="kb-group"><p class="kb-empty-note">ไม่พบข้อมูลของชุดเกณฑ์นี้</p></div>'; }
+    var docsHtml = d.documents.map(function (doc) {
+      var badge = doc.scanned ? '<span class="kb-ocr-badge">' + kbScanIcon + 'แปลงจากภาพสแกน (OCR)</span>' : '';
+      return '<div class="kb-doc-card">' + badge +
+        '<p class="kb-doc-name">' + doc.name + '</p>' +
+        '<p class="kb-doc-meta">ประเภท: ' + doc.type + ' · หน้า ' + doc.pages + '</p>' +
+      '</div>';
+    }).join('');
+    var rulesHtml = d.rules.length ? d.rules.map(function (r) {
+      return '<div class="kb-rule-card">' +
+        '<div class="kb-rule-top"><span class="ai-badge">AI SUGGESTED</span><span class="approved-label">' + kbSuccessIcon + 'อนุมัติแล้ว</span></div>' +
+        '<p class="kb-rule-text">' + r + '</p>' +
+      '</div>';
+    }).join('') : '<p class="kb-empty-note">ยังไม่มีกฎเกณฑ์ที่อนุมัติแล้วในชุดนี้</p>';
+
+    return '<div class="kb-group">' +
+      '<div class="kb-group-header"><h3 class="kb-group-title">' + name + '</h3><span class="status-chip success">' + kbSuccessIcon + d.status + '</span></div>' +
+      '<p class="kb-section-label">เอกสารประกอบ (' + d.documents.length + ' ไฟล์)</p>' +
+      docsHtml +
+      '<p class="kb-section-label">กฎเกณฑ์ที่อนุมัติแล้ว</p>' +
+      rulesHtml +
+    '</div>';
+  }
+
+  var kbBackdrop = document.getElementById('kbBackdrop');
+  var kbBody = document.getElementById('kbBody');
+  var kbCloseX = document.getElementById('kbCloseX');
+  var kbCloseBtn = document.getElementById('kbCloseBtn');
+  var viewKbScopeBtn = document.getElementById('viewKbScopeBtn');
+
+  function openKbModal() {
+    kbBody.innerHTML = Object.keys(kbData).map(renderKbGroup).join('');
+    kbBackdrop.classList.add('show');
+  }
+  function closeKbModal() {
+    kbBackdrop.classList.remove('show');
+  }
+  viewKbScopeBtn.addEventListener('click', openKbModal);
+  kbCloseX.addEventListener('click', closeKbModal);
+  kbCloseBtn.addEventListener('click', closeKbModal);
+  kbBackdrop.addEventListener('click', function (e) {
+    if (e.target === kbBackdrop) { closeKbModal(); }
+  });
+
   var chatWindow = document.getElementById('chatWindow');
   var composerForm = document.getElementById('composerForm');
   var composerInput = document.getElementById('composerInput');

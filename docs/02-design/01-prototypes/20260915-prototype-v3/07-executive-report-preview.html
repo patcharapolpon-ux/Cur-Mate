@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตัวอย่างรายงานสรุป PDF — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8;
+    --color-ai-accent: #7C3AED;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-warning: #D97706; --color-warning-bg: #FEF3C7; --color-warning-text: #92400E;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: #64748B; color: var(--color-text-primary); font-size: 14px; line-height: 1.55; }
+
+  .toolbar { position: sticky; top: 0; z-index: 10; background: var(--color-text-primary); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: var(--space-12) var(--space-24); flex-wrap: wrap; gap: var(--space-12); }
+  .toolbar-title { font-size: 14px; font-weight: 600; }
+  .toolbar-actions { display: flex; gap: var(--space-12); }
+  .btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 13px; font-weight: 600; height: 34px; padding: 6px 16px; border-radius: var(--radius-medium); border: none; cursor: pointer; text-decoration: none; }
+  .btn-primary { background: var(--color-primary); color: #fff; }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-ghost { background: transparent; color: #E2E8F0; border: 1px solid #475569; }
+  .btn-ghost:hover { background: #1e293b; }
+
+  .a4-wrap { display: flex; justify-content: center; padding: var(--space-32) var(--space-16); }
+  .a4-sheet { width: 210mm; min-height: 297mm; background: var(--color-surface); box-shadow: 0 4px 24px rgba(0,0,0,0.25); padding: 18mm 16mm; }
+
+  .report-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--color-primary); padding-bottom: var(--space-12); margin-bottom: var(--space-16); }
+  .report-wordmark { font-weight: 700; color: var(--color-primary); font-size: 18px; }
+  .report-meta { text-align: right; font-size: 11px; color: var(--color-text-secondary); }
+
+  h1.report-title { font-size: 18px; font-weight: 700; margin: 0 0 2px; }
+  p.report-sub { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-16); font-family: var(--font-mono); }
+
+  h2.report-section { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 4px; margin: var(--space-24) 0 var(--space-12); }
+
+  table.dim-table { width: 100%; border-collapse: collapse; margin-bottom: var(--space-16); }
+  table.dim-table th, table.dim-table td { text-align: left; padding: 6px 8px; font-size: 12px; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+  table.dim-table th { background: var(--color-bg); font-weight: 700; }
+  .level-badge { display: inline-block; padding: 2px 8px; border-radius: var(--radius-small); font-size: 11px; font-weight: 700; }
+  .level-badge.good { background: var(--color-success-bg); color: var(--color-success-text); }
+  .level-badge.medium { background: var(--color-warning-bg); color: var(--color-warning-text); }
+
+  .stat-row { display: flex; gap: var(--space-24); margin-bottom: var(--space-16); flex-wrap: wrap; }
+  .stat-mini { font-size: 12px; }
+  .stat-mini strong { display: block; font-size: 16px; }
+
+  .prov-box { background: var(--color-bg); border-left: 3px solid var(--color-ai-accent); padding: var(--space-12); font-size: 11px; color: var(--color-text-secondary); margin-bottom: var(--space-16); }
+  .prov-box dt { font-weight: 700; color: var(--color-text-primary); }
+  .prov-box dd { margin: 0 0 6px; }
+
+  .tone-note { font-size: 11px; font-weight: 600; color: var(--color-ai-accent); margin-top: var(--space-8); }
+
+  .report-footer { margin-top: var(--space-32); padding-top: var(--space-12); border-top: 1px solid var(--color-border); font-size: 10px; color: var(--color-text-disabled); }
+
+  footer.dev-note { max-width: 880px; margin: var(--space-24) auto; padding: 0 var(--space-16); font-size: 12px; color: #cbd5e1; line-height: 1.6; text-align: center; }
+
+  @media print {
+    body { background: #fff; }
+    .toolbar, footer.dev-note { display: none !important; }
+    .a4-wrap { padding: 0; }
+    .a4-sheet { box-shadow: none; width: auto; min-height: auto; padding: 0; margin: 0; }
+    @page { size: A4; margin: 16mm; }
+  }
+  @media (max-width: 860px) {
+    .a4-sheet { width: 100%; padding: 6mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="toolbar-title">ตัวอย่างรายงานสรุป PDF (A4) — สำหรับพิมพ์/แนบเข้าวาระการประชุม</span>
+  <div class="toolbar-actions">
+    <a class="btn btn-ghost" href="05-executive-program-health.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)">← กลับไปหน้าแดชบอร์ด</a>
+    <button type="button" class="btn btn-primary" id="printBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      สั่งพิมพ์ / บันทึกเป็น PDF
+    </button>
+  </div>
+</div>
+
+<div class="a4-wrap">
+  <div class="a4-sheet">
+    <div class="report-head">
+      <span class="report-wordmark">Curmate</span>
+      <div class="report-meta">
+        รายงานสรุปสำหรับผู้บริหาร<br>
+        ออกรายงานเมื่อ 15/09/2569
+      </div>
+    </div>
+
+    <h1 class="report-title" id="courseHeading">หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)</h1>
+    <p class="report-sub">สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์ · เล่ม curriculum-comsci-2569.pdf</p>
+
+    <h2 class="report-section">ผลวิเคราะห์สุขภาพหลักสูตร (Program Health)</h2>
+    <table class="dim-table">
+      <thead><tr><th style="width:26%;">มิติ</th><th style="width:18%;">ระดับ</th><th>หลักฐาน/ที่มา</th></tr></thead>
+      <tbody>
+        <tr><td>(ก) คุณภาพหลักสูตร</td><td><span class="level-badge good">ระดับดี</span></td><td>หมวดที่ 2 ข้อ 2.1, หมวดที่ 7 — ความครบถ้วนข้อมูล 95%</td></tr>
+        <tr><td>(ข) ศักยภาพการจัดการเรียนการสอน</td><td><span class="level-badge medium">ระดับปานกลาง</span></td><td>หมวดที่ 3 ข้อ 3.2 ตารางอาจารย์ — ความครบถ้วนข้อมูล 100%</td></tr>
+        <tr><td>(ค) ความเป็นนานาชาติ</td><td><span class="level-badge medium">ระดับปานกลาง</span></td><td>หมวดที่ 2 ข้อ 2.4, ภาคผนวก ง — ความครบถ้วนข้อมูล 80% (บางจุดสกัดไม่ได้ แสดงเป็น "—")</td></tr>
+        <tr><td>(ง) ความสอดคล้องกับทักษะที่ตลาดต้องการ</td><td><span class="level-badge good">ครอบคลุม 4/6</span></td><td>กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023) เวอร์ชัน 1 · อนุมัติแล้ว 6/7 ทักษะ</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="report-section">ผลตรวจสอบความสอดคล้องของเล่ม มคอ.2</h2>
+    <p style="font-size:12px;">สถานะ: <strong>ผ่านการตรวจสอบ — พบข้อสังเกต 2 จุด</strong> (หน่วยกิตวิชาโครงงานอาจต่ำกว่าเกณฑ์เฉพาะสาขา, คำอธิบายรายวิชา 04204512 ระบุ CLO ไม่ครบ)</p>
+
+    <h2 class="report-section">สถิติภาพรวมเชิงปริมาณ</h2>
+    <div class="stat-row">
+      <div class="stat-mini"><strong>132</strong>หน่วยกิตรวม</div>
+      <div class="stat-mini"><strong>30/96/6</strong>ทั่วไป/เฉพาะ/เลือกเสรี (นก.)</div>
+      <div class="stat-mini"><strong>8</strong>หลักสูตรในสำนักวิชานี้</div>
+    </div>
+
+    <h2 class="report-section">ความน่าเชื่อถือของผลวิเคราะห์</h2>
+    <dl class="prov-box">
+      <dt>วิธีคำนวณ</dt><dd>Curmate Program Health Method เวอร์ชัน 1.0 — ออกแบบตัวชี้วัด/เกณฑ์ตัดช่วงเอง ไม่ยืมสูตรจากระบบภูมิทัศน์หลักสูตร มฟล.</dd>
+      <dt>Provenance</dt><dd>ทุกผลลัพธ์อ้างอิงกลับไปยังหมวด/ข้อในเล่ม มคอ.2 ที่เป็นที่มา ดูรายละเอียดในตารางด้านบน</dd>
+      <dt>จุดที่สกัดข้อมูลไม่ได้</dt><dd>แสดงเป็น "—" พร้อมร้อยละความครบถ้วน ไม่นับเป็นศูนย์ (ตัวอย่าง: มิติ (ค) ความครบถ้วน 80%)</dd>
+    </dl>
+    <p class="tone-note">รายงานนี้เป็นข้อสังเกต/หลักฐานประกอบการพิจารณาเท่านั้น ไม่ใช่การฟันธงหรือการอนุมัติ/ไม่อนุมัติหลักสูตรแทนผู้บริหาร</p>
+
+    <div class="report-footer">
+      รายงานสรุปเรียบง่ายต่อหลักสูตร (ไม่ใช่ชุดเอกสารเสนอสภาแบบเต็มรูปแบบ) — สร้างโดยระบบ Curmate จากข้อมูล mock ตัวอย่างเพื่อสาธิต UI · ที่มา: docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 11, FR ข้อ 12
+    </div>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 11 · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 11 (เพิ่ม 2026-09-13 — export รายงานสรุปต่อหลักสูตรเป็น PDF รูปแบบเรียบง่าย ไม่ใช่ชุดเอกสารเสนอสภาเต็มรูปแบบ), FR ข้อ 12 (ข้อมูลกำกับความน่าเชื่อถือต้องปรากฏใน PDF เช่นเดียวกับบนหน้าจอ) · user journey "ผู้บริหาร ดูแดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร" ขั้นตอน "กดปุ่ม export รายงานสรุปต่อหลักสูตรเป็น PDF" · acceptance-criteria.md AC-11-08 — ใช้ `window.print()` และ `@media print` จริงในหน้านี้ ไม่ใช่ toast จำลองหรือโมดัลเลือกส่วนที่จะ export ตามที่ผู้ใช้ยืนยันในรอบ prototype v3 นี้
+</footer>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var courseName = params.get('course');
+  if (courseName) {
+    document.getElementById('courseHeading').textContent = courseName;
+  }
+  document.getElementById('printBtn').addEventListener('click', function () {
+    window.print();
+  });
+</script>
+</body>
+</html>

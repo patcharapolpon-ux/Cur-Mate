@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ความครอบคลุมทักษะที่ตลาดต้องการ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8;
+    --color-ai-accent: #7C3AED; --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-warning: #D97706; --color-warning-bg: #FEF3C7; --color-warning-text: #92400E;
+    --color-error: #DC2626; --color-error-bg: #FEE2E2; --color-error-text: #991B1B;
+    --color-info: #0284C7; --color-info-bg: #EFF6FF;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-text-primary); font-size: 16px; line-height: 1.6; }
+  .page { max-width: 880px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+  .exec-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-32); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); }
+  .exec-zone-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); background: var(--color-info-bg); border: 1px solid var(--color-info); color: var(--color-info); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 4px; }
+  p.course-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 var(--space-16); font-family: var(--font-mono); }
+
+  .coverage-banner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-16); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-large); padding: var(--space-24); box-shadow: var(--shadow-subtle); margin-bottom: var(--space-16); }
+  .coverage-value { font-size: 32px; font-weight: 700; color: var(--color-text-primary); margin: 0; }
+  .coverage-meta { font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 0; }
+
+  .skill-list { display: flex; flex-direction: column; gap: var(--space-16); margin-bottom: var(--space-24); }
+  .skill-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-large); padding: var(--space-16); box-shadow: var(--shadow-subtle); }
+  .skill-card.pending { opacity: 0.7; border-style: dashed; }
+  .skill-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-12); margin-bottom: var(--space-8); }
+  .skill-name { font-size: 15px; font-weight: 600; margin: 0; }
+
+  .level-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: var(--radius-small); font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .level-badge.clear { background: var(--color-success-bg); color: var(--color-success-text); }
+  .level-badge.partial { background: var(--color-warning-bg); color: var(--color-warning-text); }
+  .level-badge.none { background: var(--color-bg); color: var(--color-text-disabled); border: 1px dashed var(--color-border-strong); }
+  .level-badge.pending-badge { background: var(--color-ai-accent-bg); color: var(--color-ai-accent); }
+
+  .evidence-toggle { background: none; border: none; color: var(--color-primary); font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 4px; }
+  .evidence-toggle:hover { text-decoration: underline; }
+  .evidence-list { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: none; flex-direction: column; gap: 6px; }
+  .evidence-list.show { display: flex; }
+  .evidence-list li { font-size: 13px; color: var(--color-text-secondary); border-left: 3px solid var(--color-ai-accent); background: var(--color-bg); padding: 6px 10px; border-radius: 0 var(--radius-small) var(--radius-small) 0; }
+  .evidence-list li strong { color: var(--color-text-primary); font-family: var(--font-mono); font-weight: 600; }
+
+  .no-evidence { font-size: 13px; color: var(--color-text-disabled); margin: var(--space-8) 0 0; }
+
+  .back-row { margin-bottom: var(--space-16); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary); border-radius: var(--radius-medium); height: 40px; padding: 10px 20px; font-size: 15px; font-weight: 600; text-decoration: none; }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+
+  footer.dev-note { margin-top: var(--space-64); padding-top: var(--space-16); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-disabled); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="exec-topbar">
+    <span class="exec-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      มุมมองผู้บริหาร (ดูอย่างเดียว)
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="03-executive-select-school.html">เลือกสำนักวิชา</a>
+      <span> / </span>
+      <a href="04-executive-school-summary.html?school=สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์">ภาพรวมสำนักวิชา</a>
+      <span> / </span>
+      <a href="05-executive-program-health.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)">ผลวิเคราะห์สุขภาพหลักสูตร</a>
+      <span> / </span>
+      <span class="current">ความครอบคลุมทักษะ</span>
+    </nav>
+  </div>
+
+  <h1 id="courseHeading">หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)</h1>
+  <p class="course-sub">มิติ (ง) ความสอดคล้องกับทักษะที่ตลาดต้องการ</p>
+
+  <div class="coverage-banner">
+    <div>
+      <p class="coverage-value">ครอบคลุม 4 จาก 6 ทักษะ</p>
+      <p class="coverage-meta">เทียบกับชุดกรอบทักษะ: กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023) เวอร์ชัน 1 — มีทักษะที่อนุมัติแล้ว 6 ข้อ (จากทั้งหมด 7 ข้อในเอกสารต้นฉบับ อีก 1 ข้อยังรอตรวจสอบ ไม่ถูกนับรวมใน Y จนกว่าจะอนุมัติ)</p>
+    </div>
+    <div class="back-row">
+      <a class="btn-secondary" href="05-executive-program-health.html?course=หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิทยาการคอมพิวเตอร์ (ปรับปรุง พ.ศ. 2569)">← กลับไปหน้าผลวิเคราะห์สุขภาพหลักสูตร</a>
+    </div>
+  </div>
+
+  <div class="skill-list" id="skillList">
+
+    <div class="skill-card">
+      <div class="skill-top">
+        <p class="skill-name">การคิดวิเคราะห์และการแก้ปัญหาเชิงซับซ้อน (Analytical thinking &amp; complex problem-solving)</p>
+        <span class="level-badge clear">ครอบคลุมชัดเจน</span>
+      </div>
+      <button type="button" class="evidence-toggle" data-toggle>ดูหลักฐานอ้างอิงรายวิชา ▾</button>
+      <ul class="evidence-list">
+        <li><strong>04204451</strong> ปัญญาประดิษฐ์เบื้องต้น — CLO ข้อ 3: "วิเคราะห์และออกแบบแนวทางแก้ปัญหาด้วยเทคนิคปัญญาประดิษฐ์"</li>
+      </ul>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-top">
+        <p class="skill-name">ความคิดสร้างสรรค์ (Creative thinking)</p>
+        <span class="level-badge partial">ครอบคลุมบางส่วน</span>
+      </div>
+      <button type="button" class="evidence-toggle" data-toggle>ดูหลักฐานอ้างอิงรายวิชา ▾</button>
+      <ul class="evidence-list">
+        <li><strong>04204310</strong> วิศวกรรมซอฟต์แวร์ — คำอธิบายรายวิชา: "ฝึกออกแบบแนวทางแก้ปัญหาซอฟต์แวร์อย่างสร้างสรรค์" (กล่าวถึงเพียงบางส่วน ไม่มี CLO ระบุโดยตรง)</li>
+      </ul>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-top">
+        <p class="skill-name">การรู้เท่าทันเทคโนโลยีปัญญาประดิษฐ์และข้อมูลขนาดใหญ่ (AI and big data literacy)</p>
+        <span class="level-badge clear">ครอบคลุมชัดเจน</span>
+      </div>
+      <button type="button" class="evidence-toggle" data-toggle>ดูหลักฐานอ้างอิงรายวิชา ▾</button>
+      <ul class="evidence-list">
+        <li><strong>04204451</strong> ปัญญาประดิษฐ์เบื้องต้น — CLO ข้อ 1: "อธิบายหลักการพื้นฐานของปัญญาประดิษฐ์และการเรียนรู้ของเครื่อง"</li>
+        <li><strong>04204512</strong> วิทยาศาสตร์ข้อมูลเบื้องต้น — คำอธิบายรายวิชา: "ศึกษาการจัดการและวิเคราะห์ข้อมูลขนาดใหญ่"</li>
+      </ul>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-top">
+        <p class="skill-name">ทักษะการเขียนโปรแกรมและการพัฒนาซอฟต์แวร์ (Programming and software development)</p>
+        <span class="level-badge clear">ครอบคลุมชัดเจน</span>
+      </div>
+      <button type="button" class="evidence-toggle" data-toggle>ดูหลักฐานอ้างอิงรายวิชา ▾</button>
+      <ul class="evidence-list">
+        <li><strong>04204201</strong> การเขียนโปรแกรมเชิงวัตถุ — CLO ข้อ 2: "พัฒนาโปรแกรมโดยใช้หลักการเชิงวัตถุได้อย่างถูกต้อง"</li>
+      </ul>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-top">
+        <p class="skill-name">ความมั่นคงปลอดภัยไซเบอร์ (Cybersecurity)</p>
+        <span class="level-badge none">ไม่พบ</span>
+      </div>
+      <p class="no-evidence">ไม่พบรายวิชาที่มีคำอธิบายรายวิชาหรือ CLO ที่เกี่ยวข้องกับทักษะนี้โดยตรงในเล่ม มคอ.2 ของหลักสูตรนี้</p>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-top">
+        <p class="skill-name">การทำงานร่วมกันข้ามสายงาน (Cross-functional collaboration)</p>
+        <span class="level-badge none">ไม่พบ</span>
+      </div>
+      <p class="no-evidence">ไม่พบรายวิชาที่มีคำอธิบายรายวิชาหรือ CLO ที่เกี่ยวข้องกับทักษะนี้โดยตรงในเล่ม มคอ.2 ของหลักสูตรนี้</p>
+    </div>
+
+    <div class="skill-card pending">
+      <div class="skill-top">
+        <p class="skill-name">การตลาดดิจิทัลและโซเชียลมีเดีย (Digital marketing and social media)</p>
+        <span class="level-badge pending-badge">รอตรวจสอบ (ยังไม่อนุมัติ)</span>
+      </div>
+      <p class="no-evidence">ทักษะนี้ยัง<strong>ไม่ได้รับการอนุมัติ</strong>จากแอดมินในชุดกรอบทักษะนี้ จึงไม่ถูกนับรวมในตัวเลข "ครอบคลุม X จาก Y ทักษะ" ด้านบน (Y = 6 นับเฉพาะทักษะที่อนุมัติแล้ว)</p>
+    </div>
+
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 11 · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 9 (มิติ (ง) รายละเอียดเต็ม — "ครอบคลุม X จาก Y ทักษะ" ไม่ใช่คะแนนตัวเลข 0-100, หลักฐานอ้างอิงรายวิชาเสมอสำหรับทักษะที่ครอบคลุม), FR ข้อ 12 (provenance) · user journey "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" ขั้นตอน "ระบบเทียบชื่อรายวิชา + คำอธิบายรายวิชา + CLO ... กับทักษะที่อนุมัติในชุดที่เลือก" และ "แสดงผลเป็น 'ครอบคลุม X จาก Y ทักษะ' พร้อมหลักฐานอ้างอิงรายวิชาเสมอ" · acceptance-criteria.md AC-11-06 (หมายเหตุความหมายของ Y) และ AC-14-07 — หน้าจอนี้เป็นหน้าจอแยกของมิติ (ง) ตามที่ผู้ใช้ยืนยันในรอบ prototype v3 นี้ ไม่ใช่ accordion ในหน้าแดชบอร์ดหลัก
+</footer>
+
+<script>
+  document.getElementById('skillList').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-toggle]');
+    if (!btn) { return; }
+    var list = btn.nextElementSibling;
+    var isShown = list.classList.toggle('show');
+    btn.textContent = isShown ? 'ซ่อนหลักฐานอ้างอิงรายวิชา ▴' : 'ดูหลักฐานอ้างอิงรายวิชา ▾';
+  });
+
+  var params = new URLSearchParams(window.location.search);
+  var courseName = params.get('course');
+  if (courseName) {
+    document.getElementById('courseHeading').textContent = courseName;
+  }
+</script>
+</body>
+</html>

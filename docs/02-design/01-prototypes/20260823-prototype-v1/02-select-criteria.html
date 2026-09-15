@@ -12,6 +12,7 @@
     --color-primary-hover: #1D4ED8;
     --color-primary-active: #1E40AF;
     --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
     --color-bg: #F8FAFC;
     --color-surface: #FFFFFF;
     --color-border: #E2E8F0;
@@ -51,6 +52,7 @@
 
     --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
     --shadow-medium: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-overlay: 0 16px 40px rgba(0,0,0,0.12);
   }
 
   * { box-sizing: border-box; }
@@ -180,6 +182,172 @@
     outline-offset: 2px;
   }
 
+  .chip-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .view-kb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    padding: 4px 8px;
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 150ms ease-out, color 150ms ease-out;
+  }
+  .view-kb-btn:hover { background: #F1F5F9; color: var(--color-primary); }
+  .view-kb-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* มุมมองดูฐานความรู้แบบอ่านอย่างเดียว (ฟีเจอร์ 15) — ซ้อนทับเป็นโมดัลในหน้าเดิม เพื่อคงสถานะการเลือก chip ไว้เมื่อปิด */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-24);
+    z-index: 50;
+  }
+  .modal-backdrop.show { display: flex; }
+  .kb-dialog {
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--color-surface);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-overlay);
+    padding: var(--space-24);
+    text-align: left;
+  }
+  .kb-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-12);
+    margin-bottom: var(--space-8);
+  }
+  .kb-dialog-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+  .modal-close-x {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .modal-close-x:hover { color: var(--color-text-primary); }
+  .kb-readonly-note {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    background: var(--color-info-bg);
+    border-radius: var(--radius-medium);
+    padding: var(--space-12) var(--space-16);
+    margin: 0 0 var(--space-20, 20px);
+  }
+  .kb-group { margin-bottom: var(--space-24); }
+  .kb-group:last-child { margin-bottom: 0; }
+  .kb-group-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-bottom: 4px;
+  }
+  .kb-group-title { font-size: 18px; font-weight: 600; margin: 0; color: var(--color-text-primary); }
+  .kb-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: var(--space-16) 0 var(--space-8);
+  }
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-small);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .status-chip.success { background: var(--color-success-bg); color: var(--color-success-text); }
+  .kb-doc-card {
+    position: relative;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+  .kb-doc-name { font-size: 15px; font-weight: 600; color: var(--color-text-primary); margin: 0 0 4px; padding-right: 140px; }
+  .kb-doc-meta { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .kb-ocr-badge {
+    position: absolute;
+    top: var(--space-12);
+    right: var(--space-12);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--radius-small);
+    background: var(--color-info-bg);
+    color: var(--color-info);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .kb-rule-card {
+    background: #F7FEF9;
+    border: 1px solid var(--color-success);
+    border-left: 3px solid var(--color-success);
+    border-radius: var(--radius-large);
+    padding: var(--space-12) var(--space-16);
+    margin-bottom: var(--space-8);
+  }
+  .kb-rule-top { display: flex; align-items: center; gap: var(--space-8); margin-bottom: 6px; }
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--radius-small);
+    background: var(--color-ai-accent-bg);
+    color: var(--color-ai-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .approved-label { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--color-success-text); }
+  .kb-rule-text { font-size: 14px; color: var(--color-text-secondary); margin: 0; }
+  .kb-empty-note { font-size: 13px; color: var(--color-text-disabled); font-style: italic; margin: 0 0 var(--space-8); }
+  .kb-dialog .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-16);
+  }
+
   .selected-count {
     font-size: 14px;
     font-weight: 600;
@@ -271,22 +439,46 @@
   <p class="note">รายการนี้แสดงเฉพาะชุดเกณฑ์ที่มีสถานะ "เปิดใช้งาน (active)" เท่านั้น ชุดเกณฑ์ที่ยังรอตรวจสอบ (pending) จะไม่ปรากฏในรายการนี้</p>
 
   <div class="chip-list" id="chipList" role="group" aria-label="รายชื่อชุดเกณฑ์ที่เปิดใช้งาน">
-    <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565">
-      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-      เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565
-    </button>
-    <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.โท 2565">
-      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-      เกณฑ์มาตรฐานหลักสูตร ป.โท 2565
-    </button>
-    <button type="button" class="criteria-chip" data-name="เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565">
-      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-      เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565
-    </button>
-    <button type="button" class="criteria-chip" data-name="เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565">
-      <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
-      เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565
-    </button>
+    <div class="chip-item">
+      <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565">
+        <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565
+      </button>
+      <button type="button" class="view-kb-btn" data-view-kb="เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        ดูรายการเอกสาร/กฎเกณฑ์
+      </button>
+    </div>
+    <div class="chip-item">
+      <button type="button" class="criteria-chip" data-name="เกณฑ์มาตรฐานหลักสูตร ป.โท 2565">
+        <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        เกณฑ์มาตรฐานหลักสูตร ป.โท 2565
+      </button>
+      <button type="button" class="view-kb-btn" data-view-kb="เกณฑ์มาตรฐานหลักสูตร ป.โท 2565">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        ดูรายการเอกสาร/กฎเกณฑ์
+      </button>
+    </div>
+    <div class="chip-item">
+      <button type="button" class="criteria-chip" data-name="เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565">
+        <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565
+      </button>
+      <button type="button" class="view-kb-btn" data-view-kb="เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        ดูรายการเอกสาร/กฎเกณฑ์
+      </button>
+    </div>
+    <div class="chip-item">
+      <button type="button" class="criteria-chip" data-name="เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565">
+        <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565
+      </button>
+      <button type="button" class="view-kb-btn" data-view-kb="เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        ดูรายการเอกสาร/กฎเกณฑ์
+      </button>
+    </div>
   </div>
 
   <p class="selected-count" id="selectedCount">เลือกแล้ว 0 ชุด</p>
@@ -297,11 +489,112 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="kbBackdrop">
+  <div class="kb-dialog" role="dialog" aria-modal="true" aria-labelledby="kbTitle">
+    <div class="kb-dialog-header">
+      <h2 id="kbTitle">ดูรายการเอกสาร/กฎเกณฑ์ (อ่านอย่างเดียว)</h2>
+      <button type="button" class="modal-close-x" id="kbCloseX" aria-label="ปิด">×</button>
+    </div>
+    <p class="kb-readonly-note">มุมมองนี้เป็นการแสดงผลแบบอ่านอย่างเดียว ไม่มีสิทธิ์แก้ไข เพิ่ม หรือลบเอกสาร/กฎเกณฑ์ใดๆ</p>
+    <div id="kbBody" class="kb-body"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" id="kbCloseBtn">ปิด</button>
+    </div>
+  </div>
+</div>
+
 <footer class="dev-note">
-  ที่มา: feature-list.md ฟีเจอร์ 02 "เลือกชุดเกณฑ์มาตรฐานก่อนเริ่มตรวจสอบ/สนทนา" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 3 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "เลือกชุดเกณฑ์ criteria set" / "เลือกอย่างน้อย 1 ชุดแล้วหรือยัง" / "กดเริ่มตรวจสอบ"
+  ที่มา: feature-list.md ฟีเจอร์ 02 "เลือกชุดเกณฑ์มาตรฐานก่อนเริ่มตรวจสอบ/สนทนา" · spec docs/01-requirements/01-spec/20260812-01-tqf2-consistency-check.md FR ข้อ 3 · user journey "ผู้จัดทำหลักสูตร อัปโหลดและตรวจสอบเอกสาร มคอ.2" โหนด "เลือกชุดเกณฑ์ criteria set" / "เลือกอย่างน้อย 1 ชุดแล้วหรือยัง" / "กดเริ่มตรวจสอบ" — (อัปเดต 2026-09-15) เพิ่มปุ่ม "ดูรายการเอกสาร/กฎเกณฑ์" กำกับอยู่กับ chip ของแต่ละชุดเกณฑ์ (คลิกได้โดยไม่ต้องติ๊กเลือก chip ก่อน) เปิดมุมมองฐานความรู้แบบอ่านอย่างเดียวซ้อนทับในหน้าเดิม (modal overlay) ตามฟีเจอร์ 15 "ผู้ใช้งานทั่วไป ดูฐานความรู้แบบอ่านอย่างเดียว" spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 12 · acceptance-criteria.md AC-15-01, AC-15-02, AC-15-03 · test-cases/15-user-view-knowledge-base.md TC-15-001, TC-15-003, TC-15-004 — ปิดมุมมองนี้แล้วสถานะ chip ที่เลือกไว้ก่อนหน้าไม่ถูกกระทบ เพราะเป็นการซ้อนทับในหน้าเดิม ไม่ใช่การนำทางออกจากหน้า ดูเวอร์ชันสาธิตแบบเต็มหน้าของมุมมองเดียวกันนี้ได้ที่ `13-knowledge-base-view.html`
 </footer>
 
 <script>
+  // ข้อมูลฐานความรู้จำลอง (mock) สำหรับมุมมองดูรายการเอกสาร/กฎเกณฑ์แบบอ่านอย่างเดียว (ฟีเจอร์ 15)
+  var kbData = {
+    "เกณฑ์มาตรฐานหลักสูตร ป.ตรี 2565": {
+      status: "เปิดใช้งาน (active)",
+      documents: [
+        { name: "ประกาศกระทรวงการอุดมศึกษาฯ เรื่อง เกณฑ์มาตรฐานหลักสูตรระดับปริญญาตรี พ.ศ. 2565", type: "ประกาศกระทรวง", pages: "1-15", scanned: false },
+        { name: "ภาคผนวก ก มาตรฐานผลการเรียนรู้ระดับปริญญาตรี", type: "ภาคผนวก", pages: "16-22", scanned: true }
+      ],
+      rules: ["หลักสูตรปริญญาตรีต้องมีหน่วยกิตรวมไม่น้อยกว่า 120 หน่วยกิต"]
+    },
+    "เกณฑ์มาตรฐานหลักสูตร ป.โท 2565": {
+      status: "เปิดใช้งาน (active)",
+      documents: [
+        { name: "ประกาศกระทรวงการอุดมศึกษาฯ เรื่อง เกณฑ์มาตรฐานหลักสูตรระดับบัณฑิตศึกษา พ.ศ. 2565", type: "ประกาศกระทรวง", pages: "1-18", scanned: false }
+      ],
+      rules: ["หลักสูตรปริญญาโท แผน ก ต้องมีหน่วยกิตวิทยานิพนธ์ไม่น้อยกว่า 12 หน่วยกิต"]
+    },
+    "เกณฑ์คุณวุฒิ วิศวกรรมคอมพิวเตอร์ 2565": {
+      status: "เปิดใช้งาน (active)",
+      documents: [
+        { name: "เกณฑ์คุณวุฒิระดับปริญญาตรี สาขาวิศวกรรมคอมพิวเตอร์ พ.ศ. 2565", type: "เกณฑ์คุณวุฒิ", pages: "1-30", scanned: false }
+      ],
+      rules: ["หลักสูตรต้องมีรายวิชาโครงงานทางวิศวกรรมคอมพิวเตอร์ไม่น้อยกว่า 3 หน่วยกิต"]
+    },
+    "เกณฑ์คุณวุฒิ เทคโนโลยีสารสนเทศ 2565": {
+      status: "เปิดใช้งาน (active)",
+      documents: [
+        { name: "เกณฑ์คุณวุฒิระดับปริญญาตรี สาขาเทคโนโลยีสารสนเทศ พ.ศ. 2565", type: "เกณฑ์คุณวุฒิ", pages: "1-26", scanned: false }
+      ],
+      rules: ["หลักสูตรต้องมีรายวิชาปฏิบัติการด้านเทคโนโลยีสารสนเทศไม่น้อยกว่า 15 หน่วยกิต"]
+    }
+  };
+
+  var kbSuccessIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+  var kbScanIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a2 2 0 012-2h2M4 17v2a2 2 0 002 2h2M20 7V5a2 2 0 00-2-2h-2M20 17v2a2 2 0 01-2 2h-2M7 12h10"/></svg>';
+
+  function renderKbGroup(name) {
+    var d = kbData[name];
+    if (!d) { return '<p class="kb-empty-note">ไม่พบข้อมูลของชุดเกณฑ์นี้</p>'; }
+    var docsHtml = d.documents.map(function (doc) {
+      var badge = doc.scanned ? '<span class="kb-ocr-badge">' + kbScanIcon + 'แปลงจากภาพสแกน (OCR)</span>' : '';
+      return '<div class="kb-doc-card">' + badge +
+        '<p class="kb-doc-name">' + doc.name + '</p>' +
+        '<p class="kb-doc-meta">ประเภท: ' + doc.type + ' · หน้า ' + doc.pages + '</p>' +
+      '</div>';
+    }).join('');
+    var rulesHtml = d.rules.length ? d.rules.map(function (r) {
+      return '<div class="kb-rule-card">' +
+        '<div class="kb-rule-top"><span class="ai-badge">AI SUGGESTED</span><span class="approved-label">' + kbSuccessIcon + 'อนุมัติแล้ว</span></div>' +
+        '<p class="kb-rule-text">' + r + '</p>' +
+      '</div>';
+    }).join('') : '<p class="kb-empty-note">ยังไม่มีกฎเกณฑ์ที่อนุมัติแล้วในชุดนี้</p>';
+
+    return '<div class="kb-group">' +
+      '<div class="kb-group-header"><h3 class="kb-group-title">' + name + '</h3><span class="status-chip success">' + kbSuccessIcon + d.status + '</span></div>' +
+      '<p class="kb-section-label">เอกสารประกอบ (' + d.documents.length + ' ไฟล์)</p>' +
+      docsHtml +
+      '<p class="kb-section-label">กฎเกณฑ์ที่อนุมัติแล้ว</p>' +
+      rulesHtml;
+  }
+
+  var kbBackdrop = document.getElementById('kbBackdrop');
+  var kbTitle = document.getElementById('kbTitle');
+  var kbBody = document.getElementById('kbBody');
+  var kbCloseX = document.getElementById('kbCloseX');
+  var kbCloseBtn = document.getElementById('kbCloseBtn');
+
+  function openKbModal(name) {
+    kbTitle.textContent = 'ดูรายการเอกสาร/กฎเกณฑ์: ' + name;
+    kbBody.innerHTML = renderKbGroup(name);
+    kbBackdrop.classList.add('show');
+  }
+  function closeKbModal() {
+    kbBackdrop.classList.remove('show');
+  }
+  document.querySelectorAll('[data-view-kb]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openKbModal(btn.getAttribute('data-view-kb'));
+    });
+  });
+  kbCloseX.addEventListener('click', closeKbModal);
+  kbCloseBtn.addEventListener('click', closeKbModal);
+  kbBackdrop.addEventListener('click', function (e) {
+    if (e.target === kbBackdrop) { closeKbModal(); }
+  });
+
   var chips = document.querySelectorAll('.criteria-chip');
   var selectedCount = document.getElementById('selectedCount');
   var startBtn = document.getElementById('startBtn');

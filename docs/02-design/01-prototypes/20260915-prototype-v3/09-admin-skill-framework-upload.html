@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>อัปโหลดเอกสารกรอบทักษะ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8; --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED; --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-error: #DC2626; --color-error-bg: #FEE2E2; --color-error-text: #991B1B;
+    --color-info: #0284C7; --color-info-bg: #EFF6FF;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-text-primary); font-size: 16px; line-height: 1.6; }
+  .page { max-width: 720px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+  .admin-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-32); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); }
+  .admin-zone-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); background: var(--color-bg); border: 1px solid var(--color-border-strong); color: var(--color-text-secondary); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 4px; }
+  p.set-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 var(--space-24); }
+
+  .note { display: flex; gap: var(--space-12); background: var(--color-info-bg); border-radius: var(--radius-medium); padding: var(--space-16); margin-bottom: var(--space-24); color: var(--color-text-secondary); font-size: 13px; }
+
+  .dropzone { border: 2px dashed var(--color-border-strong); border-radius: var(--radius-large); background: var(--color-surface); padding: var(--space-32) var(--space-24); text-align: center; cursor: pointer; transition: border-color 180ms ease-out; }
+  .dropzone:hover, .dropzone:focus-visible { border-color: var(--color-primary); outline: none; }
+  .dropzone-title { font-size: 16px; font-weight: 600; margin: var(--space-12) 0 4px; }
+  .dropzone-sub { font-size: 13px; color: var(--color-text-secondary); }
+
+  .file-chip { display: none; align-items: center; gap: var(--space-8); margin-top: var(--space-16); padding: var(--space-8) var(--space-12); border: 1px solid var(--color-border); border-radius: var(--radius-medium); background: var(--color-surface); font-size: 13px; font-family: var(--font-mono); }
+  .file-chip.show { display: inline-flex; }
+
+  .banner { display: none; margin-top: var(--space-16); padding: var(--space-16); background: var(--color-error-bg); color: var(--color-error-text); gap: var(--space-12); align-items: flex-start; border-radius: var(--radius-medium); }
+  .banner.show { display: flex; }
+  .banner-title { font-weight: 600; margin: 0 0 4px; font-size: 14px; }
+  .banner-body { font-size: 13px; margin: 0; }
+
+  .test-link { display: inline-block; margin-top: var(--space-12); font-size: 13px; color: var(--color-text-secondary); text-decoration: underline; cursor: pointer; background: none; border: none; font-family: var(--font-body); padding: 0; }
+  .test-link:hover { color: var(--color-error); }
+
+  .processing-panel { display: none; margin-top: var(--space-24); background: var(--color-ai-accent-bg); border: 1px solid var(--color-ai-accent); border-radius: var(--radius-large); padding: var(--space-16); align-items: center; gap: var(--space-12); }
+  .processing-panel.show { display: flex; }
+  .spinner { width: 20px; height: 20px; border: 3px solid #D8B4FE; border-top-color: var(--color-ai-accent); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-text { font-size: 13px; color: #4C1D95; font-weight: 600; }
+
+  .success-panel { display: none; margin-top: var(--space-24); background: var(--color-success-bg); border: 1px solid var(--color-success); border-radius: var(--radius-large); padding: var(--space-24); }
+  .success-panel.show { display: block; }
+  .success-title { font-size: 16px; font-weight: 700; color: var(--color-success-text); margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  .success-body { font-size: 14px; color: var(--color-success-text); margin: 0 0 var(--space-16); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-body); font-size: 15px; font-weight: 600; height: 40px; padding: 10px 20px; border-radius: var(--radius-medium); border: none; cursor: pointer; text-decoration: none; transition: background 150ms ease-out; }
+  .btn-primary { background: var(--color-primary); color: #FFFFFF; }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary); }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+
+  .actions-row { margin-top: var(--space-24); display: flex; gap: var(--space-16); }
+
+  footer.dev-note { margin-top: var(--space-64); padding-top: var(--space-16); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-disabled); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="08-admin-skill-framework-sets.html">จัดการชุดกรอบทักษะอ้างอิง</a>
+      <span> / </span>
+      <span class="current">อัปโหลดเอกสาร</span>
+    </nav>
+  </div>
+
+  <h1>อัปโหลดเอกสารกรอบทักษะ</h1>
+  <p class="set-sub" id="setNameSub">ชุด: กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023)</p>
+
+  <div class="note">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.75" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span>เอกสารนี้คือไฟล์ที่<strong>แอดมินอัปโหลดเอง</strong> (เช่น รายงาน Future of Jobs ของ WEF, เอกสารไทยมีงานทำ) ไม่ใช่การดึง/scrape ข้อมูลจากเว็บภายนอกโดยอัตโนมัติ ซึ่งอยู่นอกขอบเขตของฟีเจอร์นี้</span>
+  </div>
+
+  <label style="display:block;font-size:13px;font-weight:600;margin-bottom:8px;">เอกสารกรอบทักษะ (PDF หรือ Word)</label>
+  <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="คลิกเพื่ออัปโหลดเอกสารกรอบทักษะ">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+    <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่</div>
+    <div class="dropzone-sub">รองรับเฉพาะไฟล์ PDF และ Word (.docx)</div>
+  </div>
+  <div id="fileChip" class="file-chip">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+    <span id="fileChipName">wef-future-of-jobs-2023.pdf</span>
+  </div>
+
+  <div id="errorBanner" class="banner">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#991B1B" stroke-width="1.75" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+    <div>
+      <p class="banner-title">ไม่รองรับไฟล์ประเภทนี้</p>
+      <p class="banner-body">ไฟล์ที่อัปโหลดต้องเป็น PDF หรือ Word (.docx) เท่านั้น กรุณาเลือกไฟล์ใหม่ที่เป็นประเภทที่รองรับ</p>
+    </div>
+  </div>
+  <button type="button" class="test-link" id="testInvalidBtn">ทดสอบกรณีไฟล์ผิดประเภท</button>
+
+  <div id="processingPanel" class="processing-panel">
+    <div class="spinner"></div>
+    <span class="processing-text">AI กำลังสกัดรายการทักษะจากเอกสาร...</span>
+  </div>
+
+  <div id="successPanel" class="success-panel">
+    <p class="success-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      สกัดสำเร็จ — พบ 7 ทักษะ สถานะ "รอตรวจสอบ (pending)"
+    </p>
+    <p class="success-body">แอดมินต้องตรวจสอบ/แก้ไข/อนุมัติหรือปฏิเสธทักษะแต่ละข้อก่อนนำไปใช้เป็นไม้บรรทัดวิเคราะห์มิติความสอดคล้องกับทักษะที่ตลาดต้องการ</p>
+    <a class="btn btn-primary" href="10-admin-skill-review.html" id="goReviewBtn">ไปตรวจสอบทักษะ →</a>
+  </div>
+
+  <div class="actions-row">
+    <button type="button" id="uploadBtn" class="btn btn-primary" disabled>เริ่มสกัดด้วย AI</button>
+    <a class="btn btn-secondary" href="08-admin-skill-framework-sets.html">ย้อนกลับ</a>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 14 "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 9 (อัปโหลดเอกสาร PDF/Word → AI สกัดเป็นรายการทักษะรายข้อสถานะ pending — ไม่ใช่การ scrape เว็บภายนอกอัตโนมัติ) · user journey "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" ขั้นตอน "อัปโหลดเอกสารกรอบทักษะ PDF/Word เข้าชุด" และ "AI สกัดเอกสารออกมาเป็นรายการทักษะรายข้อ สถานะ pending" · acceptance-criteria.md AC-14-02, AC-14-03
+</footer>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var setName = params.get('set');
+  if (setName) {
+    document.getElementById('setNameSub').textContent = 'ชุด: ' + setName;
+    document.getElementById('goReviewBtn').href = '10-admin-skill-review.html?set=' + encodeURIComponent(setName);
+  }
+
+  var dropzone = document.getElementById('dropzone');
+  var fileChip = document.getElementById('fileChip');
+  var errorBanner = document.getElementById('errorBanner');
+  var testInvalidBtn = document.getElementById('testInvalidBtn');
+  var uploadBtn = document.getElementById('uploadBtn');
+  var processingPanel = document.getElementById('processingPanel');
+  var successPanel = document.getElementById('successPanel');
+  var hasValidFile = false;
+
+  function simulateValidUpload() {
+    errorBanner.classList.remove('show');
+    fileChip.classList.add('show');
+    hasValidFile = true;
+    uploadBtn.disabled = false;
+  }
+
+  dropzone.addEventListener('click', simulateValidUpload);
+  dropzone.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); simulateValidUpload(); }
+  });
+
+  testInvalidBtn.addEventListener('click', function () {
+    fileChip.classList.remove('show');
+    hasValidFile = false;
+    errorBanner.classList.add('show');
+    uploadBtn.disabled = true;
+  });
+
+  uploadBtn.addEventListener('click', function () {
+    if (uploadBtn.disabled) { return; }
+    uploadBtn.disabled = true;
+    processingPanel.classList.add('show');
+    setTimeout(function () {
+      processingPanel.classList.remove('show');
+      successPanel.classList.add('show');
+    }, 1600);
+  });
+</script>
+</body>
+</html>

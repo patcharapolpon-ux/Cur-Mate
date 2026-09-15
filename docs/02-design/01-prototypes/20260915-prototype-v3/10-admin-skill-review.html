@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตรวจสอบและอนุมัติทักษะ — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB; --color-primary-hover: #1D4ED8; --color-primary-active: #1E40AF;
+    --color-ai-accent: #7C3AED; --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC; --color-surface: #FFFFFF; --color-border: #E2E8F0; --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A; --color-text-secondary: #475569; --color-text-disabled: #94A3B8;
+    --color-success: #16A34A; --color-success-bg: #DCFCE7; --color-success-text: #166534;
+    --color-warning: #D97706; --color-warning-bg: #FEF3C7; --color-warning-text: #92400E;
+    --color-error: #DC2626; --color-error-bg: #FEE2E2; --color-error-text: #991B1B;
+    --color-info: #0284C7; --color-info-bg: #EFF6FF;
+    --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
+    --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+    --radius-small: 4px; --radius-medium: 8px; --radius-large: 12px;
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-overlay: 0 16px 40px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--color-bg); color: var(--color-text-primary); font-size: 16px; line-height: 1.6; }
+  .page { max-width: 800px; margin: 0 auto; padding: var(--space-32) var(--space-24) var(--space-64); }
+  .wordmark { font-weight: 700; color: var(--color-primary); font-size: 20px; margin-bottom: var(--space-24); }
+  .admin-topbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-12); margin-bottom: var(--space-32); padding-bottom: var(--space-16); border-bottom: 1px solid var(--color-border); }
+  .admin-zone-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-small); background: var(--color-bg); border: 1px solid var(--color-border-strong); color: var(--color-text-secondary); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .breadcrumb { font-size: 13px; color: var(--color-text-secondary); }
+  .breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--color-primary); text-decoration: underline; }
+  .breadcrumb .current { color: var(--color-text-primary); font-weight: 600; }
+
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 4px; }
+  p.set-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 var(--space-16); }
+
+  .persistent-note { display: flex; gap: var(--space-12); background: var(--color-info-bg); border: 1px solid var(--color-info); border-radius: var(--radius-medium); padding: var(--space-16); margin-bottom: var(--space-24); color: var(--color-text-secondary); font-size: 13px; }
+  .persistent-note strong { color: var(--color-text-primary); }
+
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: var(--space-16); margin-bottom: var(--space-16); flex-wrap: wrap; }
+  .progress-note { font-size: 14px; font-weight: 600; color: var(--color-text-secondary); }
+
+  .skill-list { display: flex; flex-direction: column; gap: var(--space-16); margin-bottom: var(--space-32); }
+  .skill-card { background: var(--color-surface); border: 1px solid var(--color-border); border-left: 3px solid var(--color-ai-accent); border-radius: var(--radius-large); padding: var(--space-16); box-shadow: var(--shadow-subtle); transition: border-color 150ms ease-out, background 150ms ease-out; }
+  .skill-card.approved { border-color: var(--color-success); border-left-color: var(--color-success); background: #F7FEF9; }
+  .skill-card.rejected { border-color: var(--color-error); border-left-color: var(--color-error); background: #FEF7F7; }
+
+  .skill-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-12); margin-bottom: var(--space-8); }
+  .ai-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: var(--radius-small); background: var(--color-ai-accent-bg); color: var(--color-ai-accent); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .status-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-small); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .status-chip.error { background: var(--color-error-bg); color: var(--color-error-text); }
+
+  .skill-text { font-size: 15px; font-weight: 600; color: var(--color-text-primary); margin: 0 0 4px; }
+  .skill-card.approved .skill-text { color: var(--color-text-secondary); }
+  .skill-desc { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 var(--space-12); }
+
+  .skill-actions { display: flex; gap: var(--space-12); flex-wrap: wrap; align-items: center; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-body); font-size: 15px; font-weight: 600; height: 40px; padding: 10px 20px; border-radius: var(--radius-medium); border: none; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 150ms ease-out; }
+  .btn-primary { background: var(--color-primary); color: #FFFFFF; }
+  .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary); }
+  .btn-secondary:hover { background: var(--color-info-bg); }
+  .btn-small { font-size: 13px; height: 34px; padding: 6px 14px; }
+  .btn-approve { background: var(--color-success); color: #FFFFFF; }
+  .btn-approve:hover { background: #15803D; }
+  .btn-reject { background: transparent; color: var(--color-error); border: 1.5px solid var(--color-error); }
+  .btn-reject:hover { background: var(--color-error-bg); }
+  .btn-ghost-delete { background: transparent; color: var(--color-text-secondary); }
+  .btn-ghost-delete:hover { background: var(--color-error-bg); color: var(--color-error-text); }
+  .btn-destructive { background: var(--color-error); color: #FFFFFF; }
+  .btn-destructive:hover { background: #B91C1C; }
+
+  .approved-label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--color-success-text); }
+
+  .history-list { list-style: none; margin: var(--space-12) 0 0; padding-top: var(--space-8); border-top: 1px dashed var(--color-border); display: flex; flex-direction: column; gap: 4px; }
+  .history-list li { font-size: 12px; color: var(--color-text-disabled); font-family: var(--font-mono); }
+
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.45); align-items: center; justify-content: center; padding: var(--space-24); z-index: 40; }
+  .overlay.show { display: flex; }
+  .modal { width: 100%; max-width: 420px; background: var(--color-surface); border-radius: var(--radius-large); box-shadow: var(--shadow-overlay); padding: var(--space-24); }
+  .modal-title { font-size: 18px; font-weight: 700; margin: 0 0 var(--space-12); }
+  .modal-body { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 var(--space-24); }
+  .modal-actions { display: flex; justify-content: flex-end; gap: var(--space-12); }
+
+  footer.dev-note { margin-top: var(--space-64); padding-top: var(--space-16); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-disabled); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wordmark">Curmate</div>
+
+  <div class="admin-topbar">
+    <span class="admin-zone-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+      แผงแอดมิน
+    </span>
+    <nav class="breadcrumb" aria-label="เส้นทางหน้าปัจจุบัน">
+      <a href="08-admin-skill-framework-sets.html">จัดการชุดกรอบทักษะอ้างอิง</a>
+      <span> / </span>
+      <span class="current">ตรวจสอบและอนุมัติทักษะ</span>
+    </nav>
+  </div>
+
+  <h1>ตรวจสอบและอนุมัติทักษะ</h1>
+  <p class="set-sub" id="setNameSub">ชุด: กรอบทักษะอนาคตแรงงานดิจิทัล (WEF Future of Jobs 2023)</p>
+
+  <div class="persistent-note">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="1.75" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <span><strong>ทักษะที่อนุมัติแล้วถูกใช้เป็นไม้บรรทัดวิเคราะห์ได้ทันทีทีละข้อ</strong> ไม่ต้องรอให้อนุมัติครบทั้งชุดก่อน (ต่างจากชุดเกณฑ์มาตรฐานที่ต้องอนุมัติครบทุกข้อก่อนทั้งชุดจึงใช้งานได้) — ปฏิเสธ = ทำเครื่องหมาย "ไม่อนุมัติ" เท่านั้น ไม่ลบทิ้งถาวร และนำกลับมาพิจารณาใหม่ได้เสมอ</span>
+  </div>
+
+  <div class="toolbar">
+    <p class="progress-note" id="progressNote">อนุมัติแล้ว 0 · ไม่อนุมัติ 0 · รอตรวจสอบ 7</p>
+    <button type="button" class="btn btn-secondary btn-small" id="bulkApproveBtn">อนุมัติทั้งหมด (Bulk Approve)</button>
+  </div>
+
+  <div class="skill-list" id="skillList">
+
+    <div class="skill-card" data-skill="1">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">การคิดวิเคราะห์และการแก้ปัญหาเชิงซับซ้อน (Analytical thinking &amp; complex problem-solving)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 12</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+    <div class="skill-card" data-skill="2">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">ความคิดสร้างสรรค์ (Creative thinking)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 12</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+    <div class="skill-card" data-skill="3">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">การรู้เท่าทันเทคโนโลยีปัญญาประดิษฐ์และข้อมูลขนาดใหญ่ (AI and big data literacy)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 13</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+    <div class="skill-card" data-skill="4">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">ทักษะการเขียนโปรแกรมและการพัฒนาซอฟต์แวร์ (Programming and software development)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 14</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+    <div class="skill-card" data-skill="5">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">ความมั่นคงปลอดภัยไซเบอร์ (Cybersecurity)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 15</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+    <div class="skill-card" data-skill="6">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">การทำงานร่วมกันข้ามสายงาน (Cross-functional collaboration)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 16</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+    <div class="skill-card" data-skill="7">
+      <div class="skill-card-top"><span class="ai-badge">AI SUGGESTED</span></div>
+      <p class="skill-text">การตลาดดิจิทัลและโซเชียลมีเดีย (Digital marketing and social media)</p>
+      <p class="skill-desc">สกัดจาก wef-future-of-jobs-2023.pdf หน้า 17 — แอดมินยังไม่ได้ตรวจสอบข้อนี้ (ตัวอย่างทักษะที่ค้าง pending ในหน้าแดชบอร์ดผู้บริหาร)</p>
+      <div class="skill-actions" data-actions>
+        <button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>
+        <button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>
+        <button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>
+      </div>
+      <ul class="history-list" data-history><li>15/09/2569 09:12 — สกัดโดย AI (สถานะ: รอตรวจสอบ)</li></ul>
+    </div>
+
+  </div>
+
+  <a class="btn btn-secondary" href="08-admin-skill-framework-sets.html">← กลับไปหน้ารายการชุดกรอบทักษะ</a>
+</div>
+
+<div class="overlay" id="confirmOverlay">
+  <div class="modal">
+    <p class="modal-title" id="confirmTitle">ยืนยันการลบทักษะย่อยนี้</p>
+    <p class="modal-body" id="confirmBody">จะลบทักษะนี้ออกจากชุด ไม่สามารถกู้คืนได้</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary btn-small" id="cancelConfirmBtn">ยกเลิก</button>
+      <button type="button" class="btn btn-destructive btn-small" id="okConfirmBtn">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+<footer class="dev-note">
+  ที่มา: feature-list.md ฟีเจอร์ 14 "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" · spec docs/01-requirements/01-spec/20260904-04-executive-curriculum-dashboard.md FR ข้อ 9 (อนุมัติทีละข้อ/bulk approve, ปฏิเสธ=ไม่อนุมัติไม่ลบถาวร, ลบทักษะย่อยพร้อมยืนยัน, พิจารณาใหม่ได้เสมอ, บันทึกประวัติการเปลี่ยนสถานะ, ไม่มีสถานะ active/pending ระดับทั้งชุด) · user journey "แอดมิน จัดการชุดกรอบทักษะอ้างอิง" ขั้นตอน "อนุมัติทีละข้อ", "อนุมัติรวดเดียวทั้งชุด bulk approve", "ทำเครื่องหมายทักษะเป็น 'ไม่อนุมัติ' ไม่ลบทิ้งถาวร", "ยืนยันการลบทักษะย่อยนี้หรือไม่", "บันทึกประวัติการเปลี่ยนสถานะอนุมัติ/ไม่อนุมัติ", "แอดมินกลับมาพิจารณาทักษะที่ถูกปฏิเสธใหม่ได้ภายหลัง" · acceptance-criteria.md AC-14-04, AC-14-05, AC-14-06, AC-14-07 — ทุกปฏิสัมพันธ์ในหน้านี้ทำงานจริงในฝั่งหน้าจอ (mock) ยังไม่มีการบันทึกจริงฝั่ง backend
+</footer>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var setName = params.get('set');
+  if (setName) { document.getElementById('setNameSub').textContent = 'ชุด: ' + setName; }
+
+  var skillList = document.getElementById('skillList');
+  var progressNote = document.getElementById('progressNote');
+  var bulkApproveBtn = document.getElementById('bulkApproveBtn');
+
+  var confirmOverlay = document.getElementById('confirmOverlay');
+  var confirmTitle = document.getElementById('confirmTitle');
+  var confirmBody = document.getElementById('confirmBody');
+  var cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+  var okConfirmBtn = document.getElementById('okConfirmBtn');
+  var pendingAction = null;
+
+  var successIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+  var errorIcon = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>';
+
+  function nowLabel() { return '15/09/2569 ' + (9 + Math.floor(Math.random() * 3)) + ':' + (10 + Math.floor(Math.random() * 40)); }
+
+  function addHistory(card, text) {
+    var hist = card.querySelector('[data-history]');
+    var li = document.createElement('li');
+    li.textContent = nowLabel() + ' — ' + text;
+    hist.appendChild(li);
+  }
+
+  function renderCardState(card, state, logText) {
+    var top = card.querySelector('.skill-card-top');
+    var actions = card.querySelector('[data-actions]');
+    card.classList.remove('approved', 'rejected');
+
+    if (state === 'approved') {
+      card.classList.add('approved');
+      top.innerHTML = '<span class="ai-badge">AI SUGGESTED</span>';
+      actions.innerHTML = '<span class="approved-label">' + successIcon + 'อนุมัติแล้ว — ใช้เป็นไม้บรรทัดได้ทันที</span>' +
+        '<button type="button" class="btn btn-secondary btn-small" data-action="reconsider">พิจารณาใหม่</button>' +
+        '<button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>';
+    } else if (state === 'rejected') {
+      card.classList.add('rejected');
+      top.innerHTML = '<span class="ai-badge">AI SUGGESTED</span><span class="status-chip error">' + errorIcon + 'ไม่อนุมัติ</span>';
+      actions.innerHTML = '<button type="button" class="btn btn-secondary btn-small" data-action="reconsider">พิจารณาใหม่</button>' +
+        '<button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>';
+    } else {
+      top.innerHTML = '<span class="ai-badge">AI SUGGESTED</span>';
+      actions.innerHTML = '<button type="button" class="btn btn-approve btn-small" data-action="approve">อนุมัติ (Approve)</button>' +
+        '<button type="button" class="btn btn-reject btn-small" data-action="reject">ปฏิเสธ (Reject)</button>' +
+        '<button type="button" class="btn btn-ghost-delete btn-small" data-action="delete">ลบ</button>';
+    }
+    if (logText) { addHistory(card, logText); }
+  }
+
+  function updateProgress() {
+    var cards = skillList.querySelectorAll('.skill-card');
+    var approved = skillList.querySelectorAll('.skill-card.approved').length;
+    var rejected = skillList.querySelectorAll('.skill-card.rejected').length;
+    var pending = cards.length - approved - rejected;
+    progressNote.textContent = 'อนุมัติแล้ว ' + approved + ' · ไม่อนุมัติ ' + rejected + ' · รอตรวจสอบ ' + pending;
+  }
+
+  function openConfirm(title, body, onConfirm) {
+    confirmTitle.textContent = title;
+    confirmBody.textContent = body;
+    pendingAction = onConfirm;
+    confirmOverlay.classList.add('show');
+  }
+  function closeConfirm() { confirmOverlay.classList.remove('show'); pendingAction = null; }
+  cancelConfirmBtn.addEventListener('click', closeConfirm);
+  okConfirmBtn.addEventListener('click', function () { if (pendingAction) { pendingAction(); } closeConfirm(); });
+  confirmOverlay.addEventListener('click', function (e) { if (e.target === confirmOverlay) { closeConfirm(); } });
+
+  skillList.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-action]');
+    if (!btn) { return; }
+    var card = btn.closest('.skill-card');
+    var action = btn.getAttribute('data-action');
+
+    if (action === 'approve') {
+      renderCardState(card, 'approved', 'อนุมัติโดยแอดมิน (สถานะ: อนุมัติแล้ว)');
+      updateProgress();
+    } else if (action === 'reject') {
+      renderCardState(card, 'rejected', 'ปฏิเสธโดยแอดมิน (สถานะ: ไม่อนุมัติ — ยังไม่ถูกลบ)');
+      updateProgress();
+    } else if (action === 'reconsider') {
+      renderCardState(card, 'default', 'นำกลับมาพิจารณาใหม่ (สถานะ: รอตรวจสอบ)');
+      updateProgress();
+    } else if (action === 'delete') {
+      var skillText = card.querySelector('.skill-text').textContent;
+      openConfirm(
+        'ยืนยันการลบทักษะย่อยนี้',
+        'จะลบทักษะ "' + skillText + '" ออกจากชุดนี้ถาวร ไม่สามารถกู้คืนได้',
+        function () { card.remove(); updateProgress(); }
+      );
+    }
+  });
+
+  bulkApproveBtn.addEventListener('click', function () {
+    skillList.querySelectorAll('.skill-card').forEach(function (card) {
+      if (!card.classList.contains('approved')) {
+        renderCardState(card, 'approved', 'อนุมัติแบบ bulk (สถานะ: อนุมัติแล้ว)');
+      }
+    });
+    updateProgress();
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
