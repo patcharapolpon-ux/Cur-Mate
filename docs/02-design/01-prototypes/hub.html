@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สารบัญหน้าจอปัจจุบันทั้งหมด — Curmate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-ai-accent: #7C3AED;
+    --color-ai-accent-bg: #F3E8FF;
+    --color-bg: #F8FAFC;
+    --color-surface: #FFFFFF;
+    --color-border: #E2E8F0;
+    --color-border-strong: #CBD5E1;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-success: #16A34A;
+    --color-success-bg: #DCFCE7;
+    --color-success-text: #166534;
+    --color-warning: #D97706;
+    --color-warning-bg: #FEF3C7;
+    --color-warning-text: #92400E;
+    --color-info: #0284C7;
+    --color-info-bg: #EFF6FF;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'IBM Plex Sans Thai', sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.top {
+    margin-bottom: 8px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 8px 0 8px;
+  }
+  .lede {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    max-width: 720px;
+    margin: 0 0 8px;
+  }
+  .disclaimer {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--color-info-bg);
+    border: 1px solid #BAE0FD;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 24px 0 40px;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+  .disclaimer strong { color: var(--color-text-primary); }
+  .module {
+    margin-bottom: 40px;
+  }
+  .module-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .module-head h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .role-tag {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    background: var(--color-border);
+    color: var(--color-text-secondary);
+  }
+  .module-desc {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin: 4px 0 16px;
+  }
+  .version-chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .v-current { background: var(--color-success-bg); color: var(--color-success-text); }
+  .v-old { background: var(--color-border); color: var(--color-text-secondary); }
+  .screens {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  a.screen-card {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  a.screen-card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .screen-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+  .screen-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .old-list {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+  .old-list a {
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+  }
+  footer.note {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+  footer.note code {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--color-border);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="eyebrow">Curmate — Prototype</div>
+    <h1>สารบัญหน้าจอปัจจุบันทั้งหมด</h1>
+    <p class="lede">รวมลิงก์ไปยังหน้าจอ prototype ที่ "ใช้งานอยู่จริง" ของทุกฟีเจอร์ในตอนนี้ ณ 2026-09-15 จัดกลุ่มตามบทบาทผู้ใช้ ไม่ต้องไล่เปิดทีละโฟลเดอร์เวอร์ชันเอง</p>
+  </header>
+
+  <div class="disclaimer">
+    <span>&#9432;</span>
+    <div>
+      <strong>หน้านี้เป็นเครื่องมือช่วยไล่ดู prototype เท่านั้น ไม่ใช่หน้าจอของระบบจริง</strong><br>
+      ในระบบจริงทุกหน้าจอจะอยู่ในแอปเดียว มี navigation ตามสิทธิ์ของผู้ใช้แต่ละบทบาทเชื่อมกันเอง — การออกแบบ navigation จริงเป็นงานของชั้น <code>02-design/02-technical</code> (High-Level Architecture) ไม่ใช่ของ prototype หน้านี้จึงรวมลิงก์ไว้ให้แบบ manual เพื่อความสะดวกในการรีวิวช่วงนี้เท่านั้น เมื่อมีเวอร์ชันใหม่มาแทนที่ฟีเจอร์ใด รายการด้านล่างจะถูกอัปเดตตามไป
+    </div>
+  </div>
+
+  <!-- โมดูล: ผู้จัดทำหลักสูตร — อัปโหลด/ตรวจสอบ มคอ.2 -->
+  <section class="module">
+    <div class="module-head">
+      <h2>ผู้จัดทำหลักสูตร — อัปโหลดและตรวจสอบเอกสาร มคอ.2</h2>
+      <span class="role-tag">ฟีเจอร์ 01–05, 08</span>
+      <span class="version-chip v-current">v1 · ปัจจุบัน</span>
+    </div>
+    <p class="module-desc">อัปโหลดไฟล์ → เลือกชุดเกณฑ์ → ตรวจสอบความสอดคล้อง → ดูรายงานผล</p>
+    <div class="screens">
+      <a class="screen-card" href="20260823-prototype-v1/01-upload-mco2.html"><div class="screen-num">01</div><div class="screen-name">อัปโหลดไฟล์ มคอ.2</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/01b-extract-confirm.html"><div class="screen-num">01b</div><div class="screen-name">ตรวจสอบข้อมูลที่สกัดได้</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/02-select-criteria.html"><div class="screen-num">02</div><div class="screen-name">เลือกชุดเกณฑ์มาตรฐาน</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/03-processing.html"><div class="screen-num">03</div><div class="screen-name">กำลังตรวจสอบ</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/04-report.html"><div class="screen-num">04</div><div class="screen-name">รายงานผลตรวจสอบ</div></a>
+    </div>
+  </section>
+
+  <!-- โมดูล: แอดมิน — ฐานความรู้เกณฑ์มาตรฐาน -->
+  <section class="module">
+    <div class="module-head">
+      <h2>แอดมิน — จัดการฐานความรู้เกณฑ์มาตรฐาน</h2>
+      <span class="role-tag">ฟีเจอร์ 06–07</span>
+      <span class="version-chip v-current">v1 · ปัจจุบัน</span>
+    </div>
+    <p class="module-desc">สร้างชุดเกณฑ์ + อัปโหลดเอกสาร → ตรวจสอบและอนุมัติกฎเกณฑ์ที่ AI สกัดมา</p>
+    <div class="screens">
+      <a class="screen-card" href="20260823-prototype-v1/05-criteria-dashboard.html"><div class="screen-num">05</div><div class="screen-name">รายการชุดเกณฑ์มาตรฐาน</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/06-create-criteria-set.html"><div class="screen-num">06</div><div class="screen-name">สร้างชุดเกณฑ์ใหม่</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/07-rule-review-approval.html"><div class="screen-num">07</div><div class="screen-name">ตรวจสอบและอนุมัติกฎเกณฑ์</div></a>
+    </div>
+  </section>
+
+  <!-- โมดูล: แชทบอท -->
+  <section class="module">
+    <div class="module-head">
+      <h2>ผู้จัดทำหลักสูตร — แชทบอทให้คำแนะนำ</h2>
+      <span class="role-tag">ฟีเจอร์ 09</span>
+      <span class="version-chip v-current">v1 · ปัจจุบัน</span>
+    </div>
+    <p class="module-desc">เลือกชุดเกณฑ์ → สนทนากับแชทบอทระหว่างร่างหลักสูตร</p>
+    <div class="screens">
+      <a class="screen-card" href="20260823-prototype-v1/08-select-criteria-chatbot.html"><div class="screen-num">08</div><div class="screen-name">เลือกชุดเกณฑ์ — แชทบอท</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/09-chatbot-advisory.html"><div class="screen-num">09</div><div class="screen-name">สนทนากับแชทบอท</div></a>
+    </div>
+  </section>
+
+  <!-- โมดูล: ผู้ใช้งานทั่วไป — ดูฐานความรู้อ่านอย่างเดียว -->
+  <section class="module">
+    <div class="module-head">
+      <h2>ผู้ใช้งานทั่วไป — ดูฐานความรู้แบบอ่านอย่างเดียว</h2>
+      <span class="role-tag">ฟีเจอร์ 15</span>
+      <span class="version-chip v-current">v1 · ปัจจุบัน · ใหม่ 2026-09-15</span>
+    </div>
+    <p class="module-desc">มุมมอง read-only เดียว เข้าถึงได้จากทั้งหน้าเลือกชุดเกณฑ์ (02) และหน้าแชทบอท (09) — ด้านล่างคือเวอร์ชันสาธิตแบบเต็มหน้า</p>
+    <div class="screens">
+      <a class="screen-card" href="20260823-prototype-v1/13-knowledge-base-view.html"><div class="screen-num">13</div><div class="screen-name">ดูฐานความรู้เกณฑ์มาตรฐาน (อ่านอย่างเดียว)</div></a>
+    </div>
+  </section>
+
+  <!-- โมดูล: Auth -->
+  <section class="module">
+    <div class="module-head">
+      <h2>เข้าสู่ระบบ / จัดการผู้ใช้</h2>
+      <span class="role-tag">ฟีเจอร์ 12–13</span>
+      <span class="version-chip v-current">v1 · ปัจจุบัน</span>
+    </div>
+    <p class="module-desc">เข้าสู่ระบบ → สมัครสมาชิก · แอดมินจัดการบทบาทผู้ใช้</p>
+    <div class="screens">
+      <a class="screen-card" href="20260823-prototype-v1/10-login.html"><div class="screen-num">10</div><div class="screen-name">เข้าสู่ระบบ</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/11-signup.html"><div class="screen-num">11</div><div class="screen-name">สมัครสมาชิก</div></a>
+      <a class="screen-card" href="20260823-prototype-v1/12-manage-users.html"><div class="screen-num">12</div><div class="screen-name">แอดมินจัดการบทบาทผู้ใช้</div></a>
+    </div>
+  </section>
+
+  <!-- โมดูล: แอดมิน — หลักสูตร/กรอบทักษะ (v3) -->
+  <section class="module">
+    <div class="module-head">
+      <h2>แอดมิน — จัดการหลักสูตร &amp; ชุดกรอบทักษะอ้างอิง</h2>
+      <span class="role-tag">ฟีเจอร์ 10, 14</span>
+      <span class="version-chip v-current">v3 · ปัจจุบัน</span>
+    </div>
+    <p class="module-desc">ผูกเล่ม มคอ.2 ที่ผ่านการตรวจสอบแล้วเข้ากับรายชื่อหลักสูตร · จัดการชุดกรอบทักษะที่ตลาดต้องการ</p>
+    <div class="screens">
+      <a class="screen-card" href="20260915-prototype-v3/01-admin-manage-courses.html"><div class="screen-num">01</div><div class="screen-name">จัดการหลักสูตรสำหรับแดชบอร์ด</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/02-admin-link-tqf2-modal.html"><div class="screen-num">02</div><div class="screen-name">เพิ่มหลักสูตร — ผูกเล่ม มคอ.2</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/08-admin-skill-framework-sets.html"><div class="screen-num">08</div><div class="screen-name">จัดการชุดกรอบทักษะอ้างอิง</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/09-admin-skill-framework-upload.html"><div class="screen-num">09</div><div class="screen-name">อัปโหลดเอกสารกรอบทักษะ</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/10-admin-skill-review.html"><div class="screen-num">10</div><div class="screen-name">ตรวจสอบและอนุมัติทักษะ</div></a>
+    </div>
+    <div class="old-list">เดิม (v2 — เก็บไว้เพื่อประวัติ ไม่ใช่ current แล้ว): <a href="20260904-prototype-v2/01-admin-select-school-courses.html">01-admin-select-school-courses.html</a>, <a href="20260904-prototype-v2/02-admin-add-course-modal.html">02-admin-add-course-modal.html</a></div>
+  </section>
+
+  <!-- โมดูล: ผู้บริหาร -->
+  <section class="module">
+    <div class="module-head">
+      <h2>ผู้บริหาร — แดชบอร์ดวิเคราะห์ข้อมูลหลักสูตร</h2>
+      <span class="role-tag">ฟีเจอร์ 11</span>
+      <span class="version-chip v-current">v3 · ปัจจุบัน</span>
+    </div>
+    <p class="module-desc">เลือกสำนักวิชา → ภาพรวมระดับสำนักวิชา → ผลวิเคราะห์สุขภาพหลักสูตร 4 มิติ → ความครอบคลุมทักษะ → export PDF (read-only ทั้งหมด)</p>
+    <div class="screens">
+      <a class="screen-card" href="20260915-prototype-v3/03-executive-select-school.html"><div class="screen-num">03</div><div class="screen-name">เลือกสำนักวิชา</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/04-executive-school-summary.html"><div class="screen-num">04</div><div class="screen-name">ภาพรวมระดับสำนักวิชา</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/05-executive-program-health.html"><div class="screen-num">05</div><div class="screen-name">ผลวิเคราะห์สุขภาพหลักสูตร</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/06-executive-skill-coverage.html"><div class="screen-num">06</div><div class="screen-name">ความครอบคลุมทักษะ</div></a>
+      <a class="screen-card" href="20260915-prototype-v3/07-executive-report-preview.html"><div class="screen-num">07</div><div class="screen-name">ตัวอย่างรายงานสรุป PDF</div></a>
+    </div>
+    <div class="old-list">เดิม (v2 — เก็บไว้เพื่อประวัติ ไม่ใช่ current แล้ว): <a href="20260904-prototype-v2/03-executive-select-school.html">03-executive-select-school.html</a>, <a href="20260904-prototype-v2/04-executive-select-course.html">04-executive-select-course.html</a>, <a href="20260904-prototype-v2/05-executive-dashboard-stats.html">05-executive-dashboard-stats.html</a></div>
+  </section>
+
+  <footer class="note">
+    อ้างอิง Design System: <a href="DESIGN.md">DESIGN.md</a> (โทเค็นสี/ฟอนต์ในหน้านี้คัดลอกมาจากไฟล์เดียวกัน) — สร้างเมื่อ 2026-09-15 เป็นเครื่องมือช่วยรีวิวเท่านั้น ไม่ใช่หน้าจอของฟีเจอร์ใดฟีเจอร์หนึ่ง จึงไม่มี manifest แยกและไม่ผูกกับ Acceptance Criteria/Test Case ใดๆ เมื่อมี prototype เวอร์ชันใหม่มาแทนที่ฟีเจอร์ใดเพิ่มเติมในอนาคต ให้อัปเดตรายการในหน้านี้ตามไปด้วย (ย้ายไปช่อง "เดิม" แทนการลบทิ้ง)
+  </footer>
+
+</div>
+</body>
+</html>
