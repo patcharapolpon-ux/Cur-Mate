@@ -55,8 +55,30 @@
     return a;
   }
 
-  // ลบ criteriaSets/{id} พร้อมลบพ่วง (cascade) rules ทุกข้อของชุดนั้น
-  // และ reviewLog ใต้แต่ละ rule ด้วย — กันไม่ให้มีข้อมูลค้างอ้างอิง criteriaSetId ที่ไม่มีอยู่จริง
+  // ลบ reviewLog ทั้งหมดใต้ rule ข้อเดียว แล้วลบตัว rule เอง
+  async function ลบrulePlusLog(ruleRef) {
+    var logSnapshot = await ruleRef.collection("reviewLog").get();
+    var logDeletions = [];
+    logSnapshot.forEach(function (logDoc) { logDeletions.push(logDoc.ref.delete()); });
+    await Promise.all(logDeletions);
+    await ruleRef.delete();
+  }
+
+  // ห่อ promise ด้วย timeout กันไม่ให้ค้างตลอดกาลถ้าเครือข่ายมีปัญหา/สิทธิ์ไม่พอแล้ว SDK แค่เงียบไปโดยไม่ error
+  // (แนวคิดเดียวกับ uploadPdfWithTimeout ใน js/create-criteria-set.js)
+  function withTimeout(promise, timeoutMs, timeoutMessage) {
+    return new Promise(function (resolve, reject) {
+      var timer = setTimeout(function () { reject(new Error(timeoutMessage)); }, timeoutMs);
+      promise.then(
+        function (result) { clearTimeout(timer); resolve(result); },
+        function (err) { clearTimeout(timer); reject(err); }
+      );
+    });
+  }
+
+  // ลบ criteriaSets/{id} พร้อมลบพ่วง (cascade) rules ทุกข้อของชุดนั้น, reviewLog ใต้แต่ละ rule,
+  // และ extractionLog ของชุดนั้นด้วย — กันไม่ให้มีข้อมูลค้างอ้างอิง criteriaSetId ที่ไม่มีอยู่จริง
+  // ลบทุก rule แบบขนาน (Promise.all) ไม่ใช่ทีละข้อ เพื่อให้เร็วขึ้นเมื่อชุดมีกฎเกณฑ์หลายสิบข้อ
   async function ลบชุดเกณฑ์(id, name, cardEl) {
     var confirmed = window.confirm(
       'ต้องการลบชุดเกณฑ์ "' + name + '" ทิ้งถาวรหรือไม่? ' +
@@ -68,20 +90,27 @@
     deleteBtn.disabled = true;
     deleteBtn.textContent = "กำลังลบ...";
 
-    var rulesSnapshot = await db.collection("rules").where("criteriaSetId", "==", id).get();
-    for (var i = 0; i < rulesSnapshot.docs.length; i++) {
-      var ruleRef = rulesSnapshot.docs[i].ref;
-      var logSnapshot = await ruleRef.collection("reviewLog").get();
-      var logDeletions = [];
-      logSnapshot.forEach(function (logDoc) { logDeletions.push(logDoc.ref.delete()); });
-      await Promise.all(logDeletions);
-      await ruleRef.delete();
-    }
-    await db.collection("criteriaSets").doc(id).delete();
+    try {
+      await withTimeout((async function () {
+        var rulesSnapshot = await db.collection("rules").where("criteriaSetId", "==", id).get();
+        await Promise.all(rulesSnapshot.docs.map(function (doc) { return ลบrulePlusLog(doc.ref); }));
 
-    cardEl.remove();
-    if (!list.querySelector(".criteria-set-card")) {
-      list.innerHTML = '<p style="color:var(--color-text-secondary);">ยังไม่มีข้อมูล — เปิด seed.html เพื่อใส่ข้อมูลตัวอย่างก่อน</p>';
+        var extractionLogSnapshot = await db.collection("criteriaSets").doc(id).collection("extractionLog").get();
+        var extractionLogDeletions = [];
+        extractionLogSnapshot.forEach(function (logDoc) { extractionLogDeletions.push(logDoc.ref.delete()); });
+        await Promise.all(extractionLogDeletions);
+
+        await db.collection("criteriaSets").doc(id).delete();
+      })(), 20000, "ลบไม่สำเร็จภายในเวลาที่กำหนด — เครือข่ายอาจมีปัญหา หรือสิทธิ์ไม่พอ (เช็ค role/rules แล้วลองใหม่)");
+
+      cardEl.remove();
+      if (!list.querySelector(".criteria-set-card")) {
+        list.innerHTML = '<p style="color:var(--color-text-secondary);">ยังไม่มีข้อมูล — เปิด seed.html เพื่อใส่ข้อมูลตัวอย่างก่อน</p>';
+      }
+    } catch (err) {
+      window.alert("ลบชุดเกณฑ์ไม่สำเร็จ: " + err.message);
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = "ลบชุดเกณฑ์นี้";
     }
   }
 

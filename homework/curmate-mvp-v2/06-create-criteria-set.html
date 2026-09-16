@@ -9,8 +9,11 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-storage-compat.js" defer></script>
 <script src="js/firebase-config.js" defer></script>
 <script src="js/auth.js" defer></script>
+<script src="js/ai-config.local.js" defer></script>
+<script src="js/ai-helper.js" defer></script>
 <script src="js/create-criteria-set.js" defer></script>
 <style>
   :root {
@@ -363,7 +366,7 @@
   </div>
 
   <h1>สร้างชุดเกณฑ์ใหม่</h1>
-  <p class="lead">ตั้งชื่อและกรอกข้อมูลกำกับของชุดเกณฑ์ — กดบันทึกแล้วจะเขียนลง Firestore collection <code>criteriaSets</code> จริง (สถานะเริ่มต้น "รอตรวจสอบ")</p>
+  <p class="lead">ตั้งชื่อและกรอกข้อมูลกำกับของชุดเกณฑ์ — กดบันทึกแล้วจะเขียนลง Firestore collection <code>criteriaSets</code> จริง (สถานะเริ่มต้น "รอตรวจสอบ") พร้อมอัปโหลดเอกสาร + ให้ AI สกัดกฎเกณฑ์จริง</p>
 
   <div class="field">
     <label for="setName">ชื่อชุดเกณฑ์</label>
@@ -393,14 +396,19 @@
   </div>
 
   <h2 class="section-title">อัปโหลดเอกสารเข้าชุดเกณฑ์</h2>
+  <p class="helper" style="font-size:13px;color:var(--color-text-secondary);margin:-8px 0 20px;">ไฟล์ Markdown (บังคับ) คือเนื้อหาที่ AI จะอ่านเพื่อสกัดกฎเกณฑ์ (แปลงจาก PDF เป็น .md มาก่อนล่วงหน้า ช่วยประหยัด token และลดอาการ AI หลอน) ส่วนไฟล์ PDF (ไม่บังคับ) เก็บไว้เป็นหลักฐานอ้างอิง/เปิดดูฉบับจริงได้ที่หน้าตรวจสอบ — ต้องใช้ Firebase Storage (แผน Blaze) ถึงจะอัปโหลดได้จริง ถ้ายังไม่พร้อมใช้ Storage ข้ามช่องนี้ไปได้เลย ไม่กระทบการสกัดกฎเกณฑ์</p>
 
-  <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="คลิกเพื่ออัปโหลดเอกสารเกณฑ์มาตรฐาน">
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
-    <div class="dropzone-title">คลิกเพื่อเลือกไฟล์ (จำลอง) หรือลากไฟล์มาวางที่นี่</div>
-    <div class="dropzone-sub">รองรับไฟล์ PDF และ Word (.docx) — การอัปโหลดจริง/สกัดกฎเกณฑ์ด้วย AI ยังไม่ได้ทำในเวอร์ชันนี้ (ดู SCOPE.md)</div>
+  <div class="field">
+    <label for="pdfInput">เอกสารต้นฉบับ (PDF) — ไม่บังคับ, สำหรับเปิดดูอ้างอิง (เผื่ออนาคตเปิดใช้ Storage)</label>
+    <input type="file" id="pdfInput" accept="application/pdf,.pdf" class="text-input" style="padding:10px 14px;height:auto;">
+    <p class="helper" id="pdfFileName">ยังไม่เลือกไฟล์ (ข้ามได้)</p>
   </div>
 
-  <div id="fileList" class="file-list"></div>
+  <div class="field">
+    <label for="mdInput">เนื้อหาที่แปลงเป็น Markdown (.md) — บังคับ, สำหรับให้ AI อ่านสกัดกฎเกณฑ์</label>
+    <input type="file" id="mdInput" accept=".md,text/markdown" class="text-input" style="padding:10px 14px;height:auto;">
+    <p class="helper" id="mdFileName">ยังไม่เลือกไฟล์</p>
+  </div>
 
   <div id="toast" class="toast">
     <div class="spinner"></div>
@@ -419,7 +427,11 @@
 <footer class="dev-note">
   ต่อยอดจาก <code>homework/curmate-mvp</code> (สัปดาห์ที่ 6) — หน้าตานี้นำมาจาก
   <code>docs/02-design/01-prototypes/20260823-prototype-v1/06-create-criteria-set.html</code>
-  แล้วต่อ Firestore จริงเฉพาะการบันทึกชุดเกณฑ์ ส่วนอัปโหลดไฟล์/สกัด AI ยังคงจำลองเหมือนเดิม
+  แล้วต่อ Firestore + AI จริงทั้งหมด (เพิ่มเมื่อสัปดาห์ที่ 8): อ่านไฟล์ .md (บังคับ) เป็นข้อความส่งให้ AI
+  (OpenRouter, model google/gemini-2.5-flash-lite) สกัดกฎเกณฑ์จริง แล้วเขียนเป็นเอกสารใหม่ใน <code>rules</code> จริง
+  พร้อมบันทึก <code>criteriaSets/{id}/extractionLog</code> ทุกครั้งที่สกัด — ไฟล์ PDF (ไม่บังคับ) พยายามอัปโหลดขึ้น
+  Firebase Storage แบบมี timeout 15 วินาที ถ้า Storage ยังไม่พร้อมใช้งาน (ต้องแผน Blaze) จะข้ามไปสกัดกฎเกณฑ์ต่อทันที
+  ไม่ค้างรอ ไม่บล็อกการทำงานหลัก
   ที่มา: feature-list.md ฟีเจอร์ 06 · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 2 และ FR ข้อ 3
 </footer>
 </body>

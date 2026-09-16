@@ -22,11 +22,13 @@ Stack: vanilla JS + Firebase JS SDK v10.13.0 (compat mode, `firebase.initializeA
 
 | หน้า | script | อ่าน/เขียน collection |
 | --- | --- | --- |
-| `05-criteria-dashboard.html` | `js/dashboard.js` | อ่าน `criteriaSets` ทั้งหมด, ลบพ่วง `rules`+`reviewLog` เมื่อลบชุดเกณฑ์ |
-| `06-create-criteria-set.html` | `js/create-criteria-set.js` | เขียนเอกสารใหม่ลง `criteriaSets` (`status: pending`) — ไม่สร้าง `rules` ใดๆ (ดูหัวข้อ "จำลอง" ด้านล่าง) |
-| `07-rule-review-approval.html` | `js/rule-review.js` | อ่าน `criteriaSets/{setId}` + `rules` ที่ `criteriaSetId == setId`, เขียน `rules.status` และ `criteriaSets.status`, เพิ่มแถว `reviewLog` |
+| `05-criteria-dashboard.html` | `js/dashboard.js` | อ่าน `criteriaSets` ทั้งหมด, ลบพ่วง `rules`+`reviewLog`+`extractionLog` เมื่อลบชุดเกณฑ์ |
+| `06-create-criteria-set.html` | `js/create-criteria-set.js` | เขียนเอกสารใหม่ลง `criteriaSets` (`status: pending` + `sourceFileUrl`/`sourceFileName`/`sourceMarkdownText`), อัปโหลดไฟล์ขึ้น Firebase Storage, เรียก AI สกัดกฎเกณฑ์จริงแล้วเขียน `rules` ใหม่หลายเอกสาร, เพิ่มแถว `criteriaSets/{id}/extractionLog` |
+| `07-rule-review-approval.html` | `js/rule-review.js` | อ่าน `criteriaSets/{setId}` + `rules` ที่ `criteriaSetId == setId`, เขียน `rules.status`/`.ruleText`/`.category` และ `criteriaSets.status`, เพิ่มแถว `reviewLog`/`extractionLog` (ปุ่ม "สกัดใหม่" ลบ+เขียน `rules` ใหม่ด้วย) |
 | `manage-users.html` | `js/manage-users.js` | อ่าน `users` ทั้งหมด, เขียน `users/{uid}.role` (ยกเว้นแถวของตัวเอง) |
 | `seed.html` | `js/seed.js` + `js/data.js` | เขียนข้อมูลตัวอย่างทั้ง 4 collection ครั้งเดียว |
+
+**ผู้ช่วย AI (เพิ่มเมื่อสัปดาห์ที่ 8)**: `js/ai-helper.js` (โหลดหลัง `js/ai-config.local.js` เสมอ) ให้ฟังก์ชันกลาง `window.CURMATE_CALL_AI(messages)` เรียก OpenRouter (`google/gemini-2.5-flash-lite`) จากฝั่ง client ตรงๆ ใช้ทั้งใน `js/create-criteria-set.js` (สกัดครั้งแรก) และ `js/rule-review.js` (สกัดใหม่ + จัดหมวดหมู่รายข้อ) — ดูรายละเอียดเต็มใน [SCOPE.md](./SCOPE.md) หัวข้อ "ผู้ช่วย AI สกัดกฎเกณฑ์"
 
 การไหลระหว่างหน้า: `05 → 06` (ปุ่ม "สร้างชุดเกณฑ์ใหม่") → บันทึกเสร็จพากลับ `05` → คลิกการ์ดใน `05` พาไป `07` พร้อม id ของชุดเกณฑ์
 
@@ -37,6 +39,7 @@ Stack: vanilla JS + Firebase JS SDK v10.13.0 (compat mode, `firebase.initializeA
 ```
 📁 users
 📁 criteriaSets
+   └ 📁 extractionLog  (subcollection ของ criteriaSets/{setId} — เพิ่มเมื่อสัปดาห์ที่ 8)
 📁 rules
    └ 📁 reviewLog     (subcollection ของ rules/{ruleId})
 ```
@@ -77,8 +80,14 @@ role มี 2 ค่า (เก็บใน `users/{uid}.role` เป็นโ�
 - **ไม่ได้บังคับซ้ำ** เรื่องล็อกแก้ไข/ลบ `rules` ตอน `criteriaSets.status == "active"` (ต่างจาก UI ที่ล็อกไว้ที่หน้า 07) เพราะจะทำให้ cascade delete ของ dashboard.js (ลบ `rules` ทุกข้อตอนลบทั้งชุดเกณฑ์ทิ้ง แม้ชุดนั้นจะ `active` อยู่) พังไปด้วย — ยังคงจำกัดว่าต้องเป็น ADMIN เท่านั้นถึงจะทำได้อยู่ดี ไม่ใช่ช่องโหว่
 - **`seed.html` จะพังหลัง publish กฎนี้** เพราะ `js/seed.js` เขียนตรงๆ โดยไม่ login และกำหนด document id เอง (ไม่ใช่ auth.uid) — ต้องสลับ Firestore กลับเป็น test rules ชั่วคราวถ้าต้อง seed ข้อมูลใหม่ ทำเสร็จแล้วค่อย publish `firestore.rules` กลับ
 
+## ผู้ช่วย AI สกัดกฎเกณฑ์ (เพิ่มเมื่อสัปดาห์ที่ 8)
+
+หน้า 06 รับ 2 ไฟล์: ไฟล์ `.md` ที่แปลงมาก่อนแล้ว (**บังคับ** → อ่านเป็นข้อความส่งให้ AI) และ PDF ต้นฉบับ (**ไม่บังคับ** → Firebase Storage สำหรับดูอ้างอิง ต้องแผน Blaze ถึงจะอัปโหลดได้จริง มี timeout 15 วินาทีกันไม่ให้ค้างถ้า Storage ใช้งานไม่ได้) แล้วเรียก AI จริง (OpenRouter, `google/gemini-2.5-flash-lite`) สกัดเป็นกฎเกณฑ์เขียนลง `rules` จริง (พร้อม `sourceRef` — เลขข้อ/หมวด/มาตราอ้างอิงกลับเอกสารต้นฉบับ, และ `criteriaSetName` — denormalize ชื่อชุดเกณฑ์ไว้ด้วย ทั้งคู่ read-only มาจาก AI ล้วน) — หน้า 07 เพิ่มปุ่ม "ดูเอกสารต้นฉบับ", "สกัดใหม่ด้วย AI" (ลบ `rules` ที่ยัง `pending` แล้วสกัดซ้ำจาก `sourceMarkdownText` เดิม), "แก้ไขคำ" (เฉพาะ `pending`, แก้ได้แค่ `ruleText` ไม่ใช่ `sourceRef`), และ "ให้ AI ช่วยจัดหมวดหมู่" ต่อข้อ (เขียน `rules.category` เมื่อกดยืนยันเท่านั้น) รายละเอียดครบทุกจุดอยู่ใน [SCOPE.md](./SCOPE.md) หัวข้อ "ผู้ช่วย AI สกัดกฎเกณฑ์ (เพิ่มเมื่อสัปดาห์ที่ 8)"
+
 ## ข้อห้าม/ข้อควรระวัง
 
 - **ห้ามใส่ secret จริงลงไฟล์ที่จะ push** — service account JSON, admin SDK credential, หรือ API key/token ส่วนตัวอื่นใด ห้ามฝังในโค้ดของโฟลเดอร์นี้เด็ดขาด
   - ข้อยกเว้นที่ตั้งใจ: `js/firebase-config.js` มี Firebase **Web API key** ฝังอยู่โดยตั้งใจ — ค่านี้ไม่ใช่ความลับ (ออกแบบมาให้เปิดเผยได้ ปลอดภัยจริงอยู่ที่ Firestore Security Rules ไม่ใช่ตัว key) จึง commit ได้ตามปกติ ไม่ต้องแจ้งเตือน
-- Firestore project (`cur-mate`) อยู่โหมด test rules (อนุญาต read/write แบบเปิด) หมดอายุ 2026-10-04 — ถ้าเกินวันนี้แล้ว seed/เขียนข้อมูลจะ fail ให้แจ้งผู้ใช้ไปตั้ง rules ใหม่ใน Firebase Console แทนการพยายามแก้ไขปัญหาด้วยวิธีอื่น
+  - **`js/ai-config.local.js` (เพิ่มเมื่อสัปดาห์ที่ 8) ตรงข้ามกับข้อยกเว้นข้างต้น** — เก็บคีย์ OpenRouter ของหลักสูตรที่มีวงเงินจำกัด **ห้าม push ขึ้น GitHub เด็ดขาด** ครอบด้วย pattern `*.local.js` ใน `.gitignore` อยู่แล้ว ก่อน push ทุกครั้งต้องเช็คว่าไฟล์นี้ไม่ติดไปกับ `git status`/`git add` และเปิด repo บน GitHub หาคำว่า `sk-or` ต้องไม่เจอ (ตามที่ใบงาน w8-homework ระบุ) — ห้ามใช้คีย์ Gemini ส่วนตัวจาก Google AI Studio แทนเด็ดขาดตามเงื่อนไขการบ้าน ใช้คีย์ของหลักสูตรเท่านั้น
+- Firestore project (`cur-mate`) ใช้ [firestore.rules](./firestore.rules) จริงแล้ว (ไม่ใช่ open test rules อีกต่อไปตั้งแต่สัปดาห์ที่ 7 — ดูหัวข้อ "Firestore Security Rules" ด้านล่าง) — ถ้าแก้ไฟล์นี้ต้อง copy ไป publish ที่ Firebase Console ซ้ำทุกครั้งที่แก้ ไม่งั้นของจริงจะไม่ตรงกับไฟล์ในโค้ด
+- **Firebase Storage (เพิ่มเมื่อสัปดาห์ที่ 8)** ต้องเปิดใช้งานที่ Firebase Console ก่อน (กด "Get started" ที่แท็บ Storage ถ้ายังไม่เคยเปิด) แล้ว copy [storage.rules](./storage.rules) ไป publish เอง เหมือน `firestore.rules` — ไม่มี Firebase CLI ตั้งค่าไว้ในโฟลเดอร์นี้เช่นเดิม

@@ -11,6 +11,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
 <script src="js/firebase-config.js" defer></script>
 <script src="js/auth.js" defer></script>
+<script src="js/ai-config.local.js" defer></script>
+<script src="js/ai-helper.js" defer></script>
 <script src="js/rule-review.js" defer></script>
 <style>
   :root {
@@ -231,6 +233,13 @@
     text-transform: uppercase;
   }
 
+  .rule-source-ref {
+    font-size: 12px;
+    font-family: var(--font-mono, monospace);
+    color: var(--color-text-secondary);
+    margin: 0 0 6px;
+  }
+
   .rule-text {
     font-size: 16px;
     color: var(--color-text-primary);
@@ -310,6 +319,90 @@
   }
   .btn-danger:hover:not(:disabled) { background: var(--color-error-bg); }
   .btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .rule-edit-area {
+    width: 100%;
+    min-height: 80px;
+    padding: var(--space-12);
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--radius-medium);
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--color-text-primary);
+    resize: vertical;
+    margin-bottom: var(--space-12);
+  }
+  .rule-edit-area:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  .category-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin: 0 0 var(--space-12);
+    flex-wrap: wrap;
+  }
+  .category-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-info-bg);
+    color: var(--color-info);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .category-suggestion {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+    padding: var(--space-8) var(--space-12);
+    background: var(--color-ai-accent-bg);
+    border-radius: var(--radius-medium);
+    font-size: 13px;
+    color: #4C1D95;
+  }
+  .category-suggestion .ai-badge { flex-shrink: 0; }
+  .category-error {
+    font-size: 13px;
+    color: var(--color-error-text);
+  }
+
+  .toolbar-secondary {
+    display: flex;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+  }
+
+  .toast {
+    display: none;
+    align-items: flex-start;
+    gap: var(--space-12);
+    margin-bottom: var(--space-16);
+    padding: var(--space-16);
+    border-radius: var(--radius-medium);
+    background: var(--color-ai-accent-bg);
+    color: #4C1D95;
+  }
+  .toast.show { display: flex; }
+  .toast-title { font-weight: 600; margin: 0 0 4px; }
+  .toast-body { font-size: 14px; margin: 0; }
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(124, 58, 237, 0.25);
+    border-top-color: var(--color-ai-accent);
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+    margin-top: 2px;
+    animation: spin 800ms linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   .approved-label {
     display: inline-flex;
@@ -394,6 +487,7 @@
         รอตรวจสอบ
       </span>
       <button type="button" id="deactivateSetBtn" class="btn btn-secondary btn-small" hidden>แก้ไขชุดเกณฑ์นี้อีกครั้ง</button>
+      <a id="viewSourceLink" class="btn btn-secondary btn-small" target="_blank" rel="noopener" hidden>ดูเอกสารต้นฉบับ (PDF)</a>
     </div>
   </div>
   <p class="lead" id="pageLead">อ่านกฎเกณฑ์ของชุดนี้จาก Firestore collection <code>rules</code> โดยตรง (กรองด้วย <code>criteriaSetId</code>) กรุณาตรวจสอบและอนุมัติ/ไม่อนุมัติทีละข้อ หรืออนุมัติทั้งชุดพร้อมกัน — การกดอนุมัติ/ไม่อนุมัติจะแก้เฉพาะ field <code>status</code> กลับไปที่ Firestore จริง (<code>approved</code> / <code>rejected</code>) พร้อมบันทึกลง <code>reviewLog</code></p>
@@ -412,7 +506,17 @@
 
   <div class="toolbar" id="toolbar">
     <p class="progress-note" id="progressNote">กำลังโหลด…</p>
-    <button type="button" class="btn btn-secondary" id="bulkApproveBtn" disabled>อนุมัติทั้งหมด (Bulk Approve)</button>
+    <div class="toolbar-secondary">
+      <button type="button" class="btn btn-secondary" id="reExtractBtn" hidden>สกัดใหม่ด้วย AI</button>
+      <button type="button" class="btn btn-secondary" id="bulkApproveBtn" disabled>อนุมัติทั้งหมด (Bulk Approve)</button>
+    </div>
+  </div>
+  <div id="reExtractStatus" class="toast">
+    <div class="spinner"></div>
+    <div>
+      <p class="toast-title" id="reExtractStatusTitle"></p>
+      <p class="toast-body" id="reExtractStatusBody"></p>
+    </div>
   </div>
 
   <div class="rule-list" id="ruleList">
@@ -436,6 +540,11 @@
   ปุ่ม "ลบ" ต่อข้อ (เพิ่มเมื่อ 2026-09-06) ถาม <code>confirm()</code> ก่อนทุกครั้ง ยกเลิกแล้วไม่ลบ ยืนยันแล้วลบ
   <code>rules/{id}</code> พร้อม <code>reviewLog</code> ทั้งหมดใต้ข้อนั้น — ล็อกไว้ (ซ่อนปุ่ม) เหมือนปุ่ม "แก้ไข"
   ตอนชุดเกณฑ์อยู่สถานะ active ต้องกด "แก้ไขชุดเกณฑ์นี้อีกครั้ง" ก่อนถึงจะลบข้อย่อยได้ ·
+  เพิ่มเมื่อสัปดาห์ที่ 8: ปุ่ม "ดูเอกสารต้นฉบับ (PDF)" เปิด <code>criteriaSets.sourceFileUrl</code> แท็บใหม่ ·
+  ปุ่ม "สกัดใหม่ด้วย AI" ลบกฎเกณฑ์ที่ยัง <code>pending</code> ทั้งหมดแล้วเรียก AI สกัดจาก
+  <code>criteriaSets.sourceMarkdownText</code> เดิมซ้ำ (ข้อที่ approved/rejected แล้วไม่ถูกแตะ) พร้อมบันทึกแถวใหม่ใน
+  <code>extractionLog</code> · ปุ่ม "แก้ไขคำ" ต่อข้อ (เฉพาะสถานะ pending) แก้ <code>ruleText</code> ตรงๆ ·
+  ปุ่ม "ให้ AI ช่วยจัดหมวดหมู่" เรียก AI ครั้งเดียวต่อข้อ แสดงคำแนะนำให้กดยืนยันก่อนเขียน <code>rules.category</code> จริง ·
   ที่มา: feature-list.md ฟีเจอร์ 07 · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 4
 </footer>
 </body>

@@ -74,6 +74,14 @@ service cloud.firestore {
 
       // dashboard.js: ลบได้ทุกสถานะ (ไม่ล็อกตอน active — ตรงตาม SCOPE.md)
       allow delete: if isAdmin();
+
+      // criteriaSets/{setId}/extractionLog/{logId} — บันทึกทุกครั้งที่กด "สกัด"/"สกัดใหม่" (เพิ่มเมื่อสัปดาห์ที่ 8)
+      match /extractionLog/{logId} {
+        allow read: if isAdmin();
+        allow create: if isAdmin() && request.resource.data.triggeredBy == request.auth.uid;
+        allow update: if false; // ไม่มีฟีเจอร์แก้ไขประวัติย้อนหลัง
+        allow delete: if isAdmin(); // cascade delete ตอนลบชุดเกณฑ์ทิ้ง
+      }
     }
 
     // rules/{ruleId} — กฎเกณฑ์ย่อยของแต่ละชุด (มี criteriaSetId ชี้กลับไปหา criteriaSets)
