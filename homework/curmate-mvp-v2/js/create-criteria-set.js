@@ -1,19 +1,18 @@
 // ─────────────────────────────────────────────────────────────
 // js/create-criteria-set.js — บันทึกชุดเกณฑ์ใหม่ลง Firestore (collection criteriaSets)
-// พร้อมอัปโหลดเอกสารจริง + ให้ AI สกัดกฎเกณฑ์จริง (เพิ่มเมื่อสัปดาห์ที่ 8):
+// พร้อมลิงก์เอกสารจริง + ให้ AI สกัดกฎเกณฑ์จริง (เพิ่มเมื่อสัปดาห์ที่ 8, ปรับใหม่ภายในสัปดาห์เดียวกัน):
 // 1) สร้าง criteriaSets (status: pending)
-// 2) [ไม่บังคับ] อัปโหลดไฟล์ PDF ต้นฉบับขึ้น Firebase Storage เก็บ URL ไว้ดูอ้างอิง (sourceFileUrl) —
-//    ต้องใช้แผน Blaze ถึงจะใช้ Storage ได้จริง ถ้ายังไม่ได้อัปเกรด/ไม่ได้เลือกไฟล์ PDF จะข้ามขั้นนี้ไปเลย
-//    ไม่บล็อกการสกัดกฎเกณฑ์ (มี timeout กันไม่ให้ค้างรอ retry ของ Storage SDK นานเกินไป)
+// 2) [ไม่บังคับ] ลิงก์เอกสารต้นฉบับ (Google Drive ที่ผู้ใช้อัปโหลด+แชร์เอง) เก็บเป็น string ตรงๆ ไว้ที่ sourceFileUrl —
+//    เปลี่ยนจากอัปโหลดไฟล์ผ่าน Firebase Storage มาเป็นแบบนี้ตามคำแนะนำของอาจารย์ผู้สอน เพราะ Storage ต้องใช้แผน Blaze
 // 3) [บังคับ] อ่านไฟล์ .md เป็นข้อความ (sourceMarkdownText) เก็บไว้ใช้ "สกัดใหม่" ได้อีกโดยไม่ต้องอัปโหลดซ้ำ
 // 4) ส่ง sourceMarkdownText ให้ AI (js/ai-helper.js) สกัดเป็นรายการกฎเกณฑ์ เขียนเป็น rules ใหม่
 // 5) บันทึกแถวใน criteriaSets/{id}/extractionLog ทุกครั้งที่สกัด
 // ─────────────────────────────────────────────────────────────
 
 (function () {
-  var pdfInput = document.getElementById("pdfInput");
+  var pdfLinkInput = document.getElementById("pdfLinkInput");
+  var pdfLinkError = document.getElementById("pdfLinkError");
   var mdInput = document.getElementById("mdInput");
-  var pdfFileName = document.getElementById("pdfFileName");
   var mdFileName = document.getElementById("mdFileName");
   var extractBtn = document.getElementById("extractBtn");
   var toast = document.getElementById("toast");
@@ -22,7 +21,6 @@
 
   // หน้านี้เป็นของ ADMIN ล้วน (สร้าง/แก้ไขชุดเกณฑ์เป็นสิทธิ์จัดการ ไม่ใช่แค่ดู — ดู ACL.md)
   var currentUser = null;
-  var selectedPdfFile = null;
   var selectedMdFile = null;
 
   window.CURMATE_AUTH_READY.then(function (user) {
@@ -31,17 +29,26 @@
     updateExtractState();
   });
 
-  // PDF ไม่บังคับ (ต้องมี Firebase Storage แผน Blaze ถึงจะอัปโหลดได้จริง) — มีแค่ไฟล์ .md กับชื่อชุดก็กดสกัดได้แล้ว
-  function updateExtractState() {
-    var ชื่อกรอกแล้ว = document.getElementById("setName").value.trim().length > 0;
-    extractBtn.disabled = !ชื่อกรอกแล้ว || !selectedMdFile || !currentUser;
+  // เช็คแค่รูปแบบ URL (http/https) ไม่บังคับว่าต้องเป็น drive.google.com เป๊ะ เผื่ออนาคตอยากใช้บริการเก็บไฟล์อื่น
+  function isValidHttpUrl(value) {
+    try {
+      var url = new URL(value);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch (e) {
+      return false;
+    }
   }
 
-  pdfInput.addEventListener("change", function () {
-    selectedPdfFile = pdfInput.files[0] || null;
-    pdfFileName.textContent = selectedPdfFile ? "เลือกแล้ว: " + selectedPdfFile.name : "ยังไม่เลือกไฟล์";
-    updateExtractState();
-  });
+  // ลิงก์ PDF ไม่บังคับ — มีแค่ไฟล์ .md กับชื่อชุดก็กดสกัดได้แล้ว แต่ถ้ากรอกลิงก์มาต้องเป็น URL ที่ใช้ได้จริง
+  function updateExtractState() {
+    var ชื่อกรอกแล้ว = document.getElementById("setName").value.trim().length > 0;
+    var pdfLink = pdfLinkInput.value.trim();
+    var pdfLinkOk = pdfLink.length === 0 || isValidHttpUrl(pdfLink);
+    pdfLinkError.textContent = pdfLinkOk ? "" : "ลิงก์ไม่ถูกต้อง — ต้องขึ้นต้นด้วย http:// หรือ https://";
+    extractBtn.disabled = !ชื่อกรอกแล้ว || !selectedMdFile || !currentUser || !pdfLinkOk;
+  }
+
+  pdfLinkInput.addEventListener("input", updateExtractState);
 
   mdInput.addEventListener("change", function () {
     selectedMdFile = mdInput.files[0] || null;
@@ -66,37 +73,6 @@
     toast.classList.add("show");
   }
 
-  // อัปโหลด PDF ขึ้น Firebase Storage แบบมี timeout กันไม่ให้ค้าง — Storage SDK จะ retry เองอัตโนมัติเวลา
-  // เรียกไม่ผ่าน (เช่น Storage ยังไม่ได้อัปเกรดเป็นแผน Blaze) ซึ่งอาจกินเวลาหลายนาทีกว่าจะ error ออกมาจริง
-  // ฟังก์ชันนี้เลย "ยอมแพ้" เองภายใน timeoutMs แทนการรอ SDK retry จนจบ — คืนค่า null ถ้าอัปโหลดไม่สำเร็จ/หมดเวลา
-  // (ไม่ throw เพราะ PDF เป็นแค่ของเสริม ไม่ควรทำให้การสกัดกฎเกณฑ์หลักพังไปด้วย)
-  function uploadPdfWithTimeout(file, setId, timeoutMs) {
-    return new Promise(function (resolve) {
-      var settled = false;
-      var timer = setTimeout(function () {
-        if (settled) { return; }
-        settled = true;
-        resolve(null);
-      }, timeoutMs);
-
-      var storageRef = storage.ref("criteriaDocuments/" + setId + "/" + file.name);
-      storageRef.put(file)
-        .then(function () { return storageRef.getDownloadURL(); })
-        .then(function (url) {
-          if (settled) { return; }
-          settled = true;
-          clearTimeout(timer);
-          resolve({ url: url, name: file.name });
-        })
-        .catch(function () {
-          if (settled) { return; }
-          settled = true;
-          clearTimeout(timer);
-          resolve(null);
-        });
-    });
-  }
-
   // ตัว system prompt + ฟังก์ชัน parse ผลลัพธ์ AI ใช้ร่วมกับ "สกัดใหม่" ในหน้า 07 — ประกาศไว้ที่ js/ai-helper.js
   // (window.CURMATE_EXTRACT_SYSTEM_PROMPT / window.CURMATE_PARSE_RULE_ARRAY) เพื่อไม่ให้ต้องแก้ 2 จุด
 
@@ -119,20 +95,13 @@
       var setRef = await db.collection("criteriaSets").add(newSet);
       var setId = setRef.id;
 
-      // PDF ไม่บังคับ — ถ้าเลือกไฟล์มาและ Storage ใช้งานได้จริง (แผน Blaze) จะได้ sourceFileUrl กลับมา
-      // ถ้าไม่ได้เลือกไฟล์ หรือ Storage ใช้งานไม่ได้/หมดเวลา ก็ข้ามไปสกัดกฎเกณฑ์ต่อทันที ไม่ค้างรอ
-      var pdfResult = null;
-      if (selectedPdfFile && storage) {
-        showToast("กำลังอัปโหลดเอกสารต้นฉบับ (PDF)...", "ไม่บังคับ — ถ้าอัปโหลดไม่สำเร็จภายใน 15 วินาทีจะข้ามไปสกัดกฎเกณฑ์ต่อทันที");
-        pdfResult = await uploadPdfWithTimeout(selectedPdfFile, setId, 15000);
-      }
-
       var markdownText = await readFileAsText(selectedMdFile);
 
+      // ลิงก์ Google Drive ไม่บังคับ — ผู้ใช้อัปโหลด+แชร์ไฟล์เองนอกระบบแล้วแปะลิงก์มาตรงๆ (เช็ครูปแบบ URL แล้วตอน updateExtractState)
+      var pdfLink = pdfLinkInput.value.trim();
       var updatePayload = { sourceMarkdownText: markdownText };
-      if (pdfResult) {
-        updatePayload.sourceFileUrl = pdfResult.url;
-        updatePayload.sourceFileName = pdfResult.name;
+      if (pdfLink) {
+        updatePayload.sourceFileUrl = pdfLink;
       }
       await setRef.update(updatePayload);
 

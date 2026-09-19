@@ -14,6 +14,3 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
-// storage-compat.js โหลดเฉพาะหน้าที่ต้องใช้จริง (06-create-criteria-set.html) — หน้าอื่นไม่โหลด SDK นี้
-// เพื่อไม่เพิ่ม payload ที่ไม่ได้ใช้ จึงต้องเช็คก่อนเรียก firebase.storage() ไม่งั้นหน้าที่ไม่ได้โหลด SDK นี้จะพัง
-var storage = (typeof firebase.storage === "function") ? firebase.storage() : null;

@@ -42,10 +42,8 @@ https://cur-mate.web.app/ (deploy ผ่าน Firebase Hosting — เข้า
 
 ## ความคืบหน้าสัปดาห์ที่ 8: ผู้ช่วย AI สกัดกฎเกณฑ์จากเอกสารจริง
 
-หน้า 06 อัปโหลดไฟล์จริง 2 ไฟล์ (PDF ต้นฉบับขึ้น Firebase Storage + ไฟล์ `.md` ที่แปลงมาให้ AI อ่าน) แล้วเรียก AI จริง (OpenRouter, `google/gemini-2.5-flash-lite`) สกัดกฎเกณฑ์เขียนลง `rules` จริง — หน้า 07 เพิ่มปุ่มดูเอกสารต้นฉบับ, สกัดใหม่, แก้ไขคำ, และให้ AI ช่วยจัดหมวดหมู่ต่อข้อ รายละเอียดครบที่ [SCOPE.md](./SCOPE.md) หัวข้อ "ผู้ช่วย AI สกัดกฎเกณฑ์"
+หน้า 06 อ่านไฟล์ `.md` ที่แปลงมาให้ AI อ่าน (บังคับ) พร้อมลิงก์เอกสารต้นฉบับ (PDF, ไม่บังคับ — อัปโหลดขึ้น Google Drive เองแล้วแปะลิงก์มา เก็บเป็น string ตรงๆ ไม่ผ่าน Firebase Storage) แล้วเรียก AI จริง (OpenRouter, `google/gemini-2.5-flash-lite`) สกัดกฎเกณฑ์เขียนลง `rules` จริง — หน้า 07 เพิ่มปุ่มดูเอกสารต้นฉบับ, สกัดใหม่, แก้ไขคำ, และให้ AI ช่วยจัดหมวดหมู่ต่อข้อ รายละเอียดครบที่ [SCOPE.md](./SCOPE.md) หัวข้อ "ผู้ช่วย AI สกัดกฎเกณฑ์"
 
-**ก่อนเปิดใช้งานฟีเจอร์นี้ ต้องตั้งค่าเพิ่ม 2 อย่างที่ Firebase Console**:
-1. เปิดใช้งาน **Storage** ในโปรเจกต์ `cur-mate` (ถ้ายังไม่เคยเปิด) แล้วก็อป [storage.rules](./storage.rules) ไป publish
-2. อัปเดต [firestore.rules](./firestore.rules) เวอร์ชันล่าสุด (เพิ่ม rule ของ `extractionLog`) ไป publish ซ้ำ
+**ก่อนเปิดใช้งานฟีเจอร์นี้ ต้องตั้งค่าเพิ่ม**: อัปเดต [firestore.rules](./firestore.rules) เวอร์ชันล่าสุด (เพิ่ม rule ของ `extractionLog`) ไป publish ซ้ำที่ Firebase Console → Firestore Database → Rules (ไม่ต้องเปิด Firebase Storage — เปลี่ยนมาใช้ลิงก์ Google Drive เก็บ PDF ต้นฉบับแทนแล้ว)
 
 คีย์ AI เก็บใน `js/ai-config.local.js` (ไม่ push ขึ้น GitHub — ครอบด้วย `.gitignore` อยู่แล้ว) ต้องสร้างไฟล์นี้เองในเครื่องที่รันก่อนใช้งานฟีเจอร์นี้

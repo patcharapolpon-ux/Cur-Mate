@@ -9,7 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js" defer></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-storage-compat.js" defer></script>
 <script src="js/firebase-config.js" defer></script>
 <script src="js/auth.js" defer></script>
 <script src="js/ai-config.local.js" defer></script>
@@ -396,12 +395,12 @@
   </div>
 
   <h2 class="section-title">อัปโหลดเอกสารเข้าชุดเกณฑ์</h2>
-  <p class="helper" style="font-size:13px;color:var(--color-text-secondary);margin:-8px 0 20px;">ไฟล์ Markdown (บังคับ) คือเนื้อหาที่ AI จะอ่านเพื่อสกัดกฎเกณฑ์ (แปลงจาก PDF เป็น .md มาก่อนล่วงหน้า ช่วยประหยัด token และลดอาการ AI หลอน) ส่วนไฟล์ PDF (ไม่บังคับ) เก็บไว้เป็นหลักฐานอ้างอิง/เปิดดูฉบับจริงได้ที่หน้าตรวจสอบ — ต้องใช้ Firebase Storage (แผน Blaze) ถึงจะอัปโหลดได้จริง ถ้ายังไม่พร้อมใช้ Storage ข้ามช่องนี้ไปได้เลย ไม่กระทบการสกัดกฎเกณฑ์</p>
+  <p class="helper" style="font-size:13px;color:var(--color-text-secondary);margin:-8px 0 20px;">ไฟล์ Markdown (บังคับ) คือเนื้อหาที่ AI จะอ่านเพื่อสกัดกฎเกณฑ์ (แปลงจาก PDF เป็น .md มาก่อนล่วงหน้า ช่วยประหยัด token และลดอาการ AI หลอน) ส่วนเอกสารต้นฉบับ (PDF, ไม่บังคับ) ให้อัปโหลดขึ้น Google Drive เอง (ตั้งค่าแชร์เป็น "ทุกคนที่มีลิงก์" ก่อน) แล้วแปะแค่ลิงก์มาที่นี่ — ไม่ต้องอัปโหลดไฟล์ผ่านระบบนี้โดยตรง</p>
 
   <div class="field">
-    <label for="pdfInput">เอกสารต้นฉบับ (PDF) — ไม่บังคับ, สำหรับเปิดดูอ้างอิง (เผื่ออนาคตเปิดใช้ Storage)</label>
-    <input type="file" id="pdfInput" accept="application/pdf,.pdf" class="text-input" style="padding:10px 14px;height:auto;">
-    <p class="helper" id="pdfFileName">ยังไม่เลือกไฟล์ (ข้ามได้)</p>
+    <label for="pdfLinkInput">ลิงก์เอกสารต้นฉบับ (Google Drive) — ไม่บังคับ, สำหรับเปิดดูอ้างอิง</label>
+    <input type="url" id="pdfLinkInput" class="text-input" placeholder="https://drive.google.com/file/d/...">
+    <p class="helper" id="pdfLinkError"></p>
   </div>
 
   <div class="field">
@@ -429,9 +428,9 @@
   <code>docs/02-design/01-prototypes/20260823-prototype-v1/06-create-criteria-set.html</code>
   แล้วต่อ Firestore + AI จริงทั้งหมด (เพิ่มเมื่อสัปดาห์ที่ 8): อ่านไฟล์ .md (บังคับ) เป็นข้อความส่งให้ AI
   (OpenRouter, model google/gemini-2.5-flash-lite) สกัดกฎเกณฑ์จริง แล้วเขียนเป็นเอกสารใหม่ใน <code>rules</code> จริง
-  พร้อมบันทึก <code>criteriaSets/{id}/extractionLog</code> ทุกครั้งที่สกัด — ไฟล์ PDF (ไม่บังคับ) พยายามอัปโหลดขึ้น
-  Firebase Storage แบบมี timeout 15 วินาที ถ้า Storage ยังไม่พร้อมใช้งาน (ต้องแผน Blaze) จะข้ามไปสกัดกฎเกณฑ์ต่อทันที
-  ไม่ค้างรอ ไม่บล็อกการทำงานหลัก
+  พร้อมบันทึก <code>criteriaSets/{id}/extractionLog</code> ทุกครั้งที่สกัด — ลิงก์เอกสารต้นฉบับ (PDF, ไม่บังคับ)
+  ให้แปะลิงก์ Google Drive ที่อัปโหลดเองมาเก็บเป็น string ตรงๆ ใน Firestore แทนการอัปโหลดผ่าน Firebase Storage
+  (เปลี่ยนมาใช้แนวทางนี้ตามคำแนะนำของอาจารย์ผู้สอน เพราะ Firebase Storage ต้องใช้แผน Blaze)
   ที่มา: feature-list.md ฟีเจอร์ 06 · spec docs/01-requirements/01-spec/20260823-02-criteria-knowledge-base.md FR ข้อ 2 และ FR ข้อ 3
 </footer>
 </body>
