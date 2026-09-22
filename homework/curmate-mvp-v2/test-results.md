@@ -61,20 +61,20 @@
 
 ### บัญชีทดสอบที่ใช้ (คงอยู่ ไม่ได้ลบ)
 
-| บัญชี | อีเมล | รหัสผ่าน | role ปัจจุบัน |
-| --- | --- | --- | --- |
-| ADMIN | `playwright-admin-w9@curmate-test.dev` | `Playwright#Admin9!` | `ADMIN` |
-| STAFF 1 | `playwright-staff1-w9@curmate-test.dev` | `Playwright#Staff9!` | `STAFF` |
-| STAFF 2 | `playwright-staff2-w9@curmate-test.dev` | `Playwright#Staff9-2!` | `STAFF` |
+| บัญชี | อีเมล | role ปัจจุบัน |
+| --- | --- | --- |
+| ADMIN | `playwright-admin-w9@curmate-test.dev` | `ADMIN` |
+| STAFF 1 | `playwright-staff1-w9@curmate-test.dev` | `STAFF` |
+| STAFF 2 | `playwright-staff2-w9@curmate-test.dev` | `STAFF` |
 
-(ดู `tests/test-accounts.js` เป็นแหล่งข้อมูลจริง)
+**รหัสผ่านจริงไม่แสดงในเอกสารนี้โดยตั้งใจ** (บัญชี ADMIN ข้างต้นมีสิทธิ์จัดการข้อมูลจริงบนเว็บ) — เก็บไว้เฉพาะใน `tests/test-accounts.js` ซึ่งถูก `.gitignore` ไว้ ไม่ push ขึ้น GitHub ดูวิธีสร้างไฟล์นี้เองได้ที่ `tests/test-accounts.example.js`
 
 ---
 
 ## ไฟล์ที่เกี่ยวข้อง
 
 - `package.json`, `playwright.config.js` — ตั้งค่า Playwright (ชี้ `baseURL` ไปที่ https://cur-mate.web.app/ จริง)
-- `tests/test-accounts.js` — ข้อมูลบัญชีทดสอบ (อีเมล/รหัสผ่าน)
+- `tests/test-accounts.js` — ข้อมูลบัญชีทดสอบ (อีเมล/รหัสผ่านจริง) **ถูก `.gitignore` ไว้ ไม่อยู่ใน repo บน GitHub** ดู `tests/test-accounts.example.js` เป็นต้นแบบ
 - `tests/helpers.js` — ฟังก์ชันช่วย (login/signup/สร้างชุดเกณฑ์) ใช้ร่วมกันทุกไฟล์เทสต์
 - `tests/fixtures/sample-criteria.md` — ไฟล์ .md ตัวอย่างขนาดสั้น (2 กฎเกณฑ์) ใช้ประหยัดโควตา AI ของหลักสูตร
 - `tests/00-setup-accounts.spec.js` — เตรียมบัญชีทดสอบ (✅ ผ่านทั้ง 3 เคส)
