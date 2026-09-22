@@ -1,10 +1,10 @@
 # Curmate MVP v2 — การบ้าน Module 2 (Database) ต่อยอดสัปดาห์ที่ 7
 
+**ระบบออนไลน์**: https://cur-mate.web.app/ | **ผลการทดสอบ**: [test-results.md](./test-results.md)
+
 โฟลเดอร์นี้เป็นแบบฝึกหัดของคอร์ส ไม่ใช่แอปพลิเคชัน Curmate จริง — ดูรายละเอียดขอบเขตและสิ่งที่ต่างจาก `homework/curmate-mvp` เดิมใน [SCOPE.md](./SCOPE.md)
 
-## URL ออนไลน์
-
-https://cur-mate.web.app/ (deploy ผ่าน Firebase Hosting — เข้า root แล้ว redirect ไปหน้า `login.html` อัตโนมัติ)
+---
 
 จุดต่างหลักจากโฟลเดอร์เดิม: หน้าตา (HTML) นำมาจาก Prototype v1 จริงของ Curmate
 (`docs/02-design/01-prototypes/20260823-prototype-v1/`) แล้วต่อ Firestore จริงแทนข้อมูลจำลอง

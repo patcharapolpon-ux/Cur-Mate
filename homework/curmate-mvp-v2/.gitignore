@@ -18,6 +18,16 @@ firestore-debug.log
 # Dependencies (เผื่อมีการติดตั้งในอนาคต)
 node_modules/
 
+# Playwright (เพิ่มสัปดาห์ที่ 9 — ผลรันเทสต์/รายงาน ไม่ต้อง commit)
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# บัญชีทดสอบ Playwright — มีรหัสผ่านจริงของบัญชีที่มีสิทธิ์ ADMIN บนเว็บจริง ห้าม push เด็ดขาด
+# (ใช้ tests/test-accounts.example.js เป็นต้นแบบสร้างไฟล์นี้เอง)
+tests/test-accounts.js
+
 # OS
 Thumbs.db
 desktop.ini

@@ -1,0 +1,12 @@
+{
+  "name": "curmate-mvp-v2-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ชุดทดสอบ Playwright ของ Curmate MVP v2 (การบ้านสัปดาห์ที่ 9) — รันจริงบน https://cur-mate.web.app/ ไม่มี build/app code ในนี้ เป็นแค่ dev dependency ของเทสต์เท่านั้น",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
